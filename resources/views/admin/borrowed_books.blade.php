@@ -18,18 +18,14 @@
                 </div>
             </form>
         </div>
-        <div>
-            <p class="text-gray-700">
-                To export the data to Excel, please follow these steps:
-                <ol>
-                    <li>Select the entire table below.</li>
-                    <li>Copy the selected content (Ctrl+C or Cmd+C).</li>
-                    <li>Open Microsoft Excel or Google Sheets.</li>
-                    <li>Paste the copied content into the spreadsheet (Ctrl+V or Cmd+V).</li>
-                    <li>You may need to adjust the column widths to fit the data.</li>
-                </ol>
-            </p>
+        @if($status == 'dikembalikan')
+        <div class="mb-4 flex justify-center">
+            <a href="{{ route('admin.borrowedBooks.exportWithStatus', ['status' => $status]) }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                Export to Excel
+            </a>
         </div>
+        @endif
+
 
         @if($borrowedBooks->isEmpty())
             <p class="text-gray-700 text-center">Tidak ada buku dengan status '{{ $status }}'.</p>

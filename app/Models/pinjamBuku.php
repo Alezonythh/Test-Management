@@ -2,23 +2,32 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class pinjamBuku extends Model
 {
-    protected $fillable = ['user_id', 'book_id', 'tanggal_pinjam', 'tanggal_kembali','status', 'kondisi_awal'];
+    use HasFactory;
 
+    protected $table = 'pinjam_bukus';
 
+    protected $fillable = [
+        'user_id',
+        'book_id',
+        'tanggal_pinjam',
+        'tanggal_kembali',
+        'status',
+        'kondisi_awal',
+        'kondisi_akhir', // ✅ sudah ditambahkan
+    ];
 
-        public function user(): BelongsTo
-        {
-    
-            return $this->belongsTo(User::class);
-        }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-        public function book(): BelongsTo
-        {
-            return $this->belongsTo(Book::class);
-        }
+    public function book()
+    {
+        return $this->belongsTo(Book::class, 'book_id');
+    }
 }

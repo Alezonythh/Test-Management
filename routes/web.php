@@ -33,6 +33,7 @@ route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
     Route::get('/admin/borrow-form/{book_id}', [BookController::class, 'showAdminBorrowForm'])->name('admin.borrowForm');
     Route::get('/admin/return-form/{id}', [BookController::class, 'showReturnForm'])->name('admin.show_return_form');
     Route::post('/admin/return-form/{id}', [BookController::class, 'submitReturnForm'])->name('admin.submit_return_form');
+   Route::get('/admin/borrowed-books/export/{status?}', [AnggotaController::class, 'exportBorrowedBooks'])->name('admin.borrowedBooks.export');
 });
 route::group(['middleware' => ['auth', 'role:admin']], function(){
     
@@ -69,4 +70,7 @@ route::group(['middleware' => ['auth', 'role:anggota']], function(){
 });
 
 Route::get('/dashboard', [anggotaController::class, 'dashboard'])->name('dashboard');
+Route::get('/admin/borrowed-books/export/{status?}', [anggotaController::class, 'exportBorrowedBooks'])->name('admin.borrowedBooks.exportWithStatus');
+Route::get('/export-borrowed-books/{status?}', [App\Http\Controllers\anggotaController::class, 'exportBorrowedBooks'])
+    ->name('export.borrowed.books');
 require __DIR__.'/auth.php';
