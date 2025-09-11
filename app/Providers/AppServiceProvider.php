@@ -24,7 +24,9 @@ class AppServiceProvider extends ServiceProvider
                 ->where('status', 'dipinjam')
                 ->count();
 
-            $view->with('overdueBooksCount', $overdueBooksCount);
+            if ($overdueBooksCount > 0) {
+                $view->with('overdueBooksCount', $overdueBooksCount);
+            }
         });
     }
 }
