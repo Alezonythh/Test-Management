@@ -12,6 +12,9 @@
                     <button type="submit" name="status" value="dikembalikan" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 {{ $status == 'dikembalikan' ? 'bg-blue-600' : '' }}">
                         Buku yang Dikembalikan
                     </button>
+                    <button type="submit" name="status" value="overdue" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 {{ $status == 'overdue' ? 'bg-blue-600' : '' }}">
+                        Buku yang Sudah Waktunya Dikembalikan
+                    </button>
                 </div>
             </form>
         </div>
@@ -66,7 +69,14 @@
                                 </td>
                                 <td class="px-6 py-4">{{  app('App\Http\Controllers\anggotaController')->getBorrowerName($borrow) }}</td>
                                 <td class="px-6 py-4">{{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }}</td>
-                                <td class="px-6 py-4">{{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}</td>
+                                <td class="px-6 py-4">
+                                    {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
+                                    @if ($diff == 0 && $borrow->status == 'dipinjam')
+                                        <span class="text-yellow-500 ml-2">(Due Today)</span>
+                                    @elseif ($diff < 0 && $borrow->status == 'dipinjam')
+                                        <span class="text-red-500 ml-2">(Overdue)</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs font-medium rounded-lg {{ $borrow->status === 'dipinjam' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
                                         {{ ucfirst($borrow->status) }}

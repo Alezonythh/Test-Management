@@ -19,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \View::composer('*', function ($view) {
+            $overdueBooksCount = \App\Models\pinjamBuku::where('tanggal_kembali', '<', \Carbon\Carbon::now())
+                ->where('status', 'dipinjam')
+                ->count();
+
+            $view->with('overdueBooksCount', $overdueBooksCount);
+        });
     }
 }

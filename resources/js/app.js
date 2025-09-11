@@ -1,5 +1,6 @@
 import 'flowbite';
 import './bootstrap';
+import Swal from 'sweetalert2';
 
 import Alpine from 'alpinejs';
 
@@ -16,5 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+window.showOverdueAlert = function(count) {
+    Swal.fire({
+        title: 'Peringatan!',
+        text: 'Jumlah buku yang sudah waktunya dikembalikan: ' + count,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
 
 Alpine.start();

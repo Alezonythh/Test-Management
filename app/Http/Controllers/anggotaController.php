@@ -191,7 +191,12 @@ class anggotaController extends Controller
         $status = $status ?: $request->input('status', 'dipinjam');
 
         $borrowedBooks = PinjamBuku::with('book','user')
-        ->where('status', '=', $status)
+        ->when($status === 'overdue', function ($query) {
+            return $query->where('tanggal_kembali', '<', \Carbon\Carbon::now())
+                         ->where('status', 'dipinjam');
+        }, function ($query) use ($status) {
+            return $query->where('status', '=', $status);
+        })
         ->orderBy('tanggal_pinjam', 'desc')
         ->paginate(6);
 
