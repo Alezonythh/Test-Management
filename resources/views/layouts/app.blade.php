@@ -22,7 +22,7 @@
          <!-- Fancybox CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 

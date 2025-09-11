@@ -224,11 +224,44 @@ class anggotaController extends Controller
 
     public function dashboard()
     {
+        //total buku
         $totalBuku = Book::count();
         $totalstat = Book::where('status', true)->count();
         $totalava  = Book::where('status', false)->count();
 
-        return view('dashboard', compact('totalBuku', 'totalstat', 'totalava'));
+        //total barang dipinjam
+        $totalPinjam = PinjamBuku::count();
+
+
+$dataPeminjam = DB::table('pinjam_bukus')
+    ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
+    ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
+    ->select(
+        'books.judul_buku as nama_barang',
+        DB::raw('COUNT(pinjam_bukus.id) as total'),
+        DB::raw('GROUP_CONCAT(users.name) as peminjam')
+    )
+    ->where('pinjam_bukus.status', 'dipinjam')
+    ->groupBy('books.judul_buku')
+    ->get();
+
+$dataBuku = DB::table('books')
+    ->leftJoin('pinjam_bukus', function ($join) {
+        $join->on('books.id', '=', 'pinjam_bukus.book_id')
+             ->where('pinjam_bukus.status', '=', 'dipinjam');
+    })
+    ->select(
+        'books.judul_buku',
+        'books.jumlah_stok',
+        DB::raw('COUNT(pinjam_bukus.id) as dipinjam')
+    )
+    ->groupBy('books.id', 'books.judul_buku', 'books.jumlah_stok')
+    ->get();
+
+
+
+
+        return view('dashboard', compact('totalBuku', 'totalstat', 'totalava', 'totalPinjam','dataPeminjam', 'dataBuku'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)
