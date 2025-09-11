@@ -48,7 +48,6 @@ class anggotaController extends Controller
             'book_id'         => 'required|exists:books,id',
             'tanggal_pinjam'  => 'required|date',
             'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
-            'kondisi_awal'    => 'required|string'
         ]);
 
         $book = Book::findOrFail($request->book_id);
@@ -58,11 +57,21 @@ class anggotaController extends Controller
         }
 
         $user_id = auth()->id();
-        if(auth()->user()->role == 'admin' && $request->has('user_id')) {
+        if(auth()->user()->role == 'admin' && $request->has('user_id') && $request->user_id != null) {
             $user_id = $request->user_id;
         }
 
         PinjamBuku::create([
+            'user_id'         => $user_id,
+            'book_id'         => $book->id,
+            'tanggal_pinjam'  => $request->tanggal_pinjam,
+            'tanggal_kembali' => $request->tanggal_kembali,
+            'status'          => 'menunggu konfirmasi',
+            'kondisi_awal'    => $request->kondisi_awal,
+            'kondisi_akhir'   => null,
+        ]);
+
+        \Log::info('New borrowing request created:', [
             'user_id'         => $user_id,
             'book_id'         => $book->id,
             'tanggal_pinjam'  => $request->tanggal_pinjam,
@@ -127,6 +136,8 @@ class anggotaController extends Controller
 
         if ($book->jumlah_stok <= 0) {
             $book->update(['status' => false]);
+        } elseif ($book->jumlah_stok > 0) {
+            $book->update(['status' => true]);
         }
 
         return back()->with('success', 'Permintaan peminjaman disetujui.');

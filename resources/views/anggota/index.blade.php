@@ -106,6 +106,16 @@ $isLoggedIn = Auth::check();
                         <form action="{{ route('anggota.store') }}" method="POST" class="p-6">
                             @csrf
                             <input type="hidden" name="book_id" value="{{ $book->id }}">
+                            
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             @if (Auth::check() && Auth::user()->role == 'admin')
                             <!-- Input User ID -->
@@ -169,12 +179,14 @@ $isLoggedIn = Auth::check();
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" 
                                     required>
                             </div>
-
+                            
+                            
                             <!-- Tombol Submit -->
                             <button type="submit" 
                                     class="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm">
                                 Pinjam
                             </button>
+                                                 
                         </form>
                     </div>
                 </div>

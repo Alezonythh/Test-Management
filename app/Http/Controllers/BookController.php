@@ -243,6 +243,8 @@ class BookController extends Controller
         // Increase book stock
         $book = Book::findOrFail($pinjamBuku->book_id);
         $book->increment('jumlah_stok');
+        $book->status = true;
+        $book->save();
 
         return redirect()->route('anggota.borrowed', ['status' => 'dipinjam'])->with('success', 'Buku Berhasil Dikembalikan. Menunggu Persetujuan Admin.');
     }
