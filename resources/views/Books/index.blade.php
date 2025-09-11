@@ -3,10 +3,12 @@
         <div class="py-8 px-4 mx-auto max-w-7xl lg:pl-64">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Daftar Buku</h2>
+                @if (Auth::check() && Auth::user()->role == 'admin')
                 <a href="{{ route('books.create') }}"
                     class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
                     Tambah Buku
                 </a>
+                @endif
             </div>
             <div class="flex items-center justify-between mb-4">
                 <form action="{{ route('books.index') }}" method="GET" class="w-full max-w-md">
