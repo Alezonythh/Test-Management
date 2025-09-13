@@ -243,6 +243,7 @@ class anggotaController extends Controller
         //total barang dipinjam
         $totalPinjam = PinjamBuku::count();
 
+$search = request('search'); // ambil dari input search
 
 $dataPeminjam = DB::table('pinjam_bukus')
     ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
@@ -250,29 +251,39 @@ $dataPeminjam = DB::table('pinjam_bukus')
     ->select(
         'books.judul_buku as nama_barang',
         DB::raw('COUNT(pinjam_bukus.id) as total'),
-        DB::raw('GROUP_CONCAT(users.name) as peminjam')
+        DB::raw('GROUP_CONCAT(users.name) as peminjam'),
+        'pinjam_bukus.kondisi_awal as foto_awal_barang'
     )
-    ->where('pinjam_bukus.status', 'dipinjam')
-    ->groupBy('books.judul_buku')
+    ->where('pinjam_bukus.status', '=', 'dipinjam')
+    ->when($search, function($query, $search){
+        $query->where('books.judul_buku', 'like', "%$search%");
+    })
+    ->groupBy('books.judul_buku', 'pinjam_bukus.kondisi_awal')
     ->get();
+
 
 $dataBuku = DB::table('books')
-    ->leftJoin('pinjam_bukus', function ($join) {
-        $join->on('books.id', '=', 'pinjam_bukus.book_id')
-             ->where('pinjam_bukus.status', '=', 'dipinjam');
-    })
     ->select(
+        'books.id',
         'books.judul_buku',
         'books.jumlah_stok',
-        DB::raw('COUNT(pinjam_bukus.id) as dipinjam')
+        DB::raw("(SELECT COUNT(*) FROM pinjam_bukus 
+                  WHERE pinjam_bukus.book_id = books.id 
+                    AND pinjam_bukus.status = 'dipinjam') as dipinjam")
     )
-    ->groupBy('books.id', 'books.judul_buku', 'books.jumlah_stok')
     ->get();
 
 
+    //buku yg dikembalikan
+$dataBukuDikembalikan = DB::table('pinjam_bukus')
+    ->where('status', 'dikembalikan')
+    ->count();
 
 
-        return view('dashboard', compact('totalBuku', 'totalstat', 'totalava', 'totalPinjam','dataPeminjam', 'dataBuku'));
+
+
+
+        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam','dataPeminjam', 'dataBuku'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)

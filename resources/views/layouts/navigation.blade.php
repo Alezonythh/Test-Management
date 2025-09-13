@@ -1,150 +1,507 @@
-<button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-   <span class="sr-only">Open sidebar</span>
-   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-   </svg>
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar"
+    type="button"
+    class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Open sidebar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" fill-rule="evenodd"
+            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
+        </path>
+    </svg>
 </button>
 
-<aside
-  x-data="{
-        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'false'),
-        setOpen(value) {
-            this.open = value;
-            localStorage.setItem('sidebarOpen', value);
-            window.dispatchEvent(new Event('sidebar-toggled'));
-        }
-    }"
-    @mouseenter="setOpen(true)" 
-    @mouseleave="setOpen(false)"
-    :class="open ? 'w-64' : 'w-16'"
-    class="fixed top-0 left-0 h-screen bg-gray-800 text-white transition-all duration-300"
->
-  <div class="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-      <ul class="space-y-2">
-          <li>
-              <a href="{{route('dashboard')}}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <svg aria-hidden="true" class="w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
-                  <span class="ml-3">Beranda</span>
-              </a>
-          </li>
-          @if (Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'supervisor'))
+<aside x-data="{
+    open: JSON.parse(localStorage.getItem('sidebarOpen') || 'false'),
+    setOpen(value) {
+        this.open = value;
+        localStorage.setItem('sidebarOpen', value);
+        window.dispatchEvent(new Event('sidebar-toggled'));
+    }
+}" @mouseenter="setOpen(true)" @mouseleave="setOpen(false)" :class="open ? 'w-64' : 'w-16'"
+    class="fixed top-0 left-0 h-screen bg-gray-800 text-white transition-all duration-300">
+    <div
+        class="flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl transition-all duration-500
+    bg-gradient-to-b from-[#2C3262] to-[#1E224A] dark:from-[#1E224A] dark:to-[#14172E]
+    border-r border-white/10 dark:border-white/5">
+        <ul class="space-y-2 flex-grow">
+            <div class="flex items-center justify-center rounded-md h-16">
+                <h1 class="flex items-center font-bold text-white space-x-3">
+                    <div
+                        class="bg-white/90 backdrop-blur-md rounded-full p-1 flex items-center justify-center shadow-sm">
+                        <img src="/images/login.png" alt="Logo" class="w-15 h-8">
+                    </div>
+                    <span x-show="open"
+                        class="text-lg font-extrabold bg-gradient-to-r from-[#ffff] to-[#F1A004] bg-clip-text text-transparent tracking-wide">
+                        SMK Pesat Studio
+                    </span>
+                </h1>
+            </div>
 
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">Lemari</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-pages" class="hidden py-2 space-y-2">
-                  @if (Auth::check() && Auth::user()->role == 'admin')
-                  <li>
-                      <a href="{{route('books.create')}}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Tambah buku</a>
-                  </li>
-                  @endif
-                  <li>
-                      <a href="{{route('books.index')}}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lemari buku</a>
-                  </li>
-                  <li>
-                      <a href="{{ route('admin.borrowedBooks') }}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Informasi</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-sales" data-collapse-toggle="dropdown-sales">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">User</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-sales" class="hidden py-2 space-y-2">
-                      
-                      <li>
-                          <a href="{{route('users.index')}}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Anggota</a>
-                      </li>
-                      <li>
-                          <a href="{{ route('admin.confirmRequests') }}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Informasi</a>
-                      </li>
-              </ul>
-          </li>
-          @endif
+            <li>
+                <a href="{{ route('dashboard') }}"
+                    class="relative flex items-center p-3 rounded-lg 
+          text-gray-700 dark:text-gray-200 font-semibold
+          transition-all duration-500 ease-in-out
+          hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+          hover:shadow-lg hover:shadow-indigo-500/30
+          hover:scale-[1.02] hover:translate-x-1
+          group">
 
-          @if (Auth::check() && Auth::user()->role == 'anggota')
+                    <!-- Indicator bar kiri -->
+                    <span
+                        class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
 
-          
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">Lemari</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-pages" class="hidden py-2 space-y-2">
-                  <li>
-                      <a href="{{route('anggota.index')}}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Lemari buku</a>
-                  </li>
-                  <li>
-                      <a href="{{ route('anggota.borrowed') }}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Riwayat Pinjam Buku</a>
-                  </li>
-                  <li>
-                      <a href="{{ route('anggota.pending_requests') }}" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Informasi</a>
-                  </li>
-              </ul>
-          </li>
-          @endif
-          <li>
-              <button type="button" class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-authentication" data-collapse-toggle="dropdown-authentication">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                  <span class="flex-1 ml-3 text-left whitespace-nowrap">Authentication</span>
-                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-              </button>
-              <ul id="dropdown-authentication" class="hidden py-2 space-y-2">
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Sign In</a>
-                  </li>
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Sign Up</a>
-                  </li>
-                  <li>
-                      <a href="#" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Forgot Password</a>
-                  </li>
-              </ul>
-          </li>
-      </ul>
-      @guest
-      <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
-          <li>
-              <a href="{{ route('anggota.index') }}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
-                  <span class="ml-3">Daftar Buku</span>
-              </a>
-              <a href="{{ route('login') }}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
-                  <span class="ml-3">Login</span>
-              </a>
-          </li>
-      </ul>
-      @endguest
-      @auth
-      <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
-          <li>
-              <a href="#" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-                  <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-400 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"></path></svg>
-                  <span class="ml-3">Help</span>
-              </a>
-          </li>
-          <li>
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                    <!-- Icon -->
+                    <ion-icon name="grid-sharp"
+                        class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                     group-hover:text-white transition-colors duration-500"></ion-icon>
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-    
-          </li>
-      </ul>
-      @endauth
-  </div>
- 
+                    <!-- Label -->
+                    <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                        Dashboard
+                    </span>
+                </a>
+
+            </li>
+
+            @if (Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'supervisor'))
+                <li>
+                    <!-- Tombol utama -->
+                    <button type="button"
+                        class="relative flex items-center p-3 w-full rounded-lg font-semibold
+               text-gray-700 dark:text-gray-200
+               transition-all duration-500 ease-in-out
+               hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+               hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+               group"
+                        aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages" aria-expanded="false">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg 
+                 bg-gradient-to-b from-indigo-500 to-purple-600 
+                 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="cube-sharp"
+                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                     group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open"
+                            class="flex-1 ml-3 text-left whitespace-nowrap 
+                 group-hover:text-white transition-colors duration-500">
+                            Inventaris
+                        </span>
+
+                        <!-- Panah -->
+                        <svg aria-hidden="true"
+                            class="w-5 h-5 text-gray-500 dark:text-gray-300 
+                transition-transform duration-500 group-aria-expanded:rotate-180"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <ul id="dropdown-pages" class="hidden py-2 space-y-2">
+                        @if (Auth::check() && Auth::user()->role == 'admin')
+                            <li>
+                                <a href="{{ route('books.create') }}" x-show="open"
+                                    class="relative flex items-center p-2 pl-12 rounded-md 
+                  text-gray-700 dark:text-gray-200 
+                  transition-all duration-500 ease-in-out
+                  hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+                  hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+                  group">
+                                    <span
+                                        class="absolute left-6 w-1 h-6 rounded-full bg-indigo-400 
+                         opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                    Tambah Barang
+                                </a>
+                            </li>
+                        @endif
+                        <li>
+                            <a href="{{ route('books.index') }}" x-show="open"
+                                class="relative flex items-center p-2 pl-12 rounded-md 
+                  text-gray-700 dark:text-gray-200 
+                  transition-all duration-500 ease-in-out
+                  hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+                  hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+                  group">
+                                <span
+                                    class="absolute left-6 w-1 h-6 rounded-full bg-indigo-400 
+                         opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                Daftar Barang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.borrowedBooks') }}" x-show="open"
+                                class="relative flex items-center p-2 pl-12 rounded-md 
+                  text-gray-700 dark:text-gray-200 
+                  transition-all duration-500 ease-in-out
+                  hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+                  hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+                  group">
+                                <span
+                                    class="absolute left-6 w-1 h-6 rounded-full bg-indigo-400 
+                         opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                                Daftar Peminjaman
+                            </a>
+                        </li>
+                    </ul>
+
+
+
+
+
+                <li>
+
+
+
+                <li>
+                    <a href="{{ route('users.index') }}"
+                        class="relative flex items-center p-2 rounded-lg 
+              text-gray-700 dark:text-gray-200 font-semibold
+              transition-all duration-500 ease-in-out
+              hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+              hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+              group">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg 
+                     bg-gradient-to-b from-indigo-500 to-purple-600 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="people-sharp"
+                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                         group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                            Daftar User
+                        </span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{{ route('admin.confirmRequests') }}"
+                        class="relative flex items-center p-2 rounded-lg 
+              text-gray-700 dark:text-gray-200 font-semibold
+              transition-all duration-500 ease-in-out
+              hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+              hover:scale-[1.02] hover:translate-x-1 hover:shadow-lg hover:shadow-indigo-500/30
+              group">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg 
+                     bg-gradient-to-b from-indigo-500 to-purple-600 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="checkmark-circle-sharp"
+                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                         group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                            Konfirmasi
+                        </span>
+                    </a>
+                </li>
+
+
+                </li>
+
+            @endif
+
+            @if (Auth::check() && Auth::user()->role == 'anggota')
+                <li>
+                    <button type="button"
+                        class="relative flex items-center p-3 w-full rounded-lg font-semibold
+                   text-gray-700 dark:text-gray-200
+                   transition-all duration-500 ease-in-out
+                   hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                   hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                   hover:scale-[1.02] hover:translate-x-1
+                   group"
+                        aria-controls="dropdown-lemari" data-collapse-toggle="dropdown-lemari" aria-expanded="false">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg 
+                     bg-gradient-to-b from-indigo-500 to-purple-600 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="cube-sharp"
+                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                         group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open"
+                            class="flex-1 ml-3 text-left whitespace-nowrap group-hover:text-white transition-colors duration-500">
+                            Inventaris
+                        </span>
+
+                        <!-- Arrow -->
+                        <svg aria-hidden="true"
+                            class="w-5 h-5 text-gray-500 dark:text-gray-300 transition-transform duration-500 group-aria-expanded:rotate-180"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <ul id="dropdown-lemari" class="hidden py-2 space-y-2">
+                        <li>
+                            <a href="{{ route('anggota.index') }}" x-show="open"
+                                class="relative flex items-center p-2 pl-12 w-full rounded-lg
+                  text-gray-700 dark:text-gray-200 font-normal
+                  transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                  hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                  hover:scale-[1.02] hover:translate-x-1 group">
+                                <span
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                Daftar Barang
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('anggota.borrowed') }}" x-show="open"
+                                class="relative flex items-center p-2 pl-12 w-full rounded-lg
+                      text-gray-700 dark:text-gray-200 font-normal
+                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                      hover:scale-[1.02] hover:translate-x-1 group">
+                                <span
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                Riwayat Peminjaman
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('anggota.pending_requests') }}" x-show="open"
+                                class="relative flex items-center p-2 pl-12 w-full rounded-lg
+                      text-gray-700 dark:text-gray-200 font-normal
+                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                      hover:scale-[1.02] hover:translate-x-1 group">
+                                <span
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                Informasi Peminjaman
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+            <li>
+                <button type="button" id="authDropdownBtn"
+                    class="relative flex items-center p-3 w-full rounded-lg font-semibold
+               text-gray-700 dark:text-gray-200
+               transition-all duration-500 ease-in-out
+               hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+               hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+               hover:scale-[1.02] hover:translate-x-1
+               group"
+                    aria-controls="dropdown-authentication" data-collapse-toggle="dropdown-authentication"
+                    aria-expanded="false">
+
+                    <!-- Indicator bar kiri -->
+                    <span
+                        class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                    <!-- Icon Authentication -->
+                    <ion-icon name="lock-closed-outline"
+                        class="flex-shrink-0 w-6 h-6 text-[#F1A004] group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                    <!-- Label -->
+                    <span x-show="open"
+                        class="flex-1 ml-3 text-left whitespace-nowrap group-hover:text-white transition-colors duration-500">
+                        Authentication
+                    </span>
+
+                    <!-- Arrow -->
+                    <svg aria-hidden="true"
+                        class="w-5 h-5 text-gray-500 dark:text-gray-300 
+                transition-transform duration-500 group-aria-expanded:rotate-180"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <ul id="dropdown-authentication" class="hidden py-2 space-y-2">
+                    <li>
+                        <a href="{{ route('login') }}" x-show="open"
+                            class="relative flex items-center p-2 pl-12 w-full rounded-lg
+                      text-gray-700 dark:text-gray-200 font-normal
+                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                      hover:scale-[1.02] hover:translate-x-1
+                      group">
+                            <!-- Left indicator -->
+                            <span
+                                class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" x-show="open"
+                            class="relative flex items-center p-2 pl-12 w-full rounded-lg
+                      text-gray-700 dark:text-gray-200 font-normal
+                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
+                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                      hover:scale-[1.02] hover:translate-x-1
+                      group">
+                            <span
+                                class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            Register
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+        </ul>
+        @guest
+            <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+                <li>
+                    <a href="{{ route('anggota.index') }}"
+                        class="relative flex items-center p-3 rounded-lg 
+                  text-gray-700 dark:text-gray-200 font-semibold
+                  transition-all duration-500 ease-in-out
+                  hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
+                  hover:shadow-lg hover:shadow-indigo-500/30
+                  hover:scale-[1.02] hover:translate-x-1
+                  group">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                         opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="cube-outline"
+                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
+                             group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                            Daftar Barang
+                        </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('login') }}"
+                        class="relative flex items-center p-3 rounded-lg 
+              text-gray-700 dark:text-gray-200 font-semibold
+              transition-all duration-500 ease-in-out
+              hover:bg-gradient-to-r hover:from-green-500 hover:to-lime-500 hover:text-white
+              hover:shadow-lg hover:shadow-green-500/30
+              hover:scale-[1.02] hover:translate-x-1
+              group">
+
+                        <!-- Indicator bar kiri -->
+                        <span
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-green-500 to-lime-500 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                        <!-- Icon -->
+                        <ion-icon name="log-in-outline"
+                            class="flex-shrink-0 w-6 h-6 text-green-500 dark:text-green-400 
+                         group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                        <!-- Label -->
+                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                            Login
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+
+
+        @endguest
+        @auth
+            <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+                <li>
+                    <!-- Log Out -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="relative flex items-center w-full p-3 rounded-lg
+                           text-gray-700 dark:text-gray-200 font-semibold
+                           transition-all duration-500 ease-in-out
+                           hover:bg-gradient-to-r hover:from-red-500 hover:to-pink-500 hover:text-white
+                           hover:shadow-lg hover:shadow-red-500/30
+                           hover:scale-[1.02] hover:translate-x-1
+                           group">
+
+                            <!-- Indicator bar kiri -->
+                            <span
+                                class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-red-500 to-pink-500 
+                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                            <!-- Icon Logout -->
+                            <ion-icon name="log-out-outline"
+                                class="flex-shrink-0 w-6 h-6 text-red-500 dark:text-red-400 
+                                 group-hover:text-white transition-colors duration-500"></ion-icon>
+
+                            <!-- Label -->
+                            <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                                Log Out
+                            </span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+        @endauth
+    </div>
+
 </aside>
+
+<script>
+    // const dropdownBtn = document.getElementById('dropdownBtn');
+    // const arrowIcon = document.getElementById('arrowIcon');
+
+    // dropdownBtn.addEventListener('click', () => {
+    //     arrowIcon.classList.toggle('rotate-180');
+    // });
+
+    //     const authBtn = document.getElementById('authDropdownBtn');
+    //     const authArrow = document.getElementById('authArrowIcon');
+
+    //     authBtn.addEventListener('click', () => {
+    //         authArrow.classList.toggle('rotate-180'); // mutar 180°
+    //     });
+
+    //         const userAdminBtn = document.getElementById('userAdminButton');
+    //     const userAdminArrow = document.getElementById('userAdminArrow');
+
+    //     userAdminBtn.addEventListener('click', () => {
+    //         // Memutar ikon 180 derajat
+    //         userAdminArrow.classList.toggle('rotate-180');
+    //     });
+</script>
