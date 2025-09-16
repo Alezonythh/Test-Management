@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
-    protected $fillable = ['judul_buku', 'penulis', 'kategori', 'tahun_terbit', 'jumlah_stok', 'status','loan_status', 'deskripsi', 'kondisi_awal'];
+    protected $fillable = ['judul_buku', 'kategori', 'jumlah_stok', 'status','loan_status', 'deskripsi', 'kondisi_awal'];
 
     public function loans(): HasMany
     {

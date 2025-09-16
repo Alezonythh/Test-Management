@@ -32,11 +32,10 @@
             <div class="shadow-md sm:rounded-lg w-full overflow-x-auto">
                 <table class="table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+-------
                         <tr>
                             <th scope="col" class="px-6 py-3">Judul Buku</th>
-                            <th scope="col" class="px-6 py-3">Penulis</th>
                             <th scope="col" class="px-6 py-3">Kategori</th>
-                            <th scope="col" class="px-6 py-3">Tahun Terbit</th>
                             <th scope="col" class="px-6 py-3">Jumlah Stok</th>
                             <th scope="col" class="px-6 py-3">Status</th>
                             <th scope="col" class="px-6 py-3">Deskripsi</th>
@@ -47,11 +46,10 @@
                     </thead>
                     <tbody>
                         @foreach($books as $book)
+-------
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
                             <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $book->judul_buku }}</td>
-                            <td class="px-6 py-4">{{ $book->penulis }}</td>
                             <td class="px-6 py-4">{{ $book->kategori }}</td>
-                            <td class="px-6 py-4">{{ $book->tahun_terbit }}</td>
                             <td class="px-6 py-4">{{ $book->jumlah_stok }}</td>
                             <td class="px-6 py-4">
                                 <span
@@ -92,11 +90,12 @@
                 </table>
             </div>
 
+-------
             <!-- Modal -->
             @foreach($books as $book)
-            <div id="modal-{{ $book->id }}" tabindex="-1" 
+            <div id="modal-{{ $book->id }}" tabindex="-1"
                 class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-full max-w-md max-h-full">   
+                <div class="relative w-full max-w-md max-h-full">
                     <div class="relative bg-white rounded-lg shadow">
                         <!-- Modal Header -->
                         <div class="flex items-start justify-between p-4 border-b dark:border-gray-600">
@@ -109,32 +108,45 @@
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </button>
                         </div>
+-------
                         <!-- Modal body -->
                         <form action="{{ route('books.pinjam') }}" method="POST" class="p-6">
                             @csrf
                             <input type="hidden" name="book_id" value="{{ $book->id }}">
-                    
+
                             <!-- Nama Peminjam -->
                             <div class="mb-4">
-                                <label for="nama_peminjam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label for="nama_peminjam"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Nama Peminjam
                                 </label>
-                                <input type="text" id="nama_peminjam" name="nama_peminjam" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nama Peminjam" required>
+                                <input type="text" id="nama_peminjam" name="nama_peminjam"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Nama Peminjam" required>
                             </div>
-                    
+
                             <!-- Tanggal Peminjaman -->
                             <div class="mb-4">
-                                <label for="tanggal_pinjam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Peminjaman</label>
-                                <input type="date" id="tanggal_pinjam" name="tanggal_pinjam" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required value="{{ now()->format('Y-m-d') }}">
+                                <label for="tanggal_pinjam"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal
+                                    Peminjaman</label>
+                                <input type="date" id="tanggal_pinjam" name="tanggal_pinjam"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required value="{{ now()->format('Y-m-d') }}">
                             </div>
-                    
+
                             <!-- Tanggal Pengembalian -->
                             <div class="mb-4">
-                                <label for="tanggal_kembali" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Pengembalian</label>
-                                <input type="date" id="tanggal_kembali" name="tanggal_kembali" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required value="{{ now()->addDays(7)->format('Y-m-d') }}">
+                                <label for="tanggal_kembali"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal
+                                    Pengembalian</label>
+                                <input type="date" id="tanggal_kembali" name="tanggal_kembali"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required value="{{ now()->addDays(7)->format('Y-m-d') }}">
                             </div>
-                    
-                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Pinjam</button>
+
+                            <button type="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Pinjam</button>
                         </form>
                     </div>
                 </div>
@@ -143,6 +155,7 @@
         </div>
     </section>
 </x-app-layout>
+
 
 <script>
     function openModal(bookId) {
