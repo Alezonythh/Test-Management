@@ -1,4 +1,23 @@
 <x-app-layout>
+    <style>
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            50% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .animate-shimmer {
+            animation: shimmer 6s linear infinite;
+        }
+    </style>
     <div x-data="{
         open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
     }" x-init="window.addEventListener('sidebar-toggled', () => {
@@ -232,24 +251,73 @@
                                 </div>
                         @endif
                         @if (Auth::user()->role == 'anggota')
-                            <a href="{{ route('anggota.index') }}">
-                                <button
-                                    class="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+                                <!-- Card 1: PINJAM BARANG -->
+                                <div
+                                    class="relative rounded-3xl shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-500
+                bg-gradient-to-r from-[#4F6CF2] to-[#7FA9FF]">
+
+                                    <!-- Efek shimmer lebih terang -->
                                     <span
-                                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                                        PINJAM BUKU
-                                    </span>
-                                </button>
-                            </a>
-                            <a href="{{ route('anggota.borrowed') }}">
-                                <button
-                                    class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></span>
+
+                                    <div
+                                        class="p-10 bg-white/90 dark:bg-gray-900/80 rounded-3xl backdrop-blur-md flex flex-col gap-6 relative z-10">
+                                        <div class="flex items-center gap-3">
+                                            <ion-icon name="cube-outline" class="text-3xl text-white"></ion-icon>
+                                            <h2 class="text-2xl font-bold text-white">PINJAM BARANG</h2>
+                                        </div>
+                                        <p class="text-white/90">
+                                            Pilih barang yang ingin dipinjam dengan mudah. Sistem kami cepat, aman, dan
+                                            nyaman digunakan.
+                                        </p>
+                                        <a href="{{ route('anggota.index') }}" class="w-full">
+                                            <button
+                                                class="relative w-full px-6 py-3 font-semibold rounded-xl text-white
+               bg-gradient-to-r from-[#4F6CF2] to-[#7FA9FF]
+               shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+                                                <span
+                                                    class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
+                                                <span class="relative">MULAI PINJAM</span>
+                                            </button>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: RIWAYAT PEMINJAMAN -->
+                                <div
+                                    class="relative rounded-3xl shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-500
+                bg-gradient-to-r from-[#4AC97A] to-[#A8FF7F]">
+
+                                    <!-- Efek shimmer lebih terang -->
                                     <span
-                                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                                        RIWAYAT PEMINJAMAN
-                                    </span>
-                                </button>
-                            </a>
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"></span>
+
+                                    <div
+                                        class="p-10 bg-white/90 dark:bg-gray-900/80 rounded-3xl backdrop-blur-md flex flex-col gap-6 relative z-10">
+                                        <div class="flex items-center gap-3">
+                                            <ion-icon name="time-outline" class="text-3xl text-white"></ion-icon>
+                                            <h2 class="text-2xl font-bold text-white">RIWAYAT PEMINJAMAN</h2>
+                                        </div>
+                                        <p class="text-white/90">
+                                            Lihat semua barang yang sudah kamu pinjam, status pengembalian, dan histori
+                                            lengkapnya dengan mudah.
+                                        </p>
+                                        <a href="{{ route('anggota.borrowed') }}" class="w-full">
+                                            <button
+                                                class="relative w-full px-6 py-3 font-semibold rounded-xl text-white
+               bg-gradient-to-r from-[#4AC97A] to-[#A8FF7F]
+               shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+                                                <span
+                                                    class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
+                                                <span class="relative">LIHAT RIWAYAT</span>
+                                            </button>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                     @endauth
                 </div>
