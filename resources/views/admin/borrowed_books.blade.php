@@ -1,5 +1,11 @@
 <x-app-layout>
-    <div class="container mx-auto pt-10 lg:pl-64">
+    <div x-data="{
+        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
+    }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300">
+    <div class="container mx-auto pt-10">
         <h1 class="text-3xl font-bold text-white mb-6 text-center">Daftar Peminjaman Buku</h1>
 
         <!-- Form Filter Status -->
@@ -172,6 +178,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div></div>
     @endforeach
 </x-app-layout>

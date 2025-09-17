@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('judul_buku');
-            $table->string('penulis');
             $table->string('kategori');
-            $table->year('tahun_terbit');
             $table->integer('jumlah_stok');
             $table->boolean('status')->default(true);
             $table->string('deskripsi');

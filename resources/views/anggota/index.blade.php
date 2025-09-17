@@ -74,11 +74,9 @@
                         <!-- Informasi Buku -->
                         <div class="p-6 flex-grow text-white">
                             <h5 class="mb-4 text-2xl font-bold tracking-wide">
-                                {{ $book->judul_buku }}
+                                {{ trim(str_replace(' -----', '', $book->judul_buku)) }}
                             </h5>
-                            <p class="mb-2"><strong>Penulis:</strong> {{ $book->penulis }}</p>
                             <p class="mb-2"><strong>Kategori:</strong> {{ $book->kategori }}</p>
-                            <p class="mb-2"><strong>Tahun Terbit:</strong> {{ $book->tahun_terbit }}</p>
                             <p class="mb-2"><strong>Jumlah Stok:</strong>
                                 <span
                                     class="px-2 py-1 rounded-lg font-semibold
@@ -130,126 +128,6 @@
 
 
 
-                    </div>
-
-
-                    <!-- Modal -->
-                    <div id="modal-{{ $book->id }}" tabindex="-1"
-                        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full
-           backdrop-blur-sm bg-black/30">
-
-                        <div class="relative w-full max-w-md max-h-full mx-auto">
-                            <div
-                                class="relative bg-gradient-to-br from-[#2C3262] to-[#434a8b] rounded-3xl shadow-2xl overflow-hidden border border-gray-700">
-
-                                <!-- Modal Header -->
-                                <div class="flex items-center justify-between p-5 border-b border-gray-600">
-                                    <h3 class="text-xl font-bold text-white tracking-wide">
-                                        Form Pinjam Barang
-                                    </h3>
-                                    <button type="button"
-                                        class="text-white hover:text-gray-200 hover:bg-white/20 rounded-full p-2 transition"
-                                        data-modal-hide="modal-{{ $book->id }}">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-
-                                <!-- Modal Body -->
-                                <form action="{{ route('anggota.store') }}" method="POST" class="p-6 space-y-4">
-                                    @csrf
-                                    <input type="hidden" name="book_id" value="{{ $book->id }}">
-
-                                    @if ($errors->any())
-                                        <div class="bg-red-100 text-red-700 p-2 rounded-lg text-sm">
-                                            <ul class="list-disc list-inside">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-
-                                    @if (Auth::check() && Auth::user()->role == 'admin')
-                                        <div>
-                                            <label for="user_id" class="block mb-1 text-sm font-semibold text-white">
-                                                ID Pengguna
-                                            </label>
-                                            <input type="text" id="user_id" name="user_id"
-                                                class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#2C3262]"
-                                                placeholder="Masukkan ID Pengguna" required>
-                                        </div>
-                                    @endif
-
-                                    <div>
-                                        <label for="nama_peminjam" class="block mb-1 text-sm font-semibold text-white">
-                                            Nama Peminjam
-                                        </label>
-                                        <input type="text" id="nama_peminjam" name="nama_peminjam"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#2C3262]"
-                                            value="{{ $isLoggedIn ? Auth::user()->name : '' }}" readonly>
-                                    </div>
-
-                                    <div>
-                                        <label class="block mb-1 text-sm font-semibold text-white">Judul Buku</label>
-                                        <input type="text"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300"
-                                            value="{{ $book->judul_buku }}" readonly>
-                                    </div>
-
-                                    <div>
-                                        <label class="block mb-1 text-sm font-semibold text-white">Penulis</label>
-                                        <input type="text"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300"
-                                            value="{{ $book->penulis }}" readonly>
-                                    </div>
-
-                                    <div>
-                                        <label class="block mb-1 text-sm font-semibold text-white">Kategori</label>
-                                        <input type="text"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300"
-                                            value="{{ $book->kategori }}" readonly>
-                                    </div>
-
-                                    <div>
-                                        <label for="tanggal_pinjam" class="block mb-1 text-sm font-semibold text-white">
-                                            Tanggal Peminjaman
-                                        </label>
-                                        <input type="date" id="tanggal_pinjam" name="tanggal_pinjam"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#2C3262]"
-                                            required>
-                                    </div>
-
-                                    <div>
-                                        <label for="tanggal_kembali"
-                                            class="block mb-1 text-sm font-semibold text-white">
-                                            Tanggal Pengembalian
-                                        </label>
-                                        <input type="date" id="tanggal_kembali" name="tanggal_kembali"
-                                            class="w-full p-2.5 text-gray-900 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#2C3262]"
-                                            required>
-                                    </div>
-
-                                    <button type="submit"
-                                        class="w-full py-3 font-bold text-white text-lg
-           bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] 
-           rounded-2xl shadow-lg shadow-[#FF6B6B]/50
-           hover:from-[#FF8787] hover:to-[#FFA17F]
-           hover:scale-105 transform transition-all duration-300
-           relative overflow-hidden">
-
-                                        <span
-                                            class="absolute inset-0 bg-white/10 blur-md opacity-0 hover:opacity-30 transition-opacity duration-300 rounded-2xl"></span>
-                                        Pinjam
-                                    </button>
-
-
-                                </form>
-                            </div>
-                        </div>
                     </div>
 
                 @empty

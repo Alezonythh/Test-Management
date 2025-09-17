@@ -21,7 +21,6 @@ class BookController extends Controller
         $books = Book::query()
             ->when($search, function ($query, $search) {
                 return $query->where('judul_buku', 'like', "%{$search}%")
-                    ->orWhere('penulis', 'like', "%{$search}%")
                     ->orWhere('kategori', 'like', "%{$search}%");
             })
             ->get();
@@ -45,9 +44,7 @@ class BookController extends Controller
 
             $request->validate([
                 'judul_buku' => 'required',
-                'penulis' => 'required',
                 'kategori' => 'required',
-                'tahun_terbit' => 'required|integer',
                 'jumlah_stok' => 'required|integer',
                 'status' => 'required|boolean',
                 'deskripsi' => 'required',
@@ -96,9 +93,7 @@ class BookController extends Controller
     {
         $request->validate([
             'judul_buku' => 'required',
-            'penulis' => 'required',
             'kategori' => 'required',
-            'tahun_terbit' => 'required|integer',
             'jumlah_stok' => 'required|integer',
             'status' => 'required|boolean',
             'deskripsi' => 'required',
