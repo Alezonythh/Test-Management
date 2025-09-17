@@ -333,14 +333,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
                             <!-- Bagian Kiri: Card -->
                             <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-6">
-
                                 @foreach ($dataPeminjam as $item)
                                     <div
                                         class="relative flex flex-col items-center text-center rounded-3xl p-6
-                bg-white/80 dark:bg-gray-900/80 
-                backdrop-blur-xl border border-gray-200/40 dark:border-gray-700/40
-                shadow-lg hover:shadow-2xl hover:-translate-y-2
-                transition-all duration-500 ease-out group">
+            bg-white/80 dark:bg-gray-900/80 
+            backdrop-blur-xl border border-gray-200/40 dark:border-gray-700/40
+            shadow-lg hover:shadow-2xl hover:-translate-y-2
+            transition-all duration-500 ease-out group">
 
                                         <!-- Decorative Glow -->
                                         <div
@@ -350,13 +349,12 @@
                                         <!-- Icon Box -->
                                         <div
                                             class="relative w-20 h-20 flex items-center justify-center rounded-2xl 
-                  bg-gradient-to-br from-blue-500 to-indigo-600 
-                  dark:from-indigo-500 dark:to-purple-600
-                  shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
-                                            <img src="{{ asset('storage/' . $item->foto_awal_barang) }}"
+                bg-gradient-to-br from-blue-500 to-indigo-600 
+                dark:from-indigo-500 dark:to-purple-600
+                shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
+
+                                            <img src="{{ asset('storage/' . $item->kondisi_awal) }}"
                                                 alt="Kondisi Awal" class="w-full h-full object-cover rounded-2xl">
-
-
                                         </div>
 
                                         <!-- Nama Barang -->
@@ -366,14 +364,6 @@
                                             {{ $item->nama_barang }}
                                         </p>
 
-                                        <!-- Total -->
-                                        <h2
-                                            class="relative text-3xl font-extrabold mt-2 
-                  bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 
-                  bg-clip-text text-transparent">
-                                            {{ $item->total }}
-                                        </h2>
-
                                         <!-- Info Peminjam -->
                                         <p
                                             class="relative text-xs mt-3 text-gray-500 dark:text-gray-400 
@@ -382,14 +372,14 @@
                                         </p>
                                     </div>
                                 @endforeach
-
                             </div>
+
                             <!-- Bagian Kanan: Progress -->
                             <div
                                 class="md:col-span-2 rounded-2xl shadow-xl p-6 
-            bg-gradient-to-br from-gray-50 to-white 
-            dark:from-gray-900 dark:to-gray-800 
-            backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
+bg-gradient-to-br from-gray-50 to-white 
+dark:from-gray-900 dark:to-gray-800 
+backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                                 <h2
                                     class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                                     <ion-icon name="bar-chart-outline"
@@ -399,13 +389,13 @@
 
                                 @foreach ($dataBuku as $buku)
                                     @php
-                                        $sisa = max(0, $buku->jumlah_stok - $buku->dipinjam);
+                                        // Hitung persentase berdasarkan jumlah dipinjam dibanding stok total
                                         $persen =
                                             $buku->jumlah_stok > 0
                                                 ? min(100, ($buku->dipinjam / $buku->jumlah_stok) * 100)
                                                 : 0;
 
-                                        // Warna progress bar
+                                        // Tentukan warna progress bar
                                         if ($persen >= 80) {
                                             $warna =
                                                 'from-red-400 via-red-500 to-red-600 shadow-[0_0_8px_rgba(239,68,68,0.6)] dark:shadow-[0_0_12px_rgba(220,38,38,0.8)]';
@@ -418,55 +408,47 @@
                                         }
                                     @endphp
 
-                                    <div class="mb-6">
-                                        <!-- Judul Buku -->
-                                        <div class="flex justify-between items-center mb-2">
+                                    <div class="mb-6 flex flex-col justify-between h-28">
+                                        <!-- Judul & Stok -->
+                                        <div class="flex justify-between items-center mb-1">
                                             <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                                 {{ $buku->judul_buku }}
                                             </p>
                                             <span
-                                                class="text-xs px-2 py-1 rounded-full 
-                bg-blue-100 text-blue-700 
-                dark:bg-blue-900/50 dark:text-blue-300">
+                                                class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                                                 Stok: {{ $buku->jumlah_stok }}
                                             </span>
                                         </div>
 
-                                        <!-- Progress Bar -->
+                                        <!-- Progress Bar with percentage label -->
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span
+                                                class="text-xs font-medium text-gray-600 dark:text-gray-300">Dipinjam:
+                                                {{ $buku->dipinjam }}</span>
+                                            <span
+                                                class="text-xs font-medium text-gray-600 dark:text-gray-300">{{ round($persen) }}%</span>
+                                        </div>
                                         <div
                                             class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                                             <div class="h-3 rounded-full bg-gradient-to-r {{ $warna }} transition-[width] duration-1000 ease-out"
-                                                style="width: {{ $persen }}%">
-                                            </div>
+                                                style="width: {{ $persen }}%"></div>
                                         </div>
-
-                                        <!-- Detail Info -->
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                            Dipinjam:
-                                            <span class="font-medium text-blue-600 dark:text-blue-400">
-                                                {{ $buku->dipinjam }}
-                                            </span>
-                                        </p>
                                     </div>
                                 @endforeach
 
 
+
+
+
                             </div>
 
+
                         </div>
 
 
 
-                        <div class="mt-6 flex justify-end">
-                            <a href="{{ route('admin.borrowedBooks') }}"
-                                class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold text-sm rounded-xl shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300">
-                                Lihat Semua
-                                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
-                        </div>
+
+                    </div>
 
 
 

@@ -135,9 +135,7 @@
                                  <h5 class="mb-4 text-3xl font-extrabold tracking-wide drop-shadow-md">
                                      {{ $book->judul_buku }}
                                  </h5>
-                                 <p class="mb-2"><strong>Penulis:</strong> {{ $book->penulis }}</p>
                                  <p class="mb-2"><strong>Kategori:</strong> {{ $book->kategori }}</p>
-                                 <p class="mb-2"><strong>Tahun Terbit:</strong> {{ $book->tahun_terbit }}</p>
                                  <p class="mb-2"><strong>Jumlah Stok:</strong>
                                      <span
                                          class="px-3 py-1 rounded-full text-sm font-bold shadow-inner 
@@ -175,15 +173,17 @@
                                              class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
                                      </button>
                                  @else
-                                     <a href="{{ route('login') }}"
+                                     <button
                                          class="relative w-full px-5 py-3 bg-gradient-to-r from-[#2C3262] via-[#434A8B] to-[#2C3262] text-white font-bold rounded-2xl shadow-lg 
                        overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-indigo-500/50">
-                                         <span class="relative z-10 flex items-center justify-center gap-2">
-                                             Pinjam Buku
-                                         </span>
-                                         <span
-                                             class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
-                                     </a>
+                                         <a href="{{ route('login') }}">
+                                             <span class="relative z-10 flex items-center justify-center gap-2">
+                                                 Pinjam Buku
+                                             </span>
+                                             <span
+                                                 class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
+                                         </a>
+                                     </button>
                                  @endif
                              </div>
                          </div>
@@ -247,12 +247,7 @@
                                                  value="{{ $book->judul_buku }}" readonly>
                                          </div>
 
-                                         <div>
-                                             <label class="block mb-1 text-xs font-medium">Penulis</label>
-                                             <input type="text"
-                                                 class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none"
-                                                 value="{{ $book->penulis }}" readonly>
-                                         </div>
+
 
                                          <div>
                                              <label class="block mb-1 text-xs font-medium">Kategori</label>
