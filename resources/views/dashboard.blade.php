@@ -353,7 +353,7 @@
                   bg-gradient-to-br from-blue-500 to-indigo-600 
                   dark:from-indigo-500 dark:to-purple-600
                   shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
-                                            <img src="{{ Storage::url($item->foto_awal_barang) }}" alt="Kondisi Awal"
+                                            <img src="{{ asset('storage/' . $item->foto_awal_barang) }}" alt="Kondisi Awal"
                                                 class="w-full h-full object-cover rounded-2xl">
 
 
