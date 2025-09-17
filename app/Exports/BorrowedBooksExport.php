@@ -25,13 +25,34 @@ class BorrowedBooksExport implements FromCollection, WithMapping, WithHeadings
     public function map($borrow): array
     {
         return [
+            // judul buku dari relasi Book
             $borrow->book->judul_buku ?? '-',
+
+            // nama peminjam, ambil dari relasi user atau field nama_peminjam
             $borrow->user->name ?? $borrow->nama_peminjam ?? '-',
-            $borrow->tanggal_pinjam ? Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') : '-',
-            $borrow->tanggal_kembali ? Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') : '-',
+
+            // tanggal pinjam
+            $borrow->tanggal_pinjam
+                ? Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y')
+                : '-',
+
+            // tanggal kembali
+            $borrow->tanggal_kembali
+                ? Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y')
+                : '-',
+
+            // status peminjaman
             ucfirst($borrow->status) ?? '-',
-            $borrow->kondisi_awal ?? '-',
-            $borrow->kondisi_akhir ?? '-',
+
+            // kondisi awal dari tabel books
+            $borrow->book->kondisi_awal
+                ? url('images/' . $borrow->book->kondisi_awal)
+                : '-',
+
+            // kondisi akhir dari tabel pinjam_buku
+            $borrow->kondisi_akhir
+                ? url('images/' . $borrow->kondisi_akhir)
+                : '-',
         ];
     }
 
@@ -44,7 +65,7 @@ class BorrowedBooksExport implements FromCollection, WithMapping, WithHeadings
             'Tanggal Kembali',
             'Status',
             'Kondisi Awal',
-            'Kondisi Akhir'
+            'Kondisi Akhir',
         ];
     }
 }
