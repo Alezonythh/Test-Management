@@ -1,8 +1,12 @@
 <x-app-layout>
-    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
-        
-        
-        <div class="mx-auto max-w-screen-xl px-4  lg:pl-64">
+    <div x-data="{
+        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
+    }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300">
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5"> 
+        <div class="mx-auto max-w-screen-xl px-4">
                             <!-- Flash Message -->
                             @if (session('success'))
                     <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
@@ -120,5 +124,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section></div>
 </x-app-layout>

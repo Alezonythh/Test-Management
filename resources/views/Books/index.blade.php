@@ -1,12 +1,18 @@
 <x-app-layout>
+    <div x-data="{
+        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
+    }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300">
     <section class="bg-white dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-7xl lg:pl-64">
+        <div class="py-8 px-4 mx-auto max-w-7xl">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Daftar Buku</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Daftar Barang</h2>
                 @if (Auth::check() && Auth::user()->role == 'admin')
                 <a href="{{ route('books.create') }}"
                     class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
-                    Tambah Buku
+                    Tambah Barang
                 </a>
                 @endif
             </div>
@@ -154,6 +160,7 @@
             @endforeach
         </div>
     </section>
+    </div>
 </x-app-layout>
 
 
