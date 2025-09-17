@@ -353,8 +353,8 @@
                   bg-gradient-to-br from-blue-500 to-indigo-600 
                   dark:from-indigo-500 dark:to-purple-600
                   shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
-                                            <img src="{{ asset('storage/' . $item->foto_awal_barang) }}" alt="Kondisi Awal"
-                                                class="w-full h-full object-cover rounded-2xl">
+                                            <img src="{{ asset('storage/' . $item->foto_awal_barang) }}"
+                                                alt="Kondisi Awal" class="w-full h-full object-cover rounded-2xl">
 
 
                                         </div>
@@ -405,7 +405,7 @@
                                                 ? min(100, ($buku->dipinjam / $buku->jumlah_stok) * 100)
                                                 : 0;
 
-                                        // Warna progress bar berdasarkan persentase
+                                        // Warna progress bar
                                         if ($persen >= 80) {
                                             $warna =
                                                 'from-red-400 via-red-500 to-red-600 shadow-[0_0_8px_rgba(239,68,68,0.6)] dark:shadow-[0_0_12px_rgba(220,38,38,0.8)]';
@@ -426,8 +426,8 @@
                                             </p>
                                             <span
                                                 class="text-xs px-2 py-1 rounded-full 
-                         bg-blue-100 text-blue-700 
-                         dark:bg-blue-900/50 dark:text-blue-300">
+                bg-blue-100 text-blue-700 
+                dark:bg-blue-900/50 dark:text-blue-300">
                                                 Stok: {{ $buku->jumlah_stok }}
                                             </span>
                                         </div>
@@ -435,19 +435,21 @@
                                         <!-- Progress Bar -->
                                         <div
                                             class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                                            <div class="h-3 rounded-full transition-all duration-700 ease-out
-                        bg-gradient-to-r {{ $warna }}"
+                                            <div class="h-3 rounded-full bg-gradient-to-r {{ $warna }} transition-[width] duration-1000 ease-out"
                                                 style="width: {{ $persen }}%">
                                             </div>
                                         </div>
 
                                         <!-- Detail Info -->
                                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                            Dipinjam: <span
-                                                class="font-medium text-blue-600 dark:text-blue-400">{{ $buku->dipinjam }}</span>
+                                            Dipinjam:
+                                            <span class="font-medium text-blue-600 dark:text-blue-400">
+                                                {{ $buku->dipinjam }}
+                                            </span>
                                         </p>
                                     </div>
                                 @endforeach
+
 
                             </div>
 
