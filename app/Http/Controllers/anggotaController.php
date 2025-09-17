@@ -284,7 +284,26 @@ $dataPeminjam = DB::table('pinjam_bukus')
 
 
 
-        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataBuku'));
+        // Get count of overdue books
+        $overdueBooksCount = PinjamBuku::where('tanggal_kembali', '<', Carbon::now())
+            ->where('status', 'dipinjam')
+            ->count();
+
+        // Get count of pending loan requests
+        $pendingRequestsCount = PinjamBuku::where('status', 'menunggu konfirmasi')
+            ->count();
+
+        // Get overdue books
+        $overdueBooks = PinjamBuku::with('book', 'user')
+            ->where('tanggal_kembali', '<', Carbon::now())
+            ->where('status', 'dipinjam')
+            ->get();
+        // Get pending loan requests
+        $pendingRequests = PinjamBuku::with('book', 'user')
+            ->where('status', 'menunggu konfirmasi')
+            ->get();
+
+        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataBuku', 'overdueBooksCount', 'pendingRequestsCount', 'overdueBooks', 'pendingRequests'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)

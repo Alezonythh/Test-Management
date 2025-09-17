@@ -68,7 +68,6 @@
 
 
 
-
                         <!-- Right Section -->
                         <div class="flex items-center space-x-6">
 
@@ -76,23 +75,23 @@
                             <!-- Auth User -->
                             @if (Auth::check() && Auth::user()->role == 'admin')
                                 <!-- Notifikasi -->
-                                <button
-                                    class="relative w-11 h-11 flex items-center justify-center 
-                                        rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 
-                                        text-white shadow-lg hover:scale-110 transition-all duration-500">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a2 2 0 002-2H8a2 2 0 002 2z" />
-                                    </svg>
-                                    <span
-                                        class="absolute top-2 right-2 w-2.5 h-2.5 
-                                            bg-red-500 rounded-full border-2 border-white dark:border-gray-900 
-                                            animate-ping"></span>
-                                    <span
-                                        class="absolute top-2 right-2 w-2.5 h-2.5 
-                                            bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
-                                </button>
-                            @endif
+                                <div class="relative">
+                                 <button id="notification-button" @click="$dispatch('open-modal', 'notification-modal')"
+                                        class="relative w-11 h-11 flex items-center justify-center 
+                                             rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 
+                                             text-white shadow-lg hover:scale-110 transition-all duration-500">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                             <path
+                                                 d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a2 2 0 002-2H8a2 2 0 002 2z" />
+                                         </svg>
+                                        @if(isset($overdueBooksCount) && isset($pendingRequestsCount) && ($overdueBooksCount + $pendingRequestsCount) > 0)
+                                            <span class="absolute top-2 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                                {{ $overdueBooksCount + $pendingRequestsCount }}
+                                            </span>
+                                        @endif
+                                    </button>
+                                </div>
+                             @endif
 
 
                             <!-- Date -->
@@ -122,7 +121,6 @@
                         </div>
                     </div>
                 @endauth
-
 
 
                 <!-- Dashboard Info Section -->
@@ -178,6 +176,7 @@
                                     border border-white/10 dark:border-gray-700
                                     transition-all duration-500 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:shadow-orange-400/40">
 
+                                        <!-- Glow Overlay -->
                                         <div
                                             class="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/5 to-transparent blur-2xl pointer-events-none">
                                         </div>
@@ -204,6 +203,7 @@
                                     border border-white/10 dark:border-gray-700
                                     transition-all duration-500 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:shadow-green-400/40">
 
+                                        <!-- Glow Overlay -->
                                         <div
                                             class="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/5 to-transparent blur-2xl pointer-events-none">
                                         </div>
@@ -230,6 +230,7 @@
                                     border border-white/10 dark:border-gray-700
                                     transition-all duration-500 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:shadow-red-400/40">
 
+                                        <!-- Glow Overlay -->
                                         <div
                                             class="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/5 to-transparent blur-2xl pointer-events-none">
                                         </div>
@@ -321,7 +322,6 @@
                         @endif
                     @endauth
                 </div>
-
 
                 <section class="py-8 bg-gray-50 dark:bg-gray-900 w-full">
                     <div class="max-w-full ">
@@ -451,9 +451,6 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                     </div>
 
 
-
-
-
                 </section>
 
             </div>
@@ -464,10 +461,66 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
 
     </div>
     </body>
+     <x-modal name="notification-modal" maxWidth="md">
+        <div class="bg-[#282E5A] rounded-lg shadow-xl p-6">
+             <div class="flex justify-between items-center pb-3">
+                <h2 class="text-lg font-medium text-white">Notifications</h2>
+                <button @click="$dispatch('close')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-96">
+                @if(isset($overdueBooks) && count($overdueBooks) > 0)
+                    <h6 class="px-6 py-2 font-semibold text-gray-300">Overdue Books</h6>
+                    @foreach($overdueBooks as $borrow)
+                        <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                            <span class="font-semibold">{{ $borrow->book->judul_buku }}</span>
+                            <span class="text-gray-400">- Due: {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}</span>
+                            <br>
+                            <span class="text-xs text-gray-400">By: {{ $borrow->user->name }}</span>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if(isset($pendingRequests) && count($pendingRequests) > 0)
+                    <h6 class="px-6 py-2 font-semibold text-gray-300">Pending Requests</h6>
+                    @foreach($pendingRequests as $request)
+                        <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                            <span class="font-semibold">{{ $request->book->judul_buku }}</span>
+                            <span class="text-gray-400">- By: {{ $request->user->name }}</span>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if((isset($overdueBooks) && count($overdueBooks) == 0) && (isset($pendingRequests) && count($pendingRequests) == 0))
+                    <span class="block px-6 py-3 text-sm text-gray-300">No notifications</span>
+                @endif
+            </div>
+        </div>
+    </x-modal>
+    </div>
+    </body>
     </div>
     </div>
     </div>
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationButton = document.getElementById('notification-button');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+
+            notificationButton.addEventListener('click', function() {
+                //notificationDropdown.classList.toggle('hidden');
+                 Livewire.dispatch('openModal', { modal: 'notification-modal' })
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                  //  notificationDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </x-app-layout>
