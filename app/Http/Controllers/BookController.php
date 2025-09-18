@@ -39,34 +39,27 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'judul_buku' => 'required',
+        'kategori' => 'required',
+        'jumlah_stok' => 'required|integer',
+        'status' => 'required|boolean',
+        'deskripsi' => 'required',
+        'kondisi_awal' => 'nullable|image|max:2048', // optional, max 2MB
+    ]);
 
-            $request->validate([
-                'judul_buku' => 'required',
-                'kategori' => 'required',
-                'jumlah_stok' => 'required|integer',
-                'status' => 'required|boolean',
-                'deskripsi' => 'required',
-            ]);
-
-            // Handle image upload
-            if ($request->hasFile('kondisi_awal')) {
-                $image = $request->file('kondisi_awal');
-                $imageName = time().'.'.$image->getClientOriginalExtension();
-                $image->move(public_path('images'), $imageName);
-                $imagePath = $imageName;
-            } else {
-                $imagePath = null;
-            }
-
-            $book = new Book($request->all());
-        $book->kondisi_awal = $imagePath;
-        $book->save();
-
-            return redirect()->route('books.index')->with('success', 'Buku Berhasil Dibuat.');
-
+    // Upload image ke storage/app/public/post-images
+    if ($request->hasFile('kondisi_awal')) {
+        $validated['kondisi_awal'] = $request->file('kondisi_awal')->store('post-images', 'public');
     }
+
+    Book::create($validated);
+
+    return redirect()->route('books.index')->with('success', 'Buku berhasil dibuat.');
+}
+
 
     /**
      * Display the specified resource.

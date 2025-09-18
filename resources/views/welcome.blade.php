@@ -205,7 +205,7 @@
                     <div class="space-y-4">
                         <h1 class="text-4xl md:text-6xl font-bold leading-tight">
                             <span class="block gradient-text">Selamat Datang</span>
-                            <span class="block text-white/90">Sistem Peminjaman</span>
+                            <span class="block text-white/90">Di Peminjaman</span>
                             <span class="block text-2xl md:text-3xl font-medium" style="color: #F1A004;">Studio
                                 Equipment</span>
                         </h1>
