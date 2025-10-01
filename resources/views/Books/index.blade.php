@@ -22,8 +22,7 @@
                         class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-[#F1A004] dark:hover:bg-[#CC8600] dark:focus:ring-blue-800">
                         Tambah Barang
                     </a>
-                    @endif
-                </div>
+                    </div>
                 <div class="flex items-center justify-between mb-4">
                     <form action="{{ route('books.index') }}" method="GET" class="w-full max-w-md">
                         <div class="relative">
@@ -165,8 +164,7 @@
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
                             Tambah Barang
                         </a>
-                    @endif
-                </div>
+                    </div>
                 <div class="flex items-center justify-between mb-4">
                     <form action="{{ route('books.index') }}" method="GET" class="w-full max-w-md">
                         <div class="relative">
@@ -323,6 +321,7 @@
                     </div>
 >>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522
                 @endforeach
+                    @endif
             </div>
         </section>
     </div>
