@@ -57,7 +57,7 @@ class BookController extends Controller
 
     Book::create($validated);
 
-    return redirect()->route('books.index')->with('success', 'Buku berhasil dibuat.');
+    return redirect()->route('books.index')->with('created', 'Barang berhasil dibuat.');
 }
 
 
@@ -106,7 +106,7 @@ class BookController extends Controller
 
         $book->update($request->except('kondisi_awal'));
 
-        return redirect()->route('books.index')->with('success', 'Buku Berhasil Diupdate.');
+        return redirect()->route('books.index')->with('updated', 'Barang Berhasil Diupdate.');
     }
 
     /**
@@ -116,7 +116,7 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         $book->delete();
-        return redirect()->route('books.index')->with('success', 'Buku Berhasil Dihapus.');
+        return redirect()->route('books.index')->with('deleted', 'Barang Berhasil Dihapus.');
     }
 
     public function pinjam(Request $request)

@@ -53,6 +53,9 @@
                     </span>
                 </h1>
             </div>
+            <button id="theme-toggle"
+                class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200">
+            </button>
 
             <li>
                 <a href="{{ route('dashboard') }}"
@@ -461,25 +464,32 @@
 </aside>
 
 <script>
-    // const dropdownBtn = document.getElementById('dropdownBtn');
-    // const arrowIcon = document.getElementById('arrowIcon');
+    const themeToggleBtn = document.getElementById("theme-toggle");
 
-    // dropdownBtn.addEventListener('click', () => {
-    //     arrowIcon.classList.toggle('rotate-180');
-    // });
+    // cek tema terakhir
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+    }
 
-    //     const authBtn = document.getElementById('authDropdownBtn');
-    //     const authArrow = document.getElementById('authArrowIcon');
+    function updateIcon() {
+        themeToggleBtn.innerHTML = document.documentElement.classList.contains("dark") ?
+            "🌞" // kalau dark → ikon matahari
+            :
+            "🌙"; // kalau light → ikon bulan
+    }
 
-    //     authBtn.addEventListener('click', () => {
-    //         authArrow.classList.toggle('rotate-180'); // mutar 180°
-    //     });
+    // set icon awal
+    updateIcon();
 
-    //         const userAdminBtn = document.getElementById('userAdminButton');
-    //     const userAdminArrow = document.getElementById('userAdminArrow');
+    themeToggleBtn.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
 
-    //     userAdminBtn.addEventListener('click', () => {
-    //         // Memutar ikon 180 derajat
-    //         userAdminArrow.classList.toggle('rotate-180');
-    //     });
+        if (document.documentElement.classList.contains("dark")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+
+        updateIcon();
+    });
 </script>
