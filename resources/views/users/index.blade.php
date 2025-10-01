@@ -16,26 +16,38 @@
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 
                  <!-- Form Pencarian -->
-                 <div class="flex justify-between items-center p-4">
-                    <form action="{{ route('users.index') }}" method="GET" class="flex">
-                        <input type="text" name="search" id="search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Cari berdasarkan nama atau email" value="{{ request('search') }}">
-                        <button type="submit"
-                            class="ml-2 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Cari
-                        </button>
-                    </form>
-                
-                <!-- Tombol Tambah Anggota -->
-                <div class="flex justify-between">
-                    <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-                        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#F1A004] dark:hover:bg-[#CC8600] dark:focus:ring-[#CC8600]">
-                        Tambah Anggota
-                    </button>
-                </div>
-                 
-                </div>
+                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 border-b dark:border-gray-700">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Daftar Anggota</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Kelola data anggota dengan mudah.</p>
+    </div>
+    <div class="flex mt-4 sm:mt-0 gap-2">
+        <form action="{{ route('users.index') }}" method="GET" class="flex">
+            <input type="text" name="search" id="search"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-[#F1A004] focus:border-[#F1A004] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                placeholder="Cari nama/email..." value="{{ request('search') }}">
+            <button type="submit"
+                class="text-white bg-[#2C3262] hover:bg-[#1e244a] px-4 rounded-r-lg transition-all">
+                Cari
+            </button>
+        </form>
+        <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+    class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+           bg-gradient-to-r from-[#F1A004] to-[#CC8600]
+           shadow-[0_4px_15px_rgba(241,160,4,0.6)]
+           transition-all duration-500 ease-in-out
+           hover:scale-110 hover:shadow-[0_8px_25px_rgba(204,134,0,0.8)]
+           active:scale-95 active:shadow-inner overflow-hidden">
+    
+    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                 transition-all duration-700 ease-in-out"></span>
+    
+    Tambah Anggota
+</button>
+    </div>
+</div>
+
 
 
                 <!-- Tabel Daftar Pengguna -->
@@ -57,12 +69,36 @@
                                     <td class="px-4 py-3">{{ $user->name }}</td>
                                     <td class="px-4 py-3">{{ $user->email }}</td>
                                     <td class="px-4 py-3 flex text-right space-x-2 items-center">
-                                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-600 dark:text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600">Edit</a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus User ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 dark:text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600">Delete</button>
-                                        </form>
+                                        <a href="{{ route('users.edit', $user->id) }}" 
+   class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+          bg-gradient-to-r from-blue-600 to-indigo-600
+          shadow-[0_4px_15px_rgba(37,99,235,0.6)]
+          transition-all duration-500 ease-in-out
+          hover:scale-110 hover:shadow-[0_8px_25px_rgba(37,99,235,0.8)]
+          active:scale-95 active:shadow-inner overflow-hidden">
+    
+    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                 transition-all duration-700 ease-in-out"></span>
+    
+    Edit
+</a>
+
+<!-- Button Delete -->
+<button type="submit" 
+        class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+               bg-gradient-to-r from-red-600 to-red-800
+               shadow-[0_4px_15px_rgba(220,38,38,0.6)]
+               transition-all duration-500 ease-in-out
+               hover:scale-110 hover:shadow-[0_8px_25px_rgba(220,38,38,0.8)]
+               active:scale-95 active:shadow-inner overflow-hidden">
+        
+        <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                     opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                     transition-all duration-700 ease-in-out"></span>
+        
+        Delete
+    </button>
                                     </td>
                                 </tr>
                             @empty
@@ -83,46 +119,57 @@
 
         <!-- Modal -->
         <div id="defaultModal" tabindex="-1" aria-hidden="true"
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-            <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                    <!-- Modal Header -->
-                    <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            Tambah Anggota
-                        </h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="defaultModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal Body -->
-                    <form action="{{ route('users.store') }}" method="POST">
-                        @csrf
-                        <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                            <div>
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Lengkap</label>
-                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nama Lengkap" required>
-                            </div>
-                            <div>
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukan email siswa" required>
-                            </div>
-                            <div>
-                                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukan Password" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Tambah Anggota
-                        </button>
-                    </form>
+    class="fixed inset-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto bg-black/60 backdrop-blur-sm">
+    <div class="relative w-full max-w-lg mx-auto animate-[fadeInScale_0.4s_ease-out]">
+        <div
+            class="relative bg-gradient-to-br from-[#2C3262]/95 to-[#434A8B]/95 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden text-white">
 
-                </div>
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between p-4 border-b border-white/20">
+                <h3 class="text-lg font-extrabold tracking-wide">👤 Tambah Anggota</h3>
+                <button type="button"
+                    class="text-white/70 hover:text-white hover:bg-white/20 rounded-lg text-xs p-2 transition"
+                    data-modal-toggle="defaultModal">
+                    ✖
+                </button>
             </div>
+
+            <!-- Modal Body -->
+            <form action="{{ route('users.store') }}" method="POST" class="p-4 space-y-3 text-sm">
+                @csrf
+
+                <div>
+                    <label for="name" class="block mb-1 text-xs font-medium">Nama Lengkap</label>
+                    <input type="text" name="name" id="name"
+                        class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+                        placeholder="Nama Lengkap" required>
+                </div>
+
+                <div>
+                    <label for="email" class="block mb-1 text-xs font-medium">Email</label>
+                    <input type="email" name="email" id="email"
+                        class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+                        placeholder="Masukan email siswa" required>
+                </div>
+
+                <div>
+                    <label for="password" class="block mb-1 text-xs font-medium">Password</label>
+                    <input type="password" name="password" id="password"
+                        class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:ring-2 focus:ring-indigo-300 focus:outline-none"
+                        placeholder="Masukan Password" required>
+                </div>
+
+                <!-- Tombol Submit -->
+                <button type="submit"
+                    class="relative w-full px-3 py-2 rounded-lg font-bold text-white text-sm bg-gradient-to-r from-[#2C3262] via-[#434A8B] to-[#2C3262] shadow-lg overflow-hidden hover:scale-[1.02] transition-all duration-500">
+                    <span class="relative z-10">✨ Tambah Anggota</span>
+                    <span
+                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
+                </button>
+            </form>
         </div>
+    </div>
+</div>
+
     </section></div>
 </x-app-layout>
