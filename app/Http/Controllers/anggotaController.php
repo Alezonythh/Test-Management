@@ -19,12 +19,19 @@ class anggotaController extends Controller
     {
         $query = Book::query();
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('judul_buku', 'like', '%' . $search . '%')
-                ->orWhere('penulis', 'like', '%' . $search . '%')
-                ->orWhere('kategori', 'like', '%' . $search . '%');
-        }
+     // Search judul / penulis
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('judul_buku', 'like', '%' . $search . '%')
+              ->orWhere('penulis', 'like', '%' . $search . '%');
+        });
+    }
+
+    // Filter kategori
+    if ($request->has('kategori') && $request->kategori != '') {
+        $query->where('kategori', $request->kategori);
+    }
 
         $books = $query->orderBy('created_at', 'desc')->paginate(6);
 
@@ -84,20 +91,29 @@ class anggotaController extends Controller
         return redirect()->back()->with('success', 'Permintaan peminjaman berhasil diajukan. Tunggu konfirmasi dari admin.');
     }
 
-    public function borrowedBooks(Request $request)
-    {
-        $status = $request->input('status', 'dipinjam');
+public function borrowedBooks(Request $request)
+{
+    $status = $request->input('status', 'dipinjam');
+    $judul = $request->input('judul_buku'); // ambil input search
 
-        $borrowedBooks = PinjamBuku::where('user_id', auth()->id())
-            ->where('status', $status)
-            ->with('book')
-            ->orderBy($status == 'dipinjam' ? 'tanggal_pinjam' : 'tanggal_kembali', 'desc')
-            ->paginate(6);
+    $query = PinjamBuku::where('user_id', auth()->id())
+        ->where('status', $status)
+        ->with('book')
+        ->orderBy($status == 'dipinjam' ? 'tanggal_pinjam' : 'tanggal_kembali', 'desc');
 
-        $borrowedBooks->appends(['status' => $status]);
-
-        return view('anggota.borrowed', compact('borrowedBooks', 'status'));
+    // Filter judul buku jika ada
+    if ($judul) {
+        $query->whereHas('book', function($q) use ($judul) {
+            $q->where('judul_buku', 'like', '%' . $judul . '%');
+        });
     }
+
+    $borrowedBooks = $query->paginate(6);
+    $borrowedBooks->appends(['status' => $status, 'judul_buku' => $judul]);
+
+    return view('anggota.borrowed', compact('borrowedBooks', 'status'));
+}
+
 
     public function loanRequests()
     {
@@ -244,47 +260,41 @@ class anggotaController extends Controller
         $totalPinjam = PinjamBuku::where('status', 'dipinjam')->count();
 
         $search = request('search'); // ambil dari input search
-        
-$dataPeminjam = DB::table('pinjam_bukus')
-    ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
-    ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
-    ->select(
-        'books.judul_buku as nama_barang',
-        'books.kondisi_awal',
-        'pinjam_bukus.id as pinjam_id',
-        'users.name as peminjam'
-    )
-    ->where('pinjam_bukus.status', 'dipinjam')
-    ->when($search, function ($query, $search) {
-        return $query->where('books.judul_buku', 'like', "%{$search}%");
-    })
-    ->get();
 
-
-
-
-        $dataBuku = DB::table('books')
+        $dataPeminjam = DB::table('pinjam_bukus')
+            ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
+            ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
             ->select(
-                'books.id',
-                'books.judul_buku',
-                'books.jumlah_stok',
-                DB::raw("(SELECT COUNT(*) FROM pinjam_bukus 
-                  WHERE pinjam_bukus.book_id = books.id 
-                    AND pinjam_bukus.status = 'dipinjam') as dipinjam")
+                'books.judul_buku as nama_barang',
+                'books.kondisi_awal',
+                'pinjam_bukus.id as pinjam_id',
+                'users.name as peminjam'
             )
+            ->where('pinjam_bukus.status', 'dipinjam')
+            ->when($search, function ($query, $search) {
+                return $query->where('books.judul_buku', 'like', "%{$search}%");
+            })
             ->get();
 
+        $dataKategori = DB::table('books')
+            ->leftJoin('pinjam_bukus', function ($join) {
+                $join->on('books.id', '=', 'pinjam_bukus.book_id')
+                    ->where('pinjam_bukus.status', 'dipinjam');
+            })
+            ->select(
+                'books.kategori',
+                DB::raw('SUM(books.jumlah_stok) as jumlah_stok_total'),
+                DB::raw('COUNT(pinjam_bukus.id) as dipinjam_total')
+            )
+            ->groupBy('books.kategori')
+            ->get();
 
         //buku yg dikembalikan
         $dataBukuDikembalikan = DB::table('pinjam_bukus')
             ->where('status', 'dikembalikan')
             ->count();
 
-
-
-
-
-        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataBuku'));
+        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataKategori'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)

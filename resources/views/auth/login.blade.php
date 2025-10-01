@@ -15,8 +15,27 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-poppins bg-gray-100">
-    <main class="min-h-screen flex">
+<body class="font-poppins bg-gray-100" x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 1500)">
+
+    <!-- Loading Overlay -->
+    <div x-show="loading"
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-opacity duration-500"
+        x-transition.opacity>
+
+        <!-- Spinner -->
+        <div
+            class="w-16 h-16 border-4 border-t-indigo-500 border-r-transparent border-b-indigo-500 border-l-transparent rounded-full animate-spin mb-4">
+        </div>
+
+        <!-- Loading Text -->
+        <p class="text-gray-700 dark:text-gray-300 text-lg font-semibold animate-pulse">
+            Memuat halaman Login…
+        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            Mohon tunggu sebentar, semua data sedang dipersiapkan.
+        </p>
+    </div>
+    <main x-show="!loading" x-transition.opacity class="min-h-screen flex">
         <!-- Bagian Kiri -->
         <!-- Bagian Kiri -->
         <div class="hidden lg:flex lg:w-1/2 bg-[#F1A004] bg-center bg-no-repeat bg-contain"
