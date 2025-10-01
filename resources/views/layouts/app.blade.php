@@ -26,11 +26,6 @@
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
-            @isset($overdueBooksCount)
-            <div id="overdue-alert" class="fixed bottom-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full h-10 w-10 flex items-center justify-center cursor-pointer shadow-md">
-                <span class="text-2xl font-bold" onclick="showOverdueAlert({{ $overdueBooksCount }})">!</span>
-            </div>
-            @endisset
 
             <!-- Page Heading -->
             @isset($header)

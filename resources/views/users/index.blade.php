@@ -30,7 +30,7 @@
                 <!-- Tombol Tambah Anggota -->
                 <div class="flex justify-between">
                     <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-                        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#F1A004] dark:hover:bg-[#CC8600] dark:focus:ring-[#CC8600]">
                         Tambah Anggota
                     </button>
                 </div>
@@ -56,12 +56,12 @@
                                     <td class="px-4 py-3">{{ $loop->iteration}}</td>
                                     <td class="px-4 py-3">{{ $user->name }}</td>
                                     <td class="px-4 py-3">{{ $user->email }}</td>
-                                    <td class="px-4 py-3 flex">
-                                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <td class="px-4 py-3 flex text-right space-x-2 items-center">
+                                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-600 dark:text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600">Edit</a>
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus User ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                            <button type="submit" class="text-red-600 dark:text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

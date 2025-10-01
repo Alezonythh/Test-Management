@@ -154,7 +154,6 @@
 
 
 
-
                             <!-- Right Section -->
                             <div class="flex items-center space-x-6">
 
@@ -208,7 +207,6 @@
                             </div>
                         </div>
                     @endauth
-
 
 
                     <!-- Dashboard Info Section -->
@@ -522,9 +520,6 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                             </div>
 
 
-
-
-
                         </section>
                     @endauth
 
@@ -534,6 +529,45 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                 <!-- Cards Section -->
                 <!-- Dashboard Info -->
 
+    </div>
+    </body>
+     <x-modal name="notification-modal" maxWidth="md">
+        <div class="bg-[#282E5A] rounded-lg shadow-xl p-6">
+             <div class="flex justify-between items-center pb-3">
+                <h2 class="text-lg font-medium text-white">Notifications</h2>
+                <button @click="$dispatch('close')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-96">
+                @if(isset($overdueBooks) && count($overdueBooks) > 0)
+                    <h6 class="px-6 py-2 font-semibold text-gray-300">Overdue Books</h6>
+                    @foreach($overdueBooks as $borrow)
+                        <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                            <span class="font-semibold">{{ $borrow->book->judul_buku }}</span>
+                            <span class="text-gray-400">- Due: {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}</span>
+                            <br>
+                            <span class="text-xs text-gray-400">By: {{ $borrow->user->name }}</span>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if(isset($pendingRequests) && count($pendingRequests) > 0)
+                    <h6 class="px-6 py-2 font-semibold text-gray-300">Pending Requests</h6>
+                    @foreach($pendingRequests as $request)
+                        <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
+                            <span class="font-semibold">{{ $request->book->judul_buku }}</span>
+                            <span class="text-gray-400">- By: {{ $request->user->name }}</span>
+                        </div>
+                    @endforeach
+                @endif
+
+                @if((isset($overdueBooks) && count($overdueBooks) == 0) && (isset($pendingRequests) && count($pendingRequests) == 0))
+                    <span class="block px-6 py-3 text-sm text-gray-300">No notifications</span>
+                @endif
+            </div>
+        </div>
+    </x-modal>
             </div>
         </body>
     </div>
@@ -542,4 +576,21 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationButton = document.getElementById('notification-button');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+
+            notificationButton.addEventListener('click', function() {
+                //notificationDropdown.classList.toggle('hidden');
+                 Livewire.dispatch('openModal', { modal: 'notification-modal' })
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!notificationButton.contains(event.target) && !notificationDropdown.contains(event.target)) {
+                  //  notificationDropdown.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </x-app-layout>

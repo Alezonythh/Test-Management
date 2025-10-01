@@ -80,11 +80,6 @@
                                         {{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }}</td>
                                     <td class="px-6 py-4">
                                         {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
-                                        @if ($diff == 0 && $borrow->status == 'dipinjam')
-                                            <span class="text-yellow-500 ml-2">(Due Today)</span>
-                                        @elseif ($diff < 0 && $borrow->status == 'dipinjam')
-                                            <span class="text-red-500 ml-2">(Overdue)</span>
-                                        @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         <span
@@ -102,7 +97,7 @@
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         @if ($borrow->kondisi_akhir)
-                                            <img src="{{ asset('images/' . $borrow->kondisi_akhir) }}"
+                                            <img src="{{ asset('storage/' . $borrow->kondisi_akhir) }}"
                                                 alt="Kondisi Akhir" width="50">
                                         @else
                                             Tidak ada gambar
