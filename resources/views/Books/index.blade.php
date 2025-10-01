@@ -1,34 +1,29 @@
 <x-app-layout>
-    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), loading: true }" x-init="window.addEventListener('sidebar-toggled', () => { open = JSON.parse(localStorage.getItem('sidebarOpen')) });
-    setTimeout(() => loading = false, 1000);" :class="open ? 'ml-64' : 'ml-16'"
-        class="transition-all duration-300 relative">
-
-        <!-- Loading Overlay -->
-        <div x-show="loading"
-            class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-opacity duration-500"
-            x-transition.opacity>
-
-            <!-- Spinner -->
-            <div
-                class="w-16 h-16 border-4 border-t-indigo-500 border-r-transparent border-b-indigo-500 border-l-transparent rounded-full animate-spin mb-4">
-            </div>
-
-            <!-- Loading Text -->
-            <p class="text-gray-700 dark:text-gray-300 text-lg font-semibold animate-pulse">
-                Memuat Halaman Daftar Barang...
-            </p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                Mohon tunggu sebentar, semua data sedang dipersiapkan.
-            </p>
-        </div>
-        <section class="bg-white dark:bg-gray-900">
-            <div class="p-6" x-show="!loading" x-transition.opacity>
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300">
+        <div x-data="{
+            open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
+        }" x-init="window.addEventListener('sidebar-toggled', () => {
+            open = JSON.parse(localStorage.getItem('sidebarOpen'));
+        });" :class="open ? 'ml-64' : 'ml-16'"
+            class="transition-all duration-300">
+            <section class="bg-white dark:bg-gray-900">
                 <div class="py-8 px-4 mx-auto max-w-7xl">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Daftar Barang</h2>
                         @if (Auth::check() && Auth::user()->role == 'admin')
                             <a href="{{ route('books.create') }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-[#F1A004] dark:hover:bg-[#CC8600] dark:focus:ring-blue-800">
+                                class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+           bg-gradient-to-r from-[#F1A004] to-[#CC8600]
+           shadow-[0_4px_15px_rgba(241,160,4,0.6)]
+           transition-all duration-500 ease-in-out
+           hover:scale-110 hover:shadow-[0_8px_25px_rgba(204,134,0,0.8)]
+           active:scale-95 active:shadow-inner overflow-hidden">
+           <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                 transition-all duration-700 ease-in-out"></span>
                                 Tambah Barang
                             </a>
                         @endif
@@ -36,16 +31,13 @@
                     <div class="flex items-center justify-between mb-4">
                         <form action="{{ route('books.index') }}" method="GET" class="w-full max-w-md">
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 5a7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </div>
                                 <input type="search" name="search" id="table-search"
-                                    class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-[#F1A004] focus:border-[#F1A004] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                                     placeholder="Search">
+            <button type="submit"
+                class="text-white bg-[#2C3262] hover:bg-[#1e244a] px-4 rounded-r-lg transition-all">
+                Cari
+            </button>
                             </div>
                         </form>
                     </div>
@@ -56,7 +48,10 @@
                         </div>
                     @endif
 
-                    <div class="shadow-md sm:rounded-lg w-full overflow-x-auto">
+                    <div class="relative overflow-x-auto rounded-2xl shadow-2xl 
+            bg-gradient-to-br from-[#2C3262] via-[#434A8B] to-[#2C3262] text-white">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#2C3262]/40 via-[#434A8B]/40 to-[#2C3262]/40 blur-2xl animate-pulse"></div>
+
                         <table class="table-auto w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead
                                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -89,7 +84,7 @@
                                         <td class="px-6 py-4 text-center">
                                             @if ($book->kondisi_awal)
                                                 <a data-fancybox="gallery"
-                                                    href="{{ asset('storage/' . $book->kondisi_awal) }}">
+                                                    href="{{ asset('images/' . $book->kondisi_awal) }}">
                                                     <img src="{{ asset('storage/' . $book->kondisi_awal) }}"
                                                         alt="Kondisi Awal" width="50">
                                                 </a>
@@ -97,31 +92,62 @@
                                                 Tidak ada gambar
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <a href="{{ route('books.edit', $book->id) }}"
-                                                class="text-blue-600 dark:text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600">Edit</a>
-
+                                        <td class="px-6 py-4 text-center">
+                                            <a href="{{ route('books.edit', $book->id) }}" class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+          bg-gradient-to-r from-blue-600 to-indigo-600
+          shadow-[0_4px_15px_rgba(37,99,235,0.6)]
+          transition-all duration-500 ease-in-out
+          hover:scale-110 hover:shadow-[0_8px_25px_rgba(37,99,235,0.8)]
+          active:scale-95 active:shadow-inner overflow-hidden">
+    
+    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                 transition-all duration-700 ease-in-out"></span>
+    
+    Edit
+</a>
                                             <form action="{{ route('books.destroy', $book->id) }}" method="POST"
-                                                class="inline-block delete-form">
+                                                class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button"
-                                                    class="delete-btn text-red-600 dark:text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600">
-                                                    Delete
-                                                </button>
+                                                <button type="submit" 
+        class="relative group block px-6 py-2.5 text-white font-semibold rounded-2xl
+               bg-gradient-to-r from-red-600 to-red-800
+               shadow-[0_4px_15px_rgba(220,38,38,0.6)]
+               transition-all duration-500 ease-in-out
+               hover:scale-110 hover:shadow-[0_8px_25px_rgba(220,38,38,0.8)]
+               active:scale-95 active:shadow-inner overflow-hidden">
+        
+        <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                     opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                     transition-all duration-700 ease-in-out"></span>
+        
+        Delete
+    </button>
                                             </form>
                                         </td>
-
                                         <td class="px-6 py-4 text-right">
-                                            <button
-                                                class="font-medium text-blue-600 dark:text-[#F1A004] hover:text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-white dark:hover:bg-[#F1A004] dark:focus:ring-[#F1A004]"
-                                                data-modal-target="modal-{{ $book->id }}"
-                                                data-modal-toggle="modal-{{ $book->id }}">Pinjam
-                                            </button>
+                                            
+                                            <button data-modal-target="modal-{{ $book->id }}" 
+        data-modal-toggle="modal-{{ $book->id }}"
+        class="relative group block px-7 py-3 text-white font-semibold rounded-2xl
+               bg-gradient-to-r from-[#ff6a5a] to-[#d92c6f]
+               shadow-[0_4px_15px_rgba(217,44,111,0.6)]
+               transition-all duration-500 ease-in-out
+               hover:scale-110 hover:shadow-[0_8px_25px_rgba(217,44,111,0.8)]
+               active:scale-95 active:shadow-inner overflow-hidden">
+
+    <!-- Shine animasi -->
+    <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                 transition-all duration-700 ease-in-out"></span>
+
+    Pinjam
+</button>
                                     </tr>
                                 @endforeach
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
 
                     <!-- Modal -->
@@ -260,8 +286,8 @@
                         </div>
                     @endforeach
                 </div>
-        </section>
-    </div>
+            </section>
+        </div>
 </x-app-layout>
 
 <script>
