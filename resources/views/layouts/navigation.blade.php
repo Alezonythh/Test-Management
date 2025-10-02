@@ -21,11 +21,11 @@
         window.dispatchEvent(new Event('sidebar-toggled'));
     }
 }" @mouseenter="setOpen(true)" @mouseleave="setOpen(false)" :class="open ? 'w-64' : 'w-16'"
-    class="fixed top-0 left-0 h-screen bg-gray-800 text-white transition-all duration-300">
-    <div
-        class="relative flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl transition-all duration-500
-           bg-gradient-to-b from-[#2C3262] to-[#1E224A] dark:from-[#1E224A] dark:to-[#14172E]
-           border-r border-white/10 dark:border-white/5">
+    class="fixed top-0 left-0 h-screen transition-all duration-300
+       text-white border-r border-white/10
+       bg-[#F1A004] dark:bg-[#2C3262]">
+
+    <div class="flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl transition-all duration-500">
 
         <!-- shimmer tipis -->
         <div
@@ -48,42 +48,57 @@
                         <img src="/images/login.png" alt="Logo" class="w-15 h-8">
                     </div>
                     <span x-show="open"
-                        class="text-lg font-extrabold bg-gradient-to-r from-[#ffff] to-[#F1A004] bg-clip-text text-transparent tracking-wide">
+                        class="text-lg font-extrabold tracking-wide
+             bg-clip-text text-transparent
+             bg-gradient-to-r 
+             from-yellow-600 to-orange-700 
+             dark:from-indigo-400 dark:to-purple-600">
                         SMK Pesat Studio
                     </span>
+
+
                 </h1>
             </div>
             <button id="theme-toggle"
-                class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-200">
+                class="relative flex items-center justify-center w-12 h-12 rounded-full
+               bg-gradient-to-r from-yellow-400 to-orange-500
+               dark:from-indigo-600 dark:to-purple-600
+               shadow-lg hover:scale-110 hover:shadow-2xl
+               transition-all duration-500 text-white text-xl">
+                <span id="theme-icon" class="drop-shadow-md dark:drop-shadow-none">
+                    🌙
+                </span>
             </button>
+
 
             <li>
                 <a href="{{ route('dashboard') }}"
                     class="relative flex items-center p-3 rounded-lg 
-          text-gray-700 dark:text-gray-200 font-semibold
-          transition-all duration-500 ease-in-out
-          hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
-          hover:shadow-lg hover:shadow-indigo-500/30
-          hover:scale-[1.02] hover:translate-x-1
-          group">
+       text-gray-800 dark:text-gray-200 font-semibold
+       transition-all duration-500 ease-in-out
+       hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:text-white
+       hover:shadow-lg hover:shadow-blue-500/30
+       hover:scale-[1.02] hover:translate-x-1
+       group">
 
                     <!-- Indicator bar kiri -->
                     <span
-                        class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
-                 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                        class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800
+       opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
 
                     <!-- Icon -->
                     <ion-icon name="grid-sharp"
-                        class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
-                     group-hover:text-white transition-colors duration-500"></ion-icon>
+                        class="flex-shrink-0 w-6 h-6 text-blue-700 dark:text-yellow-400 
+       group-hover:text-white transition-colors duration-500"></ion-icon>
 
                     <!-- Label -->
                     <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
                         Dashboard
                     </span>
                 </a>
-
             </li>
+
+
 
             @if (Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'supervisor'))
                 <li>
@@ -246,24 +261,24 @@
                 <li>
                     <button type="button"
                         class="relative flex items-center p-3 w-full rounded-lg font-semibold
-                   text-gray-700 dark:text-gray-200
-                   transition-all duration-500 ease-in-out
-                   hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
-                   hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
-                   hover:scale-[1.02] hover:translate-x-1
-                   group"
+           text-gray-800 dark:text-gray-200
+           transition-all duration-500 ease-in-out
+           hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
+           hover:text-white hover:shadow-lg hover:shadow-blue-500/30
+           hover:scale-[1.02] hover:translate-x-1
+           group"
                         aria-controls="dropdown-lemari" data-collapse-toggle="dropdown-lemari" aria-expanded="false">
 
                         <!-- Indicator bar kiri -->
                         <span
                             class="absolute left-0 top-0 h-full w-1 rounded-r-lg 
-                     bg-gradient-to-b from-indigo-500 to-purple-600 
-                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+             bg-gradient-to-b from-blue-600 to-blue-800
+             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
 
                         <!-- Icon -->
                         <ion-icon name="cube-sharp"
-                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
-                         group-hover:text-white transition-colors duration-500"></ion-icon>
+                            class="flex-shrink-0 w-6 h-6 text-blue-600 dark:text-yellow-400 
+         group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
                         <span x-show="open"
@@ -273,7 +288,7 @@
 
                         <!-- Arrow -->
                         <svg aria-hidden="true"
-                            class="w-5 h-5 text-gray-500 dark:text-gray-300 transition-transform duration-500 group-aria-expanded:rotate-180"
+                            class="w-5 h-5 text-white dark:text-gray-300 transition-transform duration-500 group-aria-expanded:rotate-180"
                             fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -286,12 +301,12 @@
                         <li>
                             <a href="{{ route('anggota.index') }}" x-show="open"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
-                  text-gray-700 dark:text-gray-200 font-normal
-                  transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
-                  hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
+                  text-gray-800 dark:text-gray-200 font-normal
+                  transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
+                  hover:text-white hover:shadow-lg hover:shadow-blue-500/30
                   hover:scale-[1.02] hover:translate-x-1 group">
                                 <span
-                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800 
                      opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                                 Daftar Barang
                             </a>
@@ -299,26 +314,26 @@
                         <li>
                             <a href="{{ route('anggota.borrowed') }}" x-show="open"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
-                      text-gray-700 dark:text-gray-200 font-normal
-                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
-                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
-                      hover:scale-[1.02] hover:translate-x-1 group">
+                  text-gray-800 dark:text-gray-200 font-normal
+                  transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
+                  hover:text-white hover:shadow-lg hover:shadow-blue-500/30
+                  hover:scale-[1.02] hover:translate-x-1 group">
                                 <span
-                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                                 Riwayat Peminjaman
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('anggota.pending_requests') }}" x-show="open"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
-                      text-gray-700 dark:text-gray-200 font-normal
-                      transition-all duration-500 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600
-                      hover:text-white hover:shadow-lg hover:shadow-indigo-500/30
-                      hover:scale-[1.02] hover:translate-x-1 group">
+                  text-gray-800 dark:text-gray-200 font-normal
+                  transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
+                  hover:text-white hover:shadow-lg hover:shadow-blue-500/30
+                  hover:scale-[1.02] hover:translate-x-1 group">
                                 <span
-                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                    class="absolute left-6 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800 
+                     opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
                                 Informasi Peminjaman
                             </a>
                         </li>
@@ -328,33 +343,36 @@
 
 
 
+
             @guest
                 <li>
                     <a href="{{ route('anggota.index') }}"
                         class="relative flex items-center p-3 rounded-lg 
-                  text-gray-700 dark:text-gray-200 font-semibold
-                  transition-all duration-500 ease-in-out
-                  hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-600 hover:text-white
-                  hover:shadow-lg hover:shadow-indigo-500/30
-                  hover:scale-[1.02] hover:translate-x-1
-                  group">
+              text-gray-800 dark:text-gray-200 font-semibold
+              transition-all duration-500 ease-in-out
+              hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:text-white
+              hover:shadow-lg hover:shadow-blue-500/30
+              hover:scale-[1.02] hover:translate-x-1
+              group">
 
                         <!-- Indicator bar kiri -->
                         <span
-                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-indigo-500 to-purple-600 
-                         opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800
+                   opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
 
                         <!-- Icon -->
                         <ion-icon name="cube-outline"
-                            class="flex-shrink-0 w-6 h-6 text-indigo-500 dark:text-yellow-400 
-                             group-hover:text-white transition-colors duration-500"></ion-icon>
+                            class="flex-shrink-0 w-6 h-6 text-blue-700 dark:text-yellow-400 
+                   group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                        <span x-show="open"
+                            class="ml-3 text-gray-800 group-hover:text-white dark:text-gray-200 transition-colors duration-500">
                             Daftar Barang
                         </span>
                     </a>
                 </li>
+
             @endguest
 
 
@@ -466,21 +484,19 @@
 <script>
     const themeToggleBtn = document.getElementById("theme-toggle");
 
-    // cek tema terakhir
+    // cek tema terakhir dari localStorage
     if (localStorage.getItem("theme") === "dark") {
         document.documentElement.classList.add("dark");
     }
 
+    // update ikon tombol
     function updateIcon() {
         themeToggleBtn.innerHTML = document.documentElement.classList.contains("dark") ?
-            "🌞" // kalau dark → ikon matahari
-            :
-            "🌙"; // kalau light → ikon bulan
+            "🌞" : "🌙";
     }
-
-    // set icon awal
     updateIcon();
 
+    // toggle dark mode
     themeToggleBtn.addEventListener("click", () => {
         document.documentElement.classList.toggle("dark");
 

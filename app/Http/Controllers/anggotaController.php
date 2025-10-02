@@ -24,7 +24,7 @@ class anggotaController extends Controller
         $search = $request->input('search');
         $query->where(function ($q) use ($search) {
             $q->where('judul_buku', 'like', '%' . $search . '%')
-              ->orWhere('penulis', 'like', '%' . $search . '%');
+              ->orWhere('kategori', 'like', '%' . $search . '%');
         });
     }
 

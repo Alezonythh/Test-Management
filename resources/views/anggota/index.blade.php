@@ -54,7 +54,6 @@
              $isLoggedIn = Auth::check();
          @endphp
 
-         @endphp
          <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), loading: true }" x-init="window.addEventListener('sidebar-toggled', () => { open = JSON.parse(localStorage.getItem('sidebarOpen')) });
          setTimeout(() => loading = false, 1000);" :class="open ? 'ml-64' : 'ml-16'"
              class="transition-all duration-300 relative">
@@ -86,82 +85,112 @@
 
                      <!-- Daftar Barang (kiri) -->
                      <div class="flex-1">
-                         <h1
-                             class="text-3xl font-extrabold mb-6 
-            text-transparent bg-clip-text 
-            bg-gradient-to-r from-[#F1A004] via-[#F1A004] to-[#F1A004]">
-                             📦 Daftar Barang
-                         </h1>
+                         <div class="mb-6">
+                             <h1
+                                 class="text-3xl sm:text-4xl font-extrabold mb-2
+        text-transparent bg-clip-text 
+        bg-gradient-to-r from-[#F1A004] via-[#F1A004] to-[#F1A004] 
+        dark:from-indigo-500 dark:via-purple-600 dark:to-indigo-700">
+                                 Daftar Barang
+                             </h1>
+                             <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
+                                 Berikut adalah daftar barang yang tersedia untuk dipinjam.
+                             </p>
+                         </div>
+
 
 
 
                          <!-- Search + Filter di bawah daftar barang -->
-                         <div class="mt-8">
-                             <div class="flex items-center gap-3 mb-6">
+                         <div class="mt-6 sm:mt-8">
+                             <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 mb-6">
+
                                  <!-- Search -->
                                  <form action="{{ route('anggota.index') }}" method="GET"
-                                     class="flex items-center gap-2 w-1/2">
+                                     class="flex w-full sm:w-1/2 gap-2 mb-3 sm:mb-0">
+
                                      <div class="relative flex-grow">
+                                         <!-- Icon -->
                                          <ion-icon name="search-outline"
-                                             class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-lg"></ion-icon>
+                                             class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 text-lg"></ion-icon>
+
+                                         <!-- Input -->
                                          <input type="text" name="search" id="search"
-                                             class="w-full pl-10 pr-4 py-2.5 rounded-xl text-gray-900 dark:text-gray-100 
-                           placeholder-gray-400 bg-transparent border border-gray-200 dark:border-gray-700 
-                           focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
+                                             class="w-full pl-10 pr-4 py-2.5 rounded-xl
+            text-gray-900 dark:text-gray-100 placeholder-gray-400
+            bg-gradient-to-r from-yellow-50 to-pink-50 dark:from-gray-800 dark:to-gray-900
+            border border-gray-300 dark:border-gray-700
+            focus:outline-none focus:ring-2 focus:ring-pink-500 dark:focus:ring-yellow-400
+            shadow-sm hover:shadow-md transition-all duration-300
+            text-sm sm:text-base"
                                              placeholder="Cari nama barang..." value="{{ request('search') }}">
                                      </div>
 
                                      <button type="submit"
-                                         class="px-5 py-2.5 rounded-xl font-medium text-white 
-                       bg-gradient-to-r from-[#2C3262] to-[#434a8b] 
-                       hover:from-[#3a3f78] hover:to-[#2C3262]
-                       transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base">
+                                         class="px-4 sm:px-5 py-2.5 sm:py-2 rounded-xl font-medium text-white
+                bg-gradient-to-r from-[#2C3262] to-[#434a8b]
+                hover:from-[#3a3f78] hover:to-[#2C3262]
+                transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base">
                                          Cari
                                      </button>
                                  </form>
 
                                  <!-- Badge kategori aktif -->
-                                 @if (request('kategori'))
-                                     <span
-                                         class="px-3 py-1 rounded-full text-sm font-medium
-                             bg-indigo-100 text-indigo-700 
-                             dark:bg-indigo-500/20 dark:text-indigo-300 shadow-inner">
-                                         {{ request('kategori') }}
-                                     </span>
-                                 @else
-                                     <span
-                                         class="px-3 py-1 rounded-full text-sm font-medium
-                             bg-gray-100 text-gray-600 
-                             dark:bg-gray-700 dark:text-gray-300 shadow-inner">
-                                         🎯 Semua
-                                     </span>
-                                 @endif
+                                 <div class="flex items-center gap-2">
+                                     @if (request('kategori'))
+                                         <span
+                                             class="px-3 py-1 rounded-full text-sm font-medium
+            bg-indigo-200 text-indigo-800 dark:bg-indigo-500/30 dark:text-indigo-100
+            shadow-inner
+            hover:scale-105 hover:shadow-md transition-all duration-300">
+                                             {{ request('kategori') }}
+                                         </span>
+                                     @else
+                                         <span
+                                             class="px-3 py-1 rounded-full text-sm font-medium
+            bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300
+            shadow-inner
+            hover:scale-105 hover:shadow-md transition-all duration-300">
+                                             🎯 Semua
+                                         </span>
+                                     @endif
+                                 </div>
+
 
                                  <!-- Filter -->
-                                 <div x-data="{ open: false }" class="relative flex items-center gap-3">
+                                 <div x-data="{ open: false }"
+                                     class="relative mt-3 sm:mt-0 sm:ml-3 flex items-center gap-3">
                                      <button @click="open = true" type="button"
-                                         class="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm sm:text-base
-                       text-gray-800 dark:text-gray-200 
-                       bg-gradient-to-r from-indigo-50 via-white to-indigo-50 
-                       dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 
-                       border border-gray-200 dark:border-gray-700
-                       shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300">
-                                         <ion-icon name="pricetag-outline"
-                                             class="text-indigo-600 dark:text-indigo-400 text-lg"></ion-icon>
-                                         {{ request('kategori') ? request('kategori') : '🎯 Kategori' }}
-                                         <ion-icon name="chevron-down-outline"
-                                             class="text-indigo-600 dark:text-indigo-400 text-lg"></ion-icon>
-                                     </button>
+                                         class="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl font-semibold text-sm sm:text-base
+    text-gray-800 dark:text-gray-100
+    bg-gradient-to-r from-indigo-100 via-white to-indigo-100
+    dark:from-gray-700 dark:via-gray-900 dark:to-gray-800
+    border border-gray-300 dark:border-gray-600
+    shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300
+    focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-yellow-400">
 
+                                         <!-- Icon kategori -->
+                                         <ion-icon name="pricetag-outline"
+                                             class="text-indigo-600 dark:text-yellow-400 text-lg sm:text-xl"></ion-icon>
+
+                                         <!-- Label -->
+                                         <span class="truncate max-w-[120px] sm:max-w-[200px]">
+                                             {{ request('kategori') ? request('kategori') : '🎯 Kategori' }}
+                                         </span>
+
+                                         <!-- Icon panah -->
+                                         <ion-icon name="chevron-down-outline"
+                                             class="text-indigo-600 dark:text-yellow-400 text-lg sm:text-xl"></ion-icon>
+                                     </button>
 
 
                                      <!-- Modal -->
                                      <div x-show="open" x-transition.opacity
                                          class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
                                          <div @click.away="open = false"
-                                             class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-6 
-                           transform transition-all duration-500 ease-out scale-95
-                           border border-gray-200 dark:border-gray-700">
+                                             class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-6
+                    transform transition-all duration-500 ease-out scale-95
+                    border border-gray-200 dark:border-gray-700">
 
                                              <!-- Header -->
                                              <h2
@@ -174,54 +203,34 @@
                                              <!-- Pilihan kategori -->
                                              <form method="GET" action="{{ route('anggota.index') }}"
                                                  class="space-y-3">
-                                                 <button type="submit" name="kategori" value=""
-                                                     class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 
-                                   dark:from-gray-800 dark:to-gray-700 
-                                   hover:from-indigo-500 hover:to-indigo-600 hover:text-white 
-                                   text-gray-800 dark:text-gray-200 font-semibold text-base 
-                                   shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2">
-                                                     🎯 Semua Kategori
-                                                 </button>
-                                                 <button type="submit" name="kategori" value="Camera"
-                                                     class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 
-                                   dark:from-gray-800 dark:to-gray-700 
-                                   hover:from-indigo-500 hover:to-indigo-600 hover:text-white 
-                                   text-gray-800 dark:text-gray-200 font-semibold text-base 
-                                   shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2">
-                                                     📷 Camera
-                                                 </button>
-                                                 <button type="submit" name="kategori" value="Headset"
-                                                     class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 
-                                   dark:from-gray-800 dark:to-gray-700 
-                                   hover:from-indigo-500 hover:to-indigo-600 hover:text-white 
-                                   text-gray-800 dark:text-gray-200 font-semibold text-base 
-                                   shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2">
-                                                     🎧 Headset
-                                                 </button>
-                                                 <button type="submit" name="kategori" value="Proyektor"
-                                                     class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200 
-                                   dark:from-gray-800 dark:to-gray-700 
-                                   hover:from-indigo-500 hover:to-indigo-600 hover:text-white 
-                                   text-gray-800 dark:text-gray-200 font-semibold text-base 
-                                   shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2">
-                                                     📽️ Proyektor
-                                                 </button>
+                                                 @foreach (['', 'Camera', 'Headset', 'Proyektor'] as $cat)
+                                                     <button type="submit" name="kategori" value="{{ $cat }}"
+                                                         class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-gray-100 to-gray-200
+                            dark:from-gray-800 dark:to-gray-700
+                            hover:from-indigo-500 hover:to-indigo-600 hover:text-white
+                            text-gray-800 dark:text-gray-200 font-semibold text-base
+                            shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2">
+                                                         {{ $cat === '' ? '🎯 Semua Kategori' : ($cat === 'Camera' ? '📷 Camera' : ($cat === 'Headset' ? '🎧 Headset' : '📽️ Proyektor')) }}
+                                                     </button>
+                                                 @endforeach
                                              </form>
 
                                              <!-- Tombol close -->
                                              <div class="mt-6 text-right">
                                                  <button @click="open = false" type="button"
-                                                     class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 
-                                   text-white font-semibold shadow-md hover:shadow-lg 
-                                   hover:scale-105 transition-all duration-300">
+                                                     class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-pink-600
+                            text-white font-semibold shadow-md hover:shadow-lg
+                            hover:scale-105 transition-all duration-300">
                                                      Tutup
                                                  </button>
                                              </div>
                                          </div>
                                      </div>
                                  </div>
+
                              </div>
                          </div>
+
 
                      </div>
 
@@ -309,11 +318,23 @@
                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
                      @forelse ($books as $book)
                          <div
-                             class="relative max-w-md bg-gradient-to-br from-[#2C3262] via-[#434A8B] to-[#2C3262] rounded-3xl shadow-2xl overflow-hidden flex flex-col text-white transform transition-all duration-500 hover:scale-[1.05]">
+                             class="relative max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col
+    bg-white text-gray-900
+    dark:bg-gradient-to-br dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262] dark:text-white
+    transform transition-all duration-500 hover:scale-[1.05]">
 
-                             <!-- Efek Glow Animasi -->
+                             <!-- Efek Glow / Denyut Tengah -->
                              <div
-                                 class="absolute inset-0 bg-gradient-to-r from-[#2C3262]/40 via-[#434A8B]/40 to-[#2C3262]/40 blur-2xl animate-pulse">
+                                 class="absolute inset-0
+    bg-white/10 dark:bg-indigo-900/20
+    blur-2xl animate-pulse pointer-events-none">
+                             </div>
+
+
+
+                             <!-- Efek Overlay Glow -->
+                             <div
+                                 class="absolute inset-0 bg-[#F1A004]/10 dark:bg-gradient-to-r dark:from-[#2C3262]/40 dark:via-[#434A8B]/40 dark:to-[#2C3262]/40 blur-2xl pointer-events-none">
                              </div>
 
                              <!-- Isi Card -->
@@ -337,42 +358,32 @@
                                      </span>
                                  </p>
                                  <p class="mt-4"><strong>Deskripsi:</strong></p>
-                                 <p class="text-gray-200 text-sm italic">
+                                 <p class="text-gray-700 dark:text-gray-200 text-sm italic">
                                      {{ Str::limit($book->deskripsi, 100, '...') }}
                                  </p>
                              </div>
 
-                             <!-- Tombol Modal -->
-                             <div
-                                 class="relative p-4 bg-white/10 backdrop-blur-md text-center border-t border-white/20 z-10">
+                             <!-- Tombol Pinjam -->
+                             <div class="relative p-4 text-center border-t border-gray-200 dark:border-white/20 z-10">
                                  @if ($isLoggedIn)
                                      <button data-modal-target="modal-{{ $book->id }}"
                                          data-modal-toggle="modal-{{ $book->id }}"
-                                         class="relative w-full px-5 py-3 bg-gradient-to-r from-[#2C3262] via-[#434A8B] to-[#2C3262] text-white font-bold rounded-2xl shadow-lg 
-                       overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-indigo-500/50 {{ $book->jumlah_stok <= 0 ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                         class="relative w-full px-5 py-3 bg-[#F1A004] dark:bg-gradient-to-r dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262] 
+                text-white font-bold rounded-2xl shadow-lg overflow-hidden transition-all duration-500
+                hover:scale-105 hover:shadow-xl {{ $book->jumlah_stok <= 0 ? 'opacity-50 cursor-not-allowed' : '' }}"
                                          @if ($book->jumlah_stok <= 0) disabled @endif>
-                                         <span class="relative z-10 flex items-center justify-center gap-2">
-                                             Pinjam Barang
-                                         </span>
-                                         <!-- Animasi Shine -->
-                                         <span
-                                             class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
+                                         Pinjam Barang
                                      </button>
                                  @else
-                                     <button
-                                         class="relative w-full px-5 py-3 bg-gradient-to-r from-[#2C3262] via-[#434A8B] to-[#2C3262] text-white font-bold rounded-2xl shadow-lg 
-                       overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-indigo-500/50">
-                                         <a href="{{ route('login') }}">
-                                             <span class="relative z-10 flex items-center justify-center gap-2">
-                                                 Pinjam Barang
-                                             </span>
-                                             <span
-                                                 class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shine_2s_infinite]"></span>
-                                         </a>
-                                     </button>
+                                     <a href="{{ route('login') }}"
+                                         class="relative w-full inline-block px-5 py-3 bg-[#F1A004] dark:bg-gradient-to-r dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262] 
+                text-white font-bold rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                                         Pinjam Barang
+                                     </a>
                                  @endif
                              </div>
                          </div>
+
 
 
                          <!-- Modal -->
