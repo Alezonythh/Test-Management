@@ -5,7 +5,7 @@
         open = JSON.parse(localStorage.getItem('sidebarOpen'));
     });" :class="open ? 'ml-64' : 'ml-16'"
         class="transition-all duration-300">
-    <section class="bg-white dark:bg-gray-900">
+    <section class="bg-white dark:bg-gray-900 sm:rounded-lg">
         <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
             <div class="mb-8 text-center">
                     <h2 class="text-3xl font-extrabold text-transparent bg-clip-text 
@@ -16,7 +16,7 @@
                     <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
                         Lengkapi data berikut untuk Mengedit data barang.
                     </p>
-                </div>
+            </div>
                 <div class="bg-gradient-to-br from-[#2C3262]/95 to-[#434A8B]/95 backdrop-blur-md 
             rounded-2xl shadow-2xl p-8 border border-white/20 text-white">
             <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
@@ -36,8 +36,8 @@
                         <label for="kategori"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
                         <select id="kategori" name="kategori"
-                            class="w-full p-3 rounded-xl text-sm bg-white/20 border border-white/30 text-white 
-                           focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                            class="w-full p-3 rounded-xl text-sm bg-[#2C3262] text-white border border-white/30 
+             focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none appearance-none">
                             <option value="Fiksi" {{ $book->kategori == 'Camera' ? 'selected' : '' }}>Camera</option>
                             <option value="Non-Fiksi" {{ $book->kategori == 'Headset' ? 'selected' : '' }}>Headset
                             </option>
@@ -49,8 +49,8 @@
                         <label for="status"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
                         <select id="status" name="status"
-                            class="w-full p-3 rounded-xl text-sm bg-white/20 border border-white/30 text-white 
-                           focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                            class="w-full p-3 rounded-xl text-sm bg-[#2C3262] text-white border border-white/30 
+             focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none appearance-none">
                             <option value="1" {{ $book->status ? 'selected' : '' }}>Tersedia</option>
                             <option value="0" {{ !$book->status ? 'selected' : '' }}>Tidak Tersedia</option>
                         </select>

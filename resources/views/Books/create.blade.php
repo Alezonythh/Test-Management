@@ -6,7 +6,7 @@
     });" :class="open ? 'ml-64' : 'ml-16'"
         class="transition-all duration-300">
 
-        <section class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+        <section class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen sm:rounded-lg">
             <div class="py-12 px-4 mx-auto max-w-3xl lg:py-16">
                 <!-- Judul -->
                 <div class="mb-8 text-center">
@@ -40,8 +40,8 @@
             <div>
                 <label for="kategori" class="block mb-2 text-sm font-medium">Kategori</label>
                 <select id="kategori" name="kategori"
-                    class="w-full p-3 rounded-xl text-sm bg-white/20 border border-white/30 text-white 
-                           focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                    class="w-full p-3 rounded-xl text-sm bg-[#2C3262] text-white border border-white/30 
+             focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none appearance-none">
                     <option selected>Pilih Kategori</option>
                     <option value="Camera">Camera</option>
                     <option value="Headset">Headset</option>
@@ -53,8 +53,8 @@
             <div>
                 <label for="status" class="block mb-2 text-sm font-medium">Status</label>
                 <select id="status" name="status"
-                    class="w-full p-3 rounded-xl text-sm bg-white/20 border border-white/30 text-white 
-                           focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                    class="w-full p-3 rounded-xl text-sm bg-[#2C3262] text-white border border-white/30 
+             focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none appearance-none">
                     <option selected>Pilih Status</option>
                     <option value="1">Tersedia</option>
                     <option value="0">Tidak Tersedia</option>
