@@ -149,7 +149,7 @@
                     <!-- Search Judul Buku -->
                     <div class="relative w-full sm:w-80 group">
                         <input type="text" name="judul_buku" id="judul_buku" value="{{ request('judul_buku') }}"
-                            placeholder="Cari judul buku..."
+                            placeholder="Cari Nama Barang..."
                             class="w-full px-5 py-3 rounded-full bg-white/10 dark:bg-gray-800/30
                        border border-white/20 dark:border-gray-600/30
                        text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300
@@ -234,7 +234,6 @@
                                 class="text-xs uppercase bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
                                 <tr>
                                     <th class="px-6 py-4">Nama Barang</th>
-                                    <th class="px-6 py-4">Penulis</th>
                                     <th class="px-6 py-4">Tanggal Pinjam</th>
                                     <th class="px-6 py-4">Tanggal Kembali</th>
                                     <th class="px-6 py-4 text-center">Status</th>
@@ -247,9 +246,7 @@
                                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                                             {{ $borrow->book->judul_buku }}
                                         </td>
-                                        <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
-                                            {{ $borrow->book->penulis }}
-                                        </td>
+
                                         <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
                                             {{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }}
                                         </td>

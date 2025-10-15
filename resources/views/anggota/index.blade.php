@@ -136,25 +136,7 @@
                                  </form>
 
                                  <!-- Badge kategori aktif -->
-                                 <div class="flex items-center gap-2">
-                                     @if (request('kategori'))
-                                         <span
-                                             class="px-3 py-1 rounded-full text-sm font-medium
-            bg-indigo-200 text-indigo-800 dark:bg-indigo-500/30 dark:text-indigo-100
-            shadow-inner
-            hover:scale-105 hover:shadow-md transition-all duration-300">
-                                             {{ request('kategori') }}
-                                         </span>
-                                     @else
-                                         <span
-                                             class="px-3 py-1 rounded-full text-sm font-medium
-            bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300
-            shadow-inner
-            hover:scale-105 hover:shadow-md transition-all duration-300">
-                                             🎯 Semua
-                                         </span>
-                                     @endif
-                                 </div>
+
 
 
                                  <!-- Filter -->
