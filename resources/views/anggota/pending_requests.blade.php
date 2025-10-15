@@ -168,6 +168,13 @@
                                             class="text-red-500 animate-shake"></ion-icon>
                                     @endif
                                 </h5>
+                                @if ($request->book->jumlah_stok <= 0)
+                                    <div
+                                        class="absolute top-3 right-3 flex items-center gap-1 bg-red-100 border border-red-300 
+        text-red-700 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
+                                        Stok habis
+                                    </div>
+                                @endif
                                 <p class="mb-2 text-gray-700 dark:text-gray-300 text-sm">
                                     <span class="font-semibold">📅 Tanggal Pinjam:</span> {{ $request->tanggal_pinjam }}
                                 </p>

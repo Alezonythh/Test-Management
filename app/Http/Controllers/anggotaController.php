@@ -326,4 +326,85 @@ public function borrowedBooks(Request $request)
         $filename = 'borrowed_books_' . $status . '_' . date('YmdHis') . '.xlsx';
         return Excel::download(new BorrowedBooksExport($borrowedBooks), $filename);
     }
+
+
+    // Tambah ke keranjang
+public function addToCart($id)
+{
+    $book = Book::findOrFail($id);
+    $cart = session()->get('cart', []);
+
+    if (isset($cart[$id])) {
+        $cart[$id]['quantity']++;
+    } else {
+        $cart[$id] = [
+            'judul_buku' => $book->judul_buku,
+            'kategori' => $book->kategori,
+            'jumlah_stok' => $book->jumlah_stok,
+            'status' => $book->status,
+            'deskripsi' => $book->deskripsi,
+            'quantity' => 1,
+        ];
+    }
+
+    session()->put('cart', $cart);
+    return back()->with('success', 'Buku ditambahkan ke keranjang!');
+}
+
+// Hapus item dari keranjang
+public function removeFromCart($id)
+{
+    $cart = session()->get('cart', []);
+    unset($cart[$id]);
+    session()->put('cart', $cart);
+
+    return back()->with('success', 'Item dihapus dari keranjang.');
+}
+
+// Checkout (Pinjam Semua)
+public function checkoutCart()
+{
+    $cart = session('cart', []);
+
+    foreach ($cart as $id => $item) {
+        $jumlah = $item['quantity'] ?? 1;
+
+        for ($i = 0; $i < $jumlah; $i++) {
+            PinjamBuku::create([
+                'user_id' => auth()->id(),
+                'book_id' => $id,
+                'tanggal_pinjam' => now(),
+                'tanggal_kembali' => now()->addDays(7),
+                'status' => 'menunggu konfirmasi',
+                'kondisi_akhir' => null,
+            ]);
+        }
+    }
+
+    session()->forget('cart');
+    return back()->with('success', 'Permintaan peminjaman dikirim ke admin!');
+}
+
+public function updateCart(Request $request, $id)
+{
+    $cart = session()->get('cart', []);
+
+    if (isset($cart[$id])) {
+        $newQty = max(1, (int) $request->input('quantity')); // minimal 1
+        $maxQty = $cart[$id]['jumlah_stok']; // ambil stok buku
+
+        if ($newQty > $maxQty) {
+            return back()->with('error', 'Jumlah melebihi stok yang tersedia!');
+        }
+
+        $cart[$id]['quantity'] = $newQty; // perbarui jumlah
+        session()->put('cart', $cart);
+
+        return back()->with('success', 'Jumlah buku diperbarui!');
+    }
+
+    return back()->with('error', 'Buku tidak ditemukan di keranjang.');
+}
+
+    
 }

@@ -67,6 +67,10 @@ route::group(['middleware' => ['auth', 'role:anggota']], function(){
     Route::get('/borrowed-books', [anggotaController::class, 'borrowedBooks'])->name('anggota.borrowedBooks');
     Route::post('/anggota', [anggotaController::class, 'store'])->name('anggota.store');
     Route::post('/anggota/return-form/{id}', [BookController::class, 'submitReturnFormAnggota'])->name('anggota.submit_return_form');
+    Route::post('/keranjang/add/{id}', [AnggotaController::class, 'addToCart'])->name('keranjang.add');
+Route::delete('/keranjang/remove/{id}', [AnggotaController::class, 'removeFromCart'])->name('keranjang.remove');
+Route::post('/keranjang/checkout', [AnggotaController::class, 'checkoutCart'])->name('keranjang.checkout');
+Route::patch('/keranjang/update/{id}', [AnggotaController::class, 'updateCart'])->name('keranjang.update');
 });
 
 Route::get('/dashboard', [anggotaController::class, 'dashboard'])->name('dashboard');

@@ -108,8 +108,11 @@
                                 hover:bg-white/5 dark:hover:bg-gray-800/10 transition-colors duration-500 pointer-events-none">
                             </div>
 
+
+
                             <!-- Konten -->
                             <div class="relative z-10">
+
                                 <h5
                                     class="mb-3 text-xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                                     📖 {{ $request->book->judul_buku }}
@@ -130,18 +133,31 @@
                                     {{ $request->tanggal_kembali }}
                                 </p>
 
+                                @if ($request->book->jumlah_stok <= 0)
+                                    <div
+                                        class="absolute top-3 right-3 flex items-center gap-1 bg-red-100 border border-red-300 
+        text-red-700 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
+                                        ⚠️ Stok habis
+                                    </div>
+                                @endif
+
+
                                 <!-- Tombol Aksi -->
                                 <div class="flex justify-between mt-4">
                                     <form action="{{ route('admin.approveRequest', $request->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit"
-                                            class="px-4 py-2 text-sm font-semibold text-white rounded-lg
-                                            bg-gradient-to-r from-green-500 to-green-600 
-                                            hover:shadow-lg hover:scale-105 transition duration-300">
-                                            ✅ Setujui
+                                            class="px-4 py-2 text-sm font-semibold rounded-lg transition duration-300 
+        {{ $request->book->jumlah_stok <= 0
+            ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-lg hover:scale-105' }}"
+                                            {{ $request->book->jumlah_stok <= 0 ? 'disabled' : '' }}>
+                                            {{ $request->book->jumlah_stok <= 0 ? 'Stok Habis' : 'Setujui' }}
                                         </button>
                                     </form>
+
+
                                     <form action="{{ route('admin.rejectRequest', $request->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -149,7 +165,7 @@
                                             class="px-4 py-2 text-sm font-semibold text-white rounded-lg
                                             bg-gradient-to-r from-red-500 to-red-600 
                                             hover:shadow-lg hover:scale-105 transition duration-300">
-                                            ❌ Tolak
+                                            Tolak
                                         </button>
                                     </form>
                                 </div>
