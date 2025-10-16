@@ -1,8 +1,8 @@
 <x-app-layout>
     <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
         open = JSON.parse(localStorage.getItem('sidebarOpen'));
-    });" :class="open ? 'ml-72' : 'ml-24'" <!-- sebelumnya ml-64 dan ml-16
-        -->
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300 relative p-4">
 
 
 

@@ -18,30 +18,13 @@
             animation: shimmer 6s linear infinite;
         }
     </style>
-    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), loading: true }" x-init="window.addEventListener('sidebar-toggled', () => { open = JSON.parse(localStorage.getItem('sidebarOpen')) });
-    setTimeout(() => loading = false, 1500);" :class="open ? 'ml-64' : 'ml-16'"
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
         class="transition-all duration-300 relative">
 
-        <!-- Loading Overlay -->
-        <div x-show="loading" x-transition:enter="transition ease-out duration-500"
-            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-700" x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900">
 
-            <!-- Spinner -->
-            <div
-                class="w-16 h-16 border-4 border-t-indigo-500 border-r-transparent border-b-indigo-500 border-l-transparent rounded-full animate-spin mb-4">
-            </div>
 
-            <!-- Loading Text -->
-            <p class="text-gray-700 dark:text-gray-300 text-lg font-semibold animate-pulse">
-                Memuat dashboard…
-            </p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                Mohon tunggu sebentar, semua data sedang dipersiapkan.
-            </p>
-        </div>
 
         <body class="bg-gray-100 font-roboto">
             <div class="p-6">
@@ -470,10 +453,7 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                                             <div class="flex justify-between items-center mb-1">
                                                 <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                                     {{ $kat->kategori }}</p>
-                                                <span
-                                                    class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
-                                                    Stok: {{ $totalStok }}
-                                                </span>
+
                                             </div>
 
                                             <div class="flex justify-between items-center mb-1">

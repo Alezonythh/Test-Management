@@ -54,32 +54,15 @@
              $isLoggedIn = Auth::check();
          @endphp
 
-         <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), loading: true }" x-init="window.addEventListener('sidebar-toggled', () => { open = JSON.parse(localStorage.getItem('sidebarOpen')) });
-         setTimeout(() => loading = false, 1000);" :class="open ? 'ml-64' : 'ml-16'"
+         <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
+             open = JSON.parse(localStorage.getItem('sidebarOpen'));
+         });" :class="open ? 'ml-64' : 'ml-16'"
              class="transition-all duration-300 relative">
 
-             <!-- Loading Overlay -->
-             <div x-show="loading"
-                 class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-opacity duration-500"
-                 x-transition.opacity>
 
-                 <!-- Spinner -->
-                 <div
-                     class="w-16 h-16 border-4 border-t-indigo-500 border-r-transparent border-b-indigo-500 border-l-transparent rounded-full animate-spin mb-4">
-                 </div>
-
-                 <!-- Loading Text -->
-                 <p class="text-gray-700 dark:text-gray-300 text-lg font-semibold animate-pulse">
-                     Memuat daftar barang…
-                 </p>
-                 <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                     Mohon tunggu sebentar, semua data sedang dipersiapkan.
-                 </p>
-             </div>
 
              <!-- Konten daftar barang -->
-             <div class="min-h-screen bg-gray-100 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8" x-show="!loading"
-                 x-transition.opacity>
+             <div class="min-h-screen bg-gray-100 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8">
                  <!-- Header -->
                  <div class="flex flex-col lg:flex-row gap-8 px-6">
 

@@ -1,23 +1,8 @@
 <x-app-layout>
-    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'), loading: true }" x-init="window.addEventListener('sidebar-toggled', () => { open = JSON.parse(localStorage.getItem('sidebarOpen')) });
-    setTimeout(() => loading = false, 1000);" :class="open ? 'ml-64' : 'ml-16'"
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
         class="transition-all duration-300 relative">
-
-        <!-- Loading Screen -->
-        <div x-show="loading"
-            class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-opacity duration-500"
-            x-transition.opacity>
-            <div
-                class="w-16 h-16 border-4 border-t-[#F1A004] border-r-transparent border-b-[#F1A004] border-l-transparent rounded-full animate-spin mb-4">
-            </div>
-            <p class="text-gray-700 dark:text-gray-300 text-lg font-semibold animate-pulse">
-                Memuat Halaman Tambah Barang...
-            </p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                Mohon tunggu sebentar, semua data sedang dipersiapkan.
-            </p>
-        </div>
-
         <!-- Main Section -->
         <section
             class="bg-gradient-to-br from-[#FFF5E1] to-white dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-700">

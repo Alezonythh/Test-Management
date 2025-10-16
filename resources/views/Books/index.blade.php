@@ -78,7 +78,7 @@
                                     <td class="px-6 py-4 font-semibold text-gray-800 dark:text-white">
                                         {{ $book->judul_buku }}</td>
                                     <td class="px-6 py-4 text-gray-700 dark:text-gray-300">{{ $book->kategori }}</td>
-                                    <td class="px-6 py-4">{{ $book->jumlah_stok }}</td>
+                                    <td class="px-6 py-4 text-gray-700 dark:text-gray-300">{{ $book->jumlah_stok }}</td>
                                     <td class="px-6 py-4">
                                         <span
                                             class="px-3 py-1 rounded-full text-xs font-semibold 
@@ -112,10 +112,17 @@
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         <button data-modal-target="modal-{{ $book->id }}"
-                                            data-modal-toggle="modal-{{ $book->id }}"
-                                            class="px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-[#F1A004] to-[#d89200] hover:scale-105 transition">
-                                            Pinjam
+                                            data-modal-toggle="modal-{{ $book->id }}" @class([
+                                                'px-6 py-2 rounded-lg font-semibold text-white hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed',
+                                                $book->jumlah_stok > 0
+                                                    ? 'bg-gradient-to-r from-[#F1A004] to-[#d89200]'
+                                                    : 'bg-gray-400',
+                                            ])
+                                            @if ($book->jumlah_stok <= 0) disabled @endif>
+                                            {{ $book->jumlah_stok <= 0 ? 'Habis' : 'Pinjam' }}
                                         </button>
+
+
                                     </td>
                                 </tr>
                             @endforeach
