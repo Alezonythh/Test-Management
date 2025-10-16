@@ -70,76 +70,63 @@
             @else
                 <!-- Daftar Permintaan -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach ($paginatedUsers as $userId)
+                    @foreach ($paginatedUsers as $identifier)
                         @php
-                            $userRequests = $requestsGrouped[$userId];
+                            $requests = $requestsGrouped[$identifier];
+                            $guestName = $requests->first()->guest_name ?? null;
+                            $guestSlug = $guestName ? \Illuminate\Support\Str::slug($guestName) : null;
                         @endphp
 
                         <div
                             class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden relative hover:shadow-2xl transition-all duration-300">
 
-                            <!-- Header User -->
+                            <!-- Header -->
                             <div
                                 class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-yellow-400 to-yellow-300 dark:from-yellow-600 dark:to-yellow-500">
                                 <h5 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                                    👤 {{ $userRequests->first()->user->name }}
+                                    👤 {{ $guestName ?? 'Guest' }}
                                 </h5>
-                                <p class="text-sm text-gray-800 dark:text-gray-200 mt-1">Permintaan Peminjaman:
-                                    {{ $userRequests->count() }} Barang</p>
+                                <p class="text-sm text-gray-800 dark:text-gray-200 mt-1">
+                                    Permintaan Peminjaman: {{ $requests->count() }} Barang
+                                </p>
                             </div>
 
                             <!-- List Buku -->
-                            <div class="p-6 space-y-4">
-                                @foreach ($userRequests as $request)
-                                    <div
-                                        class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm hover:shadow-md transition flex justify-between items-center">
-                                        <div>
-                                            <p class="font-semibold text-gray-800 dark:text-gray-100">📖
-                                                {{ $request->book->judul_buku }}</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-300">📅 Pinjam:
-                                                {{ $request->tanggal_pinjam }}</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-300">📅 Kembali:
-                                                {{ $request->tanggal_kembali }}</p>
-                                            @if ($request->book->jumlah_stok <= 0)
-                                                <span class="text-red-500 text-xs font-semibold">⚠️ Stok Habis</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            @foreach ($requests as $request)
+                                <div
+                                    class="px-6 py-3 text-sm text-gray-700 border-t border-gray-200 dark:border-gray-700">
+                                    <span class="font-semibold">{{ $request->book->judul_buku }}</span>
+                                    <span class="text-gray-400">- Qty: {{ $request->quantity ?? 1 }}</span>
+                                </div>
+                            @endforeach
 
-                            <!-- Footer Actions -->
-                            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-                                <!-- Approve Semua -->
-                                <form action="{{ route('admin.approveAllRequests', $userId) }}" method="POST"
-                                    class="flex-1">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit"
-                                        class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:shadow-lg hover:scale-105 transition transform duration-300">
-                                        Setujui Semua
-                                    </button>
-                                </form>
+                            <!-- Actions -->
+                            @if ($guestSlug)
+                                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+                                    <!-- Approve Guest -->
+                                    <form
+                                        action="{{ route('admin.approveAllGuestRequests', ['guestSlug' => $guestSlug]) }}"
+                                        method="POST" class="flex-1">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="w-full py-2 ...">Setujui Semua</button>
+                                    </form>
 
-                                <!-- Reject Semua -->
-                                <form action="{{ route('admin.rejectAllRequests', $userId) }}" method="POST"
-                                    class="flex-1">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:scale-105 transition transform duration-300">
-                                        Tolak Semua
-                                    </button>
-                                </form>
-                            </div>
+                                    <!-- Reject Guest -->
+                                    <form
+                                        action="{{ route('admin.rejectAllGuestRequestsByName', ['guestSlug' => $guestSlug]) }}"
+                                        method="POST" class="flex-1">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-full py-2 ...">Tolak Semua</button>
+                                    </form>
+                                </div>
+                            @endif
 
                         </div>
                     @endforeach
-                </div>
 
-                <!-- Pagination -->
-                <div class="mt-8 flex justify-center">
-                    {{ $paginatedUsers->links() }}
+
                 </div>
 
 

@@ -257,7 +257,12 @@
 
             @endif
 
-            @if (Auth::check() && Auth::user()->role == 'anggota')
+
+
+
+
+
+            @guest
                 <li>
                     <button type="button"
                         class="relative flex items-center p-3 w-full rounded-lg font-semibold
@@ -339,39 +344,6 @@
                         </li>
                     </ul>
                 </li>
-            @endif
-
-
-
-
-            @guest
-                <li>
-                    <a href="{{ route('anggota.index') }}"
-                        class="relative flex items-center p-3 rounded-lg 
-              text-gray-800 dark:text-gray-200 font-semibold
-              transition-all duration-500 ease-in-out
-              hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 hover:text-white
-              hover:shadow-lg hover:shadow-blue-500/30
-              hover:scale-[1.02] hover:translate-x-1
-              group">
-
-                        <!-- Indicator bar kiri -->
-                        <span
-                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-600 to-blue-800
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-
-                        <!-- Icon -->
-                        <ion-icon name="cube-outline"
-                            class="flex-shrink-0 w-6 h-6 text-blue-700 dark:text-yellow-400 
-                   group-hover:text-white transition-colors duration-500"></ion-icon>
-
-                        <!-- Label -->
-                        <span x-show="open"
-                            class="ml-3 text-gray-800 group-hover:text-white dark:text-gray-200 transition-colors duration-500">
-                            Daftar Barang
-                        </span>
-                    </a>
-                </li>
 
             @endguest
 
@@ -411,31 +383,7 @@
                 </li>
 
 
-                <li>
-                    <a href="{{ route('register') }}"
-                        class="relative flex items-center p-3 rounded-lg 
-              text-gray-700 dark:text-gray-200 font-semibold
-              transition-all duration-500 ease-in-out
-              hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-500 hover:text-white
-              hover:shadow-lg hover:shadow-blue-500/30
-              hover:scale-[1.02] hover:translate-x-1
-              group">
 
-                        <!-- Indicator bar kiri -->
-                        <span
-                            class="absolute left-0 top-0 h-full w-1 rounded-r-lg bg-gradient-to-b from-blue-500 to-indigo-500 
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-
-                        <!-- Icon -->
-                        <ion-icon name="person-add-outline"
-                            class="flex-shrink-0 w-6 h-6 text-blue-500 dark:text-blue-400 
-                         group-hover:text-white transition-colors duration-500"></ion-icon>
-
-                        <!-- Label -->
-                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
-                            Register
-                        </span>
-                    </a>
                 </li>
 
             </ul>

@@ -31,64 +31,205 @@
                 <!-- Header -->
 
 
-                @if (!Auth::check())
-                    <div class="w-full px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-12">
+                @guest
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 sm:p-6">
+
+                        <!-- Card 1: PINJAM BARANG -->
                         <div
-                            class="max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl mx-auto rounded-3xl shadow-2xl
-        bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700
-        p-6 sm:p-10 md:p-12 text-center relative overflow-hidden">
+                            class="relative rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-105
+                bg-gradient-to-r from-[#4F6CF2] to-[#7FA9FF] dark:bg-gradient-to-r dark:from-[#4F6CF2] dark:to-[#7FA9FF]">
 
-                            <!-- Background dekoratif animasi -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 via-yellow-400/20 to-pink-500/20
-            dark:from-indigo-500/10 dark:via-yellow-400/10 dark:to-pink-500/10
-            animate-pulse blur-2xl">
+                            <span
+                                class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10 animate-shimmer pointer-events-none"></span>
+
+                            <div class="p-6 sm:p-8 flex flex-col gap-4 relative z-10">
+                                <div class="flex items-center gap-3">
+                                    <ion-icon name="cube-outline" class="text-3xl text-white"></ion-icon>
+                                    <h2 class="text-xl sm:text-2xl font-bold text-white">PINJAM BARANG</h2>
+                                </div>
+                                <p class="text-white/90 text-sm sm:text-base">
+                                    Pilih barang yang ingin dipinjam dengan mudah. Sistem kami cepat, aman, dan
+                                    nyaman digunakan.
+                                </p>
+                                <a href="{{ route('anggota.index') }}" class="w-full mt-auto">
+                                    <button
+                                        class="relative w-full px-5 py-3 font-semibold rounded-xl
+                                bg-white/10 dark:bg-gradient-to-r dark:from-[#4F6CF2] dark:to-[#7FA9FF]
+                                text-white shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+                                        <span
+                                            class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
+                                        <span class="relative">MULAI PINJAM</span>
+                                    </button>
+                                </a>
                             </div>
-
-                            <!-- Icon dengan animasi -->
-                            <div
-                                class="relative mx-auto w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center rounded-2xl
-            bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-xl mb-4 sm:mb-6 md:mb-8 animate-bounce">
-                                <ion-icon name="flash-outline" class="text-xl sm:text-3xl md:text-4xl"></ion-icon>
-                            </div>
-
-                            <!-- Judul -->
-                            <h1
-                                class="relative text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-snug">
-                                🎬 Selamat Datang di
-                                <span class="text-[#F1A004] dark:text-[#F1A004]">Dashboard Peminjaman Studio SMK
-                                    Pesat</span>
-                            </h1>
-
-                            <!-- Subjudul -->
-                            <p
-                                class="relative mt-3 sm:mt-4 md:mt-6 text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl max-w-full sm:max-w-xl md:max-w-2xl mx-auto leading-relaxed">
-                                Kini peminjaman <span
-                                    class="font-semibold text-yellow-500 dark:text-yellow-400">peralatan studio</span>
-                                jadi lebih <span class="font-semibold text-pink-500 dark:text-pink-400">praktis</span>,
-                                <span class="font-semibold text-indigo-500 dark:text-indigo-400">teratur</span>, dan
-                                <span class="font-semibold text-green-500 dark:text-green-400">efisien</span>.
-                                Siswa cukup mengajukan peminjaman langsung lewat website tanpa ribet ✨
-                            </p>
-
-                            <!-- Tombol login -->
-                            <a href="{{ route('login') }}"
-                                class="relative mt-6 sm:mt-8 md:mt-10 inline-block w-full sm:w-auto text-center
-            px-4 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 rounded-xl
-            bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500
-            text-white font-bold text-sm sm:text-base md:text-lg shadow-lg hover:shadow-2xl
-            hover:scale-105 transition transform duration-500">
-                                🔑 Login Sekarang & Mulai
-                            </a>
-
-                            <!-- Footer kecil -->
-                            <p class="relative mt-3 sm:mt-4 text-xs sm:text-sm text-gray-400 dark:text-gray-500 italic">
-                                “Satu login kecil, satu langkah besar menuju pengelolaan yang lebih hebat.”
-                            </p>
                         </div>
-                    </div>
-                @endif
 
+                        <!-- Card 2: RIWAYAT PEMINJAMAN -->
+                        <div
+                            class="relative rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-105
+                bg-gradient-to-r from-[#06D6A0] to-[#4AE58E] dark:bg-gradient-to-r dark:from-[#4AC97A] dark:to-[#A8FF7F]">
+
+                            <span
+                                class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10 animate-shimmer pointer-events-none"></span>
+
+                            <div class="p-6 sm:p-8 flex flex-col gap-4 relative z-10">
+                                <div class="flex items-center gap-3">
+                                    <ion-icon name="time-outline" class="text-3xl text-white"></ion-icon>
+                                    <h2 class="text-xl sm:text-2xl font-bold text-white">RIWAYAT PEMINJAMAN</h2>
+                                </div>
+                                <p class="text-white/90 text-sm sm:text-base">
+                                    Lihat semua barang yang sudah kamu pinjam, status pengembalian, dan histori
+                                    lengkapnya dengan mudah.
+                                </p>
+                                <a href="{{ route('anggota.borrowed') }}" class="w-full mt-auto">
+                                    <button
+                                        class="relative w-full px-5 py-3 font-semibold rounded-xl
+                                bg-white/10 dark:bg-gradient-to-r dark:from-[#4AC97A] dark:to-[#A8FF7F]
+                                text-white shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+                                        <span
+                                            class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
+                                        <span class="relative">LIHAT RIWAYAT</span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <section class="py-8 bg-gray-50 dark:bg-gray-900 w-full">
+                        <div class="max-w-full ">
+
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">
+                                Info Peminjaman Barang
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">List nama peminjaman barang</p>
+                            <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+                                <!-- Bagian Kiri: Card -->
+                                <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-6">
+                                    @foreach ($dataPeminjam as $item)
+                                        <div
+                                            class="relative flex flex-col items-center text-center rounded-3xl p-6
+            bg-white/80 dark:bg-gray-900/80 
+            backdrop-blur-xl border border-gray-200/40 dark:border-gray-700/40
+            shadow-lg hover:shadow-2xl hover:-translate-y-2
+            transition-all duration-500 ease-out group">
+
+                                            <!-- Decorative Glow -->
+                                            <div
+                                                class="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-pink-500/20 opacity-0 group-hover:opacity-100 blur-xl transition duration-700">
+                                            </div>
+
+                                            <!-- Icon Box -->
+                                            <div
+                                                class="relative w-20 h-20 flex items-center justify-center rounded-2xl 
+                bg-gradient-to-br from-blue-500 to-indigo-600 
+                dark:from-indigo-500 dark:to-purple-600
+                shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
+
+                                                <img src="{{ asset('storage/' . $item->kondisi_awal) }}" alt="Kondisi Awal"
+                                                    class="w-full h-full object-cover rounded-2xl">
+                                            </div>
+
+                                            <!-- Nama Barang -->
+                                            <p
+                                                class="relative text-sm font-medium text-gray-700 dark:text-gray-300 
+                group-hover:text-blue-600 dark:group-hover:text-purple-400 transition-colors">
+                                                {{ $item->nama_barang }}
+                                            </p>
+
+                                            <!-- Info Peminjam -->
+                                            <p
+                                                class="relative text-xs mt-3 text-gray-500 dark:text-gray-400 
+                group-hover:text-purple-500 dark:group-hover:text-pink-400 transition-colors">
+                                                👤 Peminjam: <span class="font-semibold">{{ $item->peminjam }}</span>
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Bagian Kanan: Progress -->
+                                <div
+                                    class="md:col-span-2 rounded-2xl shadow-xl p-6 
+bg-gradient-to-br from-gray-50 to-white 
+dark:from-gray-900 dark:to-gray-800 
+backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
+                                    <h2
+                                        class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                                        <ion-icon name="bar-chart-outline"
+                                            class="text-blue-500 dark:text-blue-400"></ion-icon>
+                                        Progress Data Barang
+                                    </h2>
+
+                                    @foreach ($dataKategori as $kat)
+                                        @php
+                                            $totalStok = $kat->jumlah_stok_total ?? 0;
+                                            $dipinjam = $kat->dipinjam_total ?? 0;
+
+                                            // logika persen
+                                            if ($totalStok == 0 && $dipinjam > 0) {
+                                                $persen = 100;
+                                            } else {
+                                                $dipinjam = min($dipinjam, $totalStok);
+                                                $persen = $totalStok > 0 ? ($dipinjam / $totalStok) * 100 : 0;
+                                                $persen = min(100, max(0, $persen));
+                                            }
+
+                                            // warna sesuai persen
+                                            if ($persen >= 80) {
+                                                $warna =
+                                                    'from-red-400 via-red-500 to-red-600 shadow-[0_0_8px_rgba(239,68,68,0.6)] dark:shadow-[0_0_12px_rgba(220,38,38,0.8)]';
+                                            } elseif ($persen >= 50) {
+                                                $warna =
+                                                    'from-yellow-400 via-yellow-500 to-yellow-600 shadow-[0_0_8px_rgba(234,179,8,0.6)] dark:shadow-[0_0_12px_rgba(202,138,4,0.8)]';
+                                            } else {
+                                                $warna =
+                                                    'from-blue-400 via-indigo-500 to-purple-500 shadow-[0_0_8px_rgba(59,130,246,0.6)] dark:shadow-[0_0_12px_rgba(99,102,241,0.8)]';
+                                            }
+                                        @endphp
+
+
+                                        <div class="mb-6 flex flex-col justify-between h-28">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                                    {{ $kat->kategori }}</p>
+
+                                            </div>
+
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-xs font-medium text-gray-600 dark:text-gray-300">
+                                                    Dipinjam: {{ $dipinjam }}</span>
+                                                <span
+                                                    class="text-xs font-medium text-gray-600 dark:text-gray-300">{{ round($persen) }}%</span>
+                                            </div>
+
+                                            <div
+                                                class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                                                <div class="h-3 rounded-full bg-gradient-to-r {{ $warna }} transition-[width] duration-1000 ease-out"
+                                                    style="width: {{ $persen }}%"></div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+
+
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </section>
+                @endguest
 
 
 
@@ -285,71 +426,7 @@
 
                                 </div>
                         @endif
-                        @if (Auth::user()->role == 'anggota')
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 sm:p-6">
 
-                                <!-- Card 1: PINJAM BARANG -->
-                                <div
-                                    class="relative rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-105
-                bg-gradient-to-r from-[#4F6CF2] to-[#7FA9FF] dark:bg-gradient-to-r dark:from-[#4F6CF2] dark:to-[#7FA9FF]">
-
-                                    <span
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10 animate-shimmer pointer-events-none"></span>
-
-                                    <div class="p-6 sm:p-8 flex flex-col gap-4 relative z-10">
-                                        <div class="flex items-center gap-3">
-                                            <ion-icon name="cube-outline" class="text-3xl text-white"></ion-icon>
-                                            <h2 class="text-xl sm:text-2xl font-bold text-white">PINJAM BARANG</h2>
-                                        </div>
-                                        <p class="text-white/90 text-sm sm:text-base">
-                                            Pilih barang yang ingin dipinjam dengan mudah. Sistem kami cepat, aman, dan
-                                            nyaman digunakan.
-                                        </p>
-                                        <a href="{{ route('anggota.index') }}" class="w-full mt-auto">
-                                            <button
-                                                class="relative w-full px-5 py-3 font-semibold rounded-xl
-                                bg-white/10 dark:bg-gradient-to-r dark:from-[#4F6CF2] dark:to-[#7FA9FF]
-                                text-white shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
-                                                <span
-                                                    class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
-                                                <span class="relative">MULAI PINJAM</span>
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- Card 2: RIWAYAT PEMINJAMAN -->
-                                <div
-                                    class="relative rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-105
-                bg-gradient-to-r from-[#06D6A0] to-[#4AE58E] dark:bg-gradient-to-r dark:from-[#4AC97A] dark:to-[#A8FF7F]">
-
-                                    <span
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-white/10 animate-shimmer pointer-events-none"></span>
-
-                                    <div class="p-6 sm:p-8 flex flex-col gap-4 relative z-10">
-                                        <div class="flex items-center gap-3">
-                                            <ion-icon name="time-outline" class="text-3xl text-white"></ion-icon>
-                                            <h2 class="text-xl sm:text-2xl font-bold text-white">RIWAYAT PEMINJAMAN</h2>
-                                        </div>
-                                        <p class="text-white/90 text-sm sm:text-base">
-                                            Lihat semua barang yang sudah kamu pinjam, status pengembalian, dan histori
-                                            lengkapnya dengan mudah.
-                                        </p>
-                                        <a href="{{ route('anggota.borrowed') }}" class="w-full mt-auto">
-                                            <button
-                                                class="relative w-full px-5 py-3 font-semibold rounded-xl
-                                bg-white/10 dark:bg-gradient-to-r dark:from-[#4AC97A] dark:to-[#A8FF7F]
-                                text-white shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
-                                                <span
-                                                    class="absolute inset-0 bg-white opacity-10 rounded-xl blur-xl animate-pulse"></span>
-                                                <span class="relative">LIHAT RIWAYAT</span>
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        @endif
 
 
 
@@ -532,7 +609,9 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                     @foreach ($pendingRequests as $request)
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
                             <span class="font-semibold">{{ $request->book->judul_buku }}</span>
-                            <span class="text-gray-400">- By: {{ $request->user->name }}</span>
+                            <span class="text-gray-400">
+                                - By: {{ $request->user ? $request->user->name : $request->guest_name ?? 'Guest' }}
+                            </span>
                         </div>
                     @endforeach
                 @endif
@@ -577,10 +656,13 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                     @foreach ($pendingRequests as $request)
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
                             <span class="font-semibold">{{ $request->book->judul_buku }}</span>
-                            <span class="text-gray-400">- By: {{ $request->user->name }}</span>
+                            <span class="text-gray-400">
+                                - By: {{ optional($request->user)->name ?? ($request->guest_name ?? 'Guest') }}
+                            </span>
                         </div>
                     @endforeach
                 @endif
+
 
                 @if (isset($overdueBooks) && count($overdueBooks) == 0 && (isset($pendingRequests) && count($pendingRequests) == 0))
                     <span class="block px-6 py-3 text-sm text-gray-300">No notifications</span>

@@ -22,9 +22,9 @@ Route::middleware('auth')->group(function () {
 route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
     Route::get('/anggota/loan-requests', [AnggotaController::class, 'loanRequests'])->name('anggota.loan_requests');
     Route::get('/admin/confirm-requests', [anggotaController::class, 'confirmRequests'])->name('admin.confirmRequests');
-    Route::delete('/admin/reject-all/{userId}', [AnggotaController::class, 'rejectAllRequestsByUser'])->name('admin.rejectAllRequests');
-    Route::patch('/admin/approve-all/{userId}', [AnggotaController::class, 'approveAllRequestsByUser'])->name('admin.approveAllRequests');
-    Route::delete('/admin/reject-request/{id}', [AnggotaController::class, 'rejectRequest'])->name('admin.rejectRequest');
+Route::patch('/admin/approve-guest/{guestSlug}', [AnggotaController::class, 'approveAllGuestRequests'])->name('admin.approveAllGuestRequests');
+Route::delete('/admin/reject-guest/{guestSlug}', [AnggotaController::class, 'rejectAllGuestRequestsByName'])->name('admin.rejectAllGuestRequestsByName');
+
     Route::get('/admin/borrowed-books/{status?}', [AnggotaController::class, 'borrowedBooksAdmin'])->name('admin.borrowedBooks');
     Route::patch('/admin/return-book/{id}', [AnggotaController::class, 'returnBookForAdmin'])->name('admin.returnBookForAdmin');
     Route::patch('/admin/complete-loan/{id}', [AnggotaController::class, 'completeLoan'])->name('admin.completeLoan');
@@ -61,18 +61,20 @@ route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
     Route::get('/admin/borrow-form/{book_id}', [BookController::class, 'showAdminBorrowForm'])->name('admin.borrowForm');
     Route::post('/books/pinjam', [BookController::class, 'pinjam'])->name('books.pinjam');
 });
+
 Route::get('/anggota', [anggotaController::class, 'index'])->name('anggota.index');
-route::group(['middleware' => ['auth', 'role:anggota']], function(){
-    Route::get('/anggota/pending-requests', [anggotaController::class, 'pendingRequests'])->name('anggota.pending_requests');
-    Route::get('/anggota/borrowed', [anggotaController::class, 'borrowedBooks'])->name('anggota.borrowed');
-    Route::get('/borrowed-books', [anggotaController::class, 'borrowedBooks'])->name('anggota.borrowedBooks');
-    Route::post('/anggota', [anggotaController::class, 'store'])->name('anggota.store');
-    Route::post('/anggota/return-form/{id}', [BookController::class, 'submitReturnFormAnggota'])->name('anggota.submit_return_form');
-    Route::post('/keranjang/add/{id}', [AnggotaController::class, 'addToCart'])->name('keranjang.add');
+
+// Untuk guest, hapus middleware role:anggota
+Route::get('/anggota/pending-requests', [anggotaController::class, 'pendingRequests'])->name('anggota.pending_requests');
+Route::get('/anggota/borrowed', [anggotaController::class, 'borrowedBooks'])->name('anggota.borrowed');
+Route::get('/borrowed-books', [anggotaController::class, 'borrowedBooks'])->name('anggota.borrowedBooks');
+Route::post('/anggota', [anggotaController::class, 'store'])->name('anggota.store');
+Route::post('/anggota/return-form/{id}', [BookController::class, 'submitReturnFormAnggota'])->name('anggota.submit_return_form');
+
+Route::post('/keranjang/add/{id}', [AnggotaController::class, 'addToCart'])->name('keranjang.add');
 Route::delete('/keranjang/remove/{id}', [AnggotaController::class, 'removeFromCart'])->name('keranjang.remove');
 Route::post('/keranjang/checkout', [AnggotaController::class, 'checkoutCart'])->name('keranjang.checkout');
 Route::patch('/keranjang/update/{id}', [AnggotaController::class, 'updateCart'])->name('keranjang.update');
-});
 
 Route::get('/dashboard', [anggotaController::class, 'dashboard'])->name('dashboard');
 Route::get('/admin/borrowed-books/export/{status?}', [anggotaController::class, 'exportBorrowedBooks'])->name('admin.borrowedBooks.exportWithStatus');

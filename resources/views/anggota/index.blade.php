@@ -330,25 +330,17 @@
 
                              <!-- Tombol Pinjam -->
                              <div class="relative p-4 text-center border-t border-gray-200 dark:border-white/20 z-10">
-                                 @if ($isLoggedIn)
-                                     <form id="addToCartForm-{{ $book->id }}"
-                                         action="{{ route('keranjang.add', $book->id) }}" method="POST"
-                                         class="mt-3">
-                                         @csrf
-                                         <button type="button" onclick="confirmAddToCart({{ $book->id }})"
-                                             {{ $book->jumlah_stok <= 0 ? 'disabled' : '' }}
-                                             class="w-full text-white font-semibold py-2 rounded-lg transition
+                                 <form id="addToCartForm-{{ $book->id }}"
+                                     action="{{ route('keranjang.add', $book->id) }}" method="POST" class="mt-3">
+                                     @csrf
+                                     <button type="button" onclick="confirmAddToCart({{ $book->id }})"
+                                         {{ $book->jumlah_stok <= 0 ? 'disabled' : '' }}
+                                         class="w-full text-white font-semibold py-2 rounded-lg transition
         {{ $book->jumlah_stok > 0 ? 'bg-[#F1A004] hover:bg-[#d68c00]' : 'bg-gray-400 cursor-not-allowed' }}">
-                                             {{ $book->jumlah_stok > 0 ? 'Tambah ke Keranjang' : 'Stok Habis' }}
-                                         </button>
-                                     </form>
-                                 @else
-                                     <a href="{{ route('login') }}"
-                                         class="relative w-full inline-block px-5 py-3 bg-[#F1A004] dark:bg-gradient-to-r dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262] 
-                text-white font-bold rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-xl">
-                                         Tambah ke Keranjang
-                                     </a>
-                                 @endif
+                                         {{ $book->jumlah_stok > 0 ? 'Tambah ke Keranjang' : 'Stok Habis' }}
+                                     </button>
+                                 </form>
+
                              </div>
                          </div>
 
@@ -384,88 +376,91 @@
                                  </div>
 
                                  <!-- Isi -->
+                                 <!-- Isi Cart -->
                                  <div class="flex-1 overflow-y-auto p-4 space-y-3">
                                      @php $cart = session('cart', []); @endphp
 
-                                     @if ($cart)
-                                         @foreach ($cart as $id => $item)
-                                             <div
-                                                 class="flex gap-3 items-start bg-gray-50 dark:bg-white/10 rounded-xl p-3 shadow-sm hover:shadow-md transition">
-                                                 <!-- Info -->
-                                                 <div class="flex-1">
-                                                     <p
-                                                         class="font-semibold text-gray-800 dark:text-white text-sm leading-tight">
-                                                         {{ $item['judul_buku'] }}
-                                                     </p>
-                                                     <p class="text-xs text-gray-600 dark:text-gray-300">Kategori:
-                                                         {{ $item['kategori'] }}</p>
-                                                     <p class="text-xs text-black dark:text-gray-300">
-                                                         Status:
-                                                         @if ($item['status'] === 1)
-                                                             <span
-                                                                 class="font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400 px-2 py-0.5 rounded-full">
-                                                                 Tersedia
-                                                             </span>
-                                                         @else
-                                                             <span
-                                                                 class="font-semibold text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 px-2 py-0.5 rounded-full">
-                                                                 Tidak Tersedia
-                                                             </span>
-                                                         @endif
-                                                     </p>
+                                     @if (count($cart) > 0)
+                                         <form action="{{ route('keranjang.checkout') }}" method="POST"
+                                             id="cartForm">
+                                             @csrf
+                                             @foreach ($cart as $id => $item)
+                                                 <div
+                                                     class="flex gap-3 items-start bg-gray-50 dark:bg-white/10 rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                                                     <!-- Info Buku -->
+                                                     <div class="flex-1">
+                                                         <p
+                                                             class="font-semibold text-gray-800 dark:text-white text-sm leading-tight">
+                                                             {{ $item['judul_buku'] }}
+                                                         </p>
+                                                         <p class="text-xs text-gray-600 dark:text-gray-300">Kategori:
+                                                             {{ $item['kategori'] }}</p>
+                                                         <p class="text-xs text-black dark:text-gray-300">
+                                                             Status:
+                                                             @if ($item['status'] === 1)
+                                                                 <span
+                                                                     class="font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400 px-2 py-0.5 rounded-full">Tersedia</span>
+                                                             @else
+                                                                 <span
+                                                                     class="font-semibold text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 px-2 py-0.5 rounded-full">Tidak
+                                                                     Tersedia</span>
+                                                             @endif
+                                                         </p>
+
+                                                         <!-- Input Guest dan Tanggal -->
+                                                         <div class="mt-2 space-y-1">
+                                                             <input type="text"
+                                                                 name="cart[{{ $id }}][guest_name]"
+                                                                 placeholder="Nama Peminjam"
+                                                                 class="w-full p-2 border rounded-md" required>
+                                                             <input type="date"
+                                                                 name="cart[{{ $id }}][tanggal_pinjam]"
+                                                                 class="w-full p-2 border rounded-md" required>
+                                                             <input type="date"
+                                                                 name="cart[{{ $id }}][tanggal_kembali]"
+                                                                 class="w-full p-2 border rounded-md" required>
+                                                         </div>
+
+                                                         <!-- Jumlah -->
+                                                         <div class="mt-2 flex items-center gap-2">
+                                                             <button type="button"
+                                                                 onclick="updateQty(this, -1, {{ $id }})"
+                                                                 class="w-7 h-7 ...">−</button>
+
+                                                             <input type="number"
+                                                                 name="cart[{{ $id }}][quantity]"
+                                                                 value="{{ $item['quantity'] }}" min="1"
+                                                                 max="{{ $item['jumlah_stok'] }}"
+                                                                 data-max="{{ $item['jumlah_stok'] }}"
+                                                                 class="w-12 text-center ...">
+
+                                                             <button type="button"
+                                                                 onclick="updateQty(this, 1, {{ $id }})"
+                                                                 class="w-7 h-7 ...">＋</button>
+                                                         </div>
 
 
-                                                     <!-- Jumlah -->
-                                                     <div class="mt-2 flex items-center gap-2">
+                                                         <!-- Tombol Hapus (pakai JS, bukan form) -->
                                                          <button type="button"
-                                                             onclick="updateQty(this, -1, {{ $id }})"
-                                                             class="w-7 h-7 flex items-center justify-center bg-gray-200 dark:bg-[#3A4080] hover:bg-gray-300 dark:hover:bg-[#4A50A0] rounded-md text-sm font-bold transition">−</button>
-
-                                                         <input type="number" name="quantity"
-                                                             value="{{ $item['quantity'] }}" min="1"
-                                                             max="{{ $item['jumlah_stok'] }}"
-                                                             class="w-12 text-center border dark:border-gray-500 rounded-md text-sm bg-white dark:bg-[#434A8B] text-gray-800 dark:text-white"
-                                                             onchange="updateQuantity({{ $id }}, this.value)">
-
-                                                         <button type="button"
-                                                             onclick="updateQty(this, 1, {{ $id }})"
-                                                             class="w-7 h-7 flex items-center justify-center bg-gray-200 dark:bg-[#3A4080] hover:bg-gray-300 dark:hover:bg-[#4A50A0] rounded-md text-sm font-bold transition">＋</button>
-                                                     </div>
-
-                                                     <!-- Tombol Hapus -->
-                                                     <form action="{{ route('keranjang.remove', $id) }}"
-                                                         method="POST" class="mt-2">
-                                                         @csrf
-                                                         @method('DELETE')
-                                                         <button type="submit"
-                                                             class="flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-all duration-200 text-xs font-medium px-2 py-1 rounded-lg shadow-sm border border-red-200">
+                                                             onclick="removeFromCart({{ $id }})"
+                                                             class="mt-2 flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-all duration-200 text-xs font-medium px-2 py-1 rounded-lg shadow-sm border border-red-200">
                                                              Hapus
                                                          </button>
-                                                     </form>
-
+                                                     </div>
                                                  </div>
-                                             </div>
-                                         @endforeach
-                                     @else
-                                         <p class="text-center text-gray-500 dark:text-gray-300 mt-10">Keranjang masih
-                                             kosong </p>
-                                     @endif
-                                 </div>
+                                             @endforeach
 
-                                 <!-- Footer -->
-                                 @if ($cart)
-                                     <div class="p-4 border-t border-gray-200 dark:border-white/20">
-                                         <form id="checkoutForm" action="{{ route('keranjang.checkout') }}"
-                                             method="POST">
-                                             @csrf
-                                             <button type="button" onclick="confirmCheckout()"
-                                                 class="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white py-3 rounded-xl font-semibold text-sm transition">
+                                             <!-- Tombol Checkout -->
+                                             <button type="submit"
+                                                 class="mt-4 w-full bg-[#22C55E] hover:bg-[#16A34A] text-white py-3 rounded-xl font-semibold text-sm transition">
                                                  Pinjam Semua
                                              </button>
                                          </form>
-
-                                     </div>
-                                 @endif
+                                     @else
+                                         <p class="text-center text-gray-500 dark:text-gray-300 mt-10">Keranjang masih
+                                             kosong</p>
+                                     @endif
+                                 </div>
                              </div>
                          </div>
 
@@ -487,15 +482,17 @@
          function updateQty(btn, diff, id) {
              const input = btn.parentElement.querySelector('input[type=number]');
              let val = parseInt(input.value) + diff;
-             const max = parseInt(input.max);
+             const max = parseInt(input.dataset.max); // pakai data-max
              const min = parseInt(input.min);
-             if (val >= min && val <= max) {
-                 input.value = val;
-                 updateQuantity(id, val);
-             }
+
+             if (val < min) val = min;
+             if (val > max) val = max;
+
+             input.value = val;
+             updateQuantity(id, val);
          }
 
-         // 🔄 Update otomatis tanpa reload
+         // Update otomatis tanpa reload
          function updateQuantity(id, quantity) {
              fetch(`/keranjang/update/${id}`, {
                      method: 'PATCH',
@@ -506,10 +503,12 @@
                      body: JSON.stringify({
                          quantity
                      })
-                 }).then(res => res.json())
+                 })
+                 .then(res => res.json())
                  .then(data => console.log('Updated:', data))
                  .catch(err => console.error(err));
          }
+
 
          function confirmAddToCart(id) {
              Swal.fire({
@@ -547,6 +546,19 @@
                      document.getElementById('checkoutForm').submit();
                  }
              });
+         }
+
+         function removeFromCart(id) {
+             fetch(`/keranjang/remove/${id}`, {
+                     method: 'DELETE',
+                     headers: {
+                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                         'Accept': 'application/json',
+                     },
+                 }).then(res => res.json())
+                 .then(data => {
+                     if (data.success) location.reload();
+                 });
          }
      </script>
 
