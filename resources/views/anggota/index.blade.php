@@ -353,8 +353,10 @@
                                          class="mt-3">
                                          @csrf
                                          <button type="button" onclick="confirmAddToCart({{ $book->id }})"
-                                             class="w-full bg-[#F1A004] hover:bg-[#d68c00] text-white font-semibold py-2 rounded-lg transition">
-                                             Tambah ke Keranjang
+                                             {{ $book->jumlah_stok <= 0 ? 'disabled' : '' }}
+                                             class="w-full text-white font-semibold py-2 rounded-lg transition
+        {{ $book->jumlah_stok > 0 ? 'bg-[#F1A004] hover:bg-[#d68c00]' : 'bg-gray-400 cursor-not-allowed' }}">
+                                             {{ $book->jumlah_stok > 0 ? 'Tambah ke Keranjang' : 'Stok Habis' }}
                                          </button>
                                      </form>
                                  @else
@@ -414,7 +416,7 @@
                                                      </p>
                                                      <p class="text-xs text-gray-600 dark:text-gray-300">Kategori:
                                                          {{ $item['kategori'] }}</p>
-                                                     <p class="text-xs">
+                                                     <p class="text-xs text-black dark:text-gray-300">
                                                          Status:
                                                          @if ($item['status'] === 1)
                                                              <span
@@ -470,13 +472,15 @@
                                  <!-- Footer -->
                                  @if ($cart)
                                      <div class="p-4 border-t border-gray-200 dark:border-white/20">
-                                         <form action="{{ route('keranjang.checkout') }}" method="POST">
+                                         <form id="checkoutForm" action="{{ route('keranjang.checkout') }}"
+                                             method="POST">
                                              @csrf
-                                             <button type="submit"
-                                                 class="w-full bg-[#F1A004] hover:bg-[#d68c00] text-white py-3 rounded-xl font-semibold text-sm transition">
+                                             <button type="button" onclick="confirmCheckout()"
+                                                 class="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white py-3 rounded-xl font-semibold text-sm transition">
                                                  Pinjam Semua
                                              </button>
                                          </form>
+
                                      </div>
                                  @endif
                              </div>
@@ -539,6 +543,25 @@
              }).then((result) => {
                  if (result.isConfirmed) {
                      document.getElementById(`addToCartForm-${id}`).submit();
+                 }
+             });
+         }
+
+         function confirmCheckout() {
+             Swal.fire({
+                 title: 'Konfirmasi Peminjaman',
+                 text: 'Apakah kamu yakin ingin meminjam semua barang ini sekaligus?',
+                 icon: 'question',
+                 showCancelButton: true,
+                 confirmButtonColor: '#22C55E',
+                 cancelButtonColor: '#6B7280',
+                 confirmButtonText: 'Ya, pinjam semua',
+                 cancelButtonText: 'Batal',
+                 background: document.documentElement.classList.contains('dark') ? '#2C3262' : '#fff',
+                 color: document.documentElement.classList.contains('dark') ? '#fff' : '#000',
+             }).then((result) => {
+                 if (result.isConfirmed) {
+                     document.getElementById('checkoutForm').submit();
                  }
              });
          }

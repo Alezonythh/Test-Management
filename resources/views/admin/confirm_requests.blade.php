@@ -61,7 +61,7 @@
                 </p>
             </div>
 
-            @if ($requests->isEmpty())
+            @if ($requestsGrouped->isEmpty())
                 <div x-data="{ show: true }" x-show="show" x-transition:enter="transition ease-out duration-500"
                     x-transition:enter-start="opacity-0 -translate-y-3 scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -84,99 +84,80 @@
                 </div>
             @else
                 <!-- Daftar Permintaan -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach ($requests as $request)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($paginatedUsers as $userId)
+                        @php
+                            $userRequests = $requestsGrouped[$userId];
+                        @endphp
+
                         <div
-                            class="relative p-6 rounded-2xl shadow-md overflow-hidden
-                            bg-white dark:bg-gray-900 
-                            border border-gray-200 dark:border-gray-700
-                            hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02]
-                            transition-all duration-500 ease-out
-                            animate-[fadeIn_0.8s_ease-out]">
+                            class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden relative hover:shadow-2xl transition-all duration-300">
 
-                            <!-- Overlay gradient halus -->
+                            <!-- Header User -->
                             <div
-                                class="absolute inset-0 opacity-[0.07] 
-                                bg-gradient-to-br from-[#F1A004]/40 via-amber-400/40 to-yellow-300/40
-                                dark:from-yellow-600/20 dark:via-yellow-700/20 dark:to-yellow-800/20
-                                pointer-events-none animate-[shimmer_6s_infinite]">
-                            </div>
-
-                            <!-- Hover glow -->
-                            <div
-                                class="absolute inset-0 rounded-2xl bg-white/0 dark:bg-gray-900/0
-                                hover:bg-white/5 dark:hover:bg-gray-800/10 transition-colors duration-500 pointer-events-none">
-                            </div>
-
-
-
-                            <!-- Konten -->
-                            <div class="relative z-10">
-
-                                <h5
-                                    class="mb-3 text-xl font-extrabold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                                    📖 {{ $request->book->judul_buku }}
+                                class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-yellow-400 to-yellow-300 dark:from-yellow-600 dark:to-yellow-500">
+                                <h5 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                                    👤 {{ $userRequests->first()->user->name }}
                                 </h5>
-
-                                <p class="mb-2 text-gray-700 dark:text-gray-300 text-sm">
-                                    <span class="font-semibold text-[#F1A004] dark:text-yellow-400">👤 Anggota:</span>
-                                    {{ $request->user->name }}
-                                </p>
-                                <p class="mb-1 text-gray-700 dark:text-gray-300 text-sm">
-                                    <span class="font-semibold text-[#F1A004] dark:text-yellow-400">📅 Tanggal
-                                        Pinjam:</span>
-                                    {{ $request->tanggal_pinjam }}
-                                </p>
-                                <p class="mb-4 text-gray-700 dark:text-gray-300 text-sm">
-                                    <span class="font-semibold text-[#F1A004] dark:text-yellow-400">📅 Tanggal
-                                        Kembali:</span>
-                                    {{ $request->tanggal_kembali }}
-                                </p>
-
-                                @if ($request->book->jumlah_stok <= 0)
-                                    <div
-                                        class="absolute top-3 right-3 flex items-center gap-1 bg-red-100 border border-red-300 
-        text-red-700 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
-                                        ⚠️ Stok habis
-                                    </div>
-                                @endif
-
-
-                                <!-- Tombol Aksi -->
-                                <div class="flex justify-between mt-4">
-                                    <form action="{{ route('admin.approveRequest', $request->id) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit"
-                                            class="px-4 py-2 text-sm font-semibold rounded-lg transition duration-300 
-        {{ $request->book->jumlah_stok <= 0
-            ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-lg hover:scale-105' }}"
-                                            {{ $request->book->jumlah_stok <= 0 ? 'disabled' : '' }}>
-                                            {{ $request->book->jumlah_stok <= 0 ? 'Stok Habis' : 'Setujui' }}
-                                        </button>
-                                    </form>
-
-
-                                    <form action="{{ route('admin.rejectRequest', $request->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-4 py-2 text-sm font-semibold text-white rounded-lg
-                                            bg-gradient-to-r from-red-500 to-red-600 
-                                            hover:shadow-lg hover:scale-105 transition duration-300">
-                                            Tolak
-                                        </button>
-                                    </form>
-                                </div>
+                                <p class="text-sm text-gray-800 dark:text-gray-200 mt-1">Permintaan Peminjaman:
+                                    {{ $userRequests->count() }} Barang</p>
                             </div>
+
+                            <!-- List Buku -->
+                            <div class="p-6 space-y-4">
+                                @foreach ($userRequests as $request)
+                                    <div
+                                        class="p-4 rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm hover:shadow-md transition flex justify-between items-center">
+                                        <div>
+                                            <p class="font-semibold text-gray-800 dark:text-gray-100">📖
+                                                {{ $request->book->judul_buku }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-300">📅 Pinjam:
+                                                {{ $request->tanggal_pinjam }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-300">📅 Kembali:
+                                                {{ $request->tanggal_kembali }}</p>
+                                            @if ($request->book->jumlah_stok <= 0)
+                                                <span class="text-red-500 text-xs font-semibold">⚠️ Stok Habis</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Footer Actions -->
+                            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+                                <!-- Approve Semua -->
+                                <form action="{{ route('admin.approveAllRequests', $userId) }}" method="POST"
+                                    class="flex-1">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                        class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:shadow-lg hover:scale-105 transition transform duration-300">
+                                        Setujui Semua
+                                    </button>
+                                </form>
+
+                                <!-- Reject Semua -->
+                                <form action="{{ route('admin.rejectAllRequests', $userId) }}" method="POST"
+                                    class="flex-1">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="w-full py-2 rounded-lg text-white font-semibold bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:scale-105 transition transform duration-300">
+                                        Tolak Semua
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     @endforeach
                 </div>
 
-                <div class="mt-10 flex justify-center">
-                    {{ $requests->links() }}
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-center">
+                    {{ $paginatedUsers->links() }}
                 </div>
+
+
             @endif
         </div>
     </div>

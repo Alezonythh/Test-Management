@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\Exports\BorrowedBooksExport;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class anggotaController extends Controller
 {
@@ -125,39 +126,59 @@ public function borrowedBooks(Request $request)
         return view('anggota.loan_requests', compact('requests'));
     }
 
-    public function confirmRequests()
-    {
-        $requests = PinjamBuku::where('status', 'menunggu konfirmasi')
-            ->with('book', 'user')
-            ->paginate(10);
 
-        return view('admin.confirm_requests', compact('requests'));
-    }
+public function confirmRequests(Request $request)
+{
+    // Ambil semua request menunggu konfirmasi
+    $allRequests = PinjamBuku::where('status', 'menunggu konfirmasi')
+                    ->with('book', 'user')
+                    ->get()
+                    ->groupBy('user_id');
 
-    public function approveRequest($id)
-    {
-        $peminjaman = PinjamBuku::findOrFail($id);
+    // Ambil user_id unik
+    $userIds = $allRequests->keys();
 
-        if ($peminjaman->status !== 'menunggu konfirmasi') {
-            return back()->with('error', 'Permintaan ini sudah diproses.');
+    $perPage = 5;
+    $page = $request->get('page', 1);
+    $items = $userIds->slice(($page - 1) * $perPage, $perPage);
+
+    $paginatedUsers = new LengthAwarePaginator(
+        $items,
+        $userIds->count(),
+        $perPage,
+        $page,
+        ['path' => $request->url(), 'query' => $request->query()]
+    );
+
+    return view('admin.confirm_requests', [
+        'requestsGrouped' => $allRequests,
+        'paginatedUsers' => $paginatedUsers,
+    ]);
+}
+
+
+
+  public function approveAllRequestsByUser($userId)
+{
+    $requests = PinjamBuku::where('user_id', $userId)
+                ->where('status', 'menunggu konfirmasi')
+                ->with('book')
+                ->get();
+
+    DB::transaction(function () use ($requests) {
+        foreach ($requests as $peminjaman) {
+            $book = $peminjaman->book;
+            if ($book->jumlah_stok <= 0) continue;
+
+            $peminjaman->update(['status' => 'dipinjam']);
+            $book->decrement('jumlah_stok');
+
+            $book->update(['status' => $book->jumlah_stok > 0]);
         }
+    });
 
-        $book = $peminjaman->book;
-        if ($book->jumlah_stok <= 0) {
-            return back()->with('error', 'Stok buku habis.');
-        }
-
-        $peminjaman->update(['status' => 'dipinjam']);
-        $book->decrement('jumlah_stok');
-
-        if ($book->jumlah_stok <= 0) {
-            $book->update(['status' => false]);
-        } elseif ($book->jumlah_stok > 0) {
-            $book->update(['status' => true]);
-        }
-
-        return back()->with('success', 'Permintaan peminjaman disetujui.');
-    }
+    return back()->with('success', 'Semua permintaan user berhasil disetujui.');
+}
 
     public function rejectRequest($id)
     {
@@ -171,6 +192,16 @@ public function borrowedBooks(Request $request)
 
         return back()->with('success', 'Permintaan peminjaman ditolak.');
     }
+
+    public function rejectAllRequestsByUser($userId)
+{
+    PinjamBuku::where('user_id', $userId)
+        ->where('status', 'menunggu konfirmasi')
+        ->delete();
+
+    return back()->with('success', 'Semua permintaan user ditolak.');
+}
+
 
     public function borrowedBooksAdmin(Request $request, $status = null)
     {
@@ -390,16 +421,15 @@ public function updateCart(Request $request, $id)
     $cart = session()->get('cart', []);
 
     if (isset($cart[$id])) {
-        $newQty = max(1, (int) $request->input('quantity')); // minimal 1
-        $maxQty = $cart[$id]['jumlah_stok']; // ambil stok buku
+        $newQty = max(1, (int)$request->input('quantity'));
+        $maxQty = $cart[$id]['jumlah_stok'];
 
         if ($newQty > $maxQty) {
-            return back()->with('error', 'Jumlah melebihi stok yang tersedia!');
+            return back()->with('error', 'Jumlah melebihi stok!');
         }
 
-        $cart[$id]['quantity'] = $newQty; // perbarui jumlah
+        $cart[$id]['quantity'] = $newQty;
         session()->put('cart', $cart);
-
         return back()->with('success', 'Jumlah buku diperbarui!');
     }
 

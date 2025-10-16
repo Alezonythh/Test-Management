@@ -22,7 +22,8 @@ Route::middleware('auth')->group(function () {
 route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
     Route::get('/anggota/loan-requests', [AnggotaController::class, 'loanRequests'])->name('anggota.loan_requests');
     Route::get('/admin/confirm-requests', [anggotaController::class, 'confirmRequests'])->name('admin.confirmRequests');
-    Route::patch('/admin/approve-request/{id}', [AnggotaController::class, 'approveRequest'])->name('admin.approveRequest');
+    Route::delete('/admin/reject-all/{userId}', [AnggotaController::class, 'rejectAllRequestsByUser'])->name('admin.rejectAllRequests');
+    Route::patch('/admin/approve-all/{userId}', [AnggotaController::class, 'approveAllRequestsByUser'])->name('admin.approveAllRequests');
     Route::delete('/admin/reject-request/{id}', [AnggotaController::class, 'rejectRequest'])->name('admin.rejectRequest');
     Route::get('/admin/borrowed-books/{status?}', [AnggotaController::class, 'borrowedBooksAdmin'])->name('admin.borrowedBooks');
     Route::patch('/admin/return-book/{id}', [AnggotaController::class, 'returnBookForAdmin'])->name('admin.returnBookForAdmin');
