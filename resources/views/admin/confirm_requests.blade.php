@@ -73,7 +73,7 @@
                     @foreach ($paginatedUsers as $identifier)
                         @php
                             $requests = $requestsGrouped[$identifier];
-                            $guestName = $requests->first()->guest_name ?? null;
+                            $guestName = $requests->first()->nama_peminjam ?? null;
                             $guestSlug = $guestName ? \Illuminate\Support\Str::slug($guestName) : null;
                         @endphp
 
@@ -86,17 +86,24 @@
                                 <h5 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                                     👤 {{ $guestName ?? 'Guest' }}
                                 </h5>
+                                @php
+                                    $totalQty = $requests->sum(function($r){ return $r->quantity ?? 1; });
+                                    $groupedByBook = $requests->groupBy('book_id');
+                                @endphp
                                 <p class="text-sm text-gray-800 dark:text-gray-200 mt-1">
-                                    Permintaan Peminjaman: {{ $requests->count() }} Barang
+                                    Permintaan Peminjaman: {{ $totalQty }} Barang
                                 </p>
                             </div>
 
                             <!-- List Buku -->
-                            @foreach ($requests as $request)
-                                <div
-                                    class="px-6 py-3 text-sm text-gray-700 border-t border-gray-200 dark:border-gray-700">
-                                    <span class="font-semibold">{{ $request->book->judul_buku }}</span>
-                                    <span class="text-gray-400">- Qty: {{ $request->quantity ?? 1 }}</span>
+                            @foreach ($groupedByBook as $bookId => $items)
+                                @php
+                                    $first = $items->first();
+                                    $qty = $items->sum(function($r){ return $r->quantity ?? 1; });
+                                @endphp
+                                <div class="px-6 py-3 text-sm text-gray-700 border-t border-gray-200 dark:border-gray-700">
+                                    <span class="font-semibold">{{ $first->book->judul_buku }}</span>
+                                    <span class="text-gray-400">- Qty: {{ $qty }}</span>
                                 </div>
                             @endforeach
 

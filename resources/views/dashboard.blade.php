@@ -610,7 +610,7 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
                             <span class="font-semibold">{{ $request->book->judul_buku }}</span>
                             <span class="text-gray-400">
-                                - By: {{ $request->user ? $request->user->name : $request->guest_name ?? 'Guest' }}
+                                - By: {{ $request->user ? $request->user->name : ($request->nama_peminjam ?? 'Guest') }}
                             </span>
                         </div>
                     @endforeach
@@ -657,7 +657,7 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
                             <span class="font-semibold">{{ $request->book->judul_buku }}</span>
                             <span class="text-gray-400">
-                                - By: {{ optional($request->user)->name ?? ($request->guest_name ?? 'Guest') }}
+                                - By: {{ optional($request->user)->name ?? ($request->nama_peminjam ?? 'Guest') }}
                             </span>
                         </div>
                     @endforeach

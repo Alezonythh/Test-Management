@@ -150,87 +150,86 @@
                                         <th class="px-6 py-3">Tanggal Pinjam</th>
                                         <th class="px-6 py-3">Tanggal Kembali</th>
                                         <th class="px-6 py-3">Status</th>
+                                        <th class="px-6 py-3 text-center">Jumlah</th>
                                         <th class="px-6 py-3 text-center">Kondisi Awal</th>
                                         <th class="px-6 py-3 text-center">Kondisi Akhir</th>
                                         <th class="px-6 py-3 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($borrows as $borrow)
+                                    @php $groups = $borrows->groupBy('book_id'); @endphp
+                                    @foreach ($groups as $bookId => $items)
                                         @php
-                                            $returnDate = \Carbon\Carbon::parse($borrow->tanggal_kembali);
+                                            $first = $items->first();
+                                            $qty = $items->sum(function($r){ return $r->quantity ?? 1; });
+                                            $minPinjam = \Carbon\Carbon::parse($items->min('tanggal_pinjam'))->format('d-m-Y');
+                                            $maxKembali = \Carbon\Carbon::parse($items->max('tanggal_kembali'))->format('d-m-Y');
+                                            $anyDipinjam = $items->contains(function($r){ return $r->status === 'dipinjam'; });
+                                            $statusText = $anyDipinjam ? 'dipinjam' : 'dikembalikan';
+                                            $returnDate = \Carbon\Carbon::parse($items->max('tanggal_kembali'));
                                             $now = \Carbon\Carbon::now();
                                             $diff = $now->diffInDays($returnDate, false);
                                             $rowClass = '';
-                                            if ($diff == 0 && $borrow->status == 'dipinjam') {
-                                                $rowClass = 'bg-yellow-500/20';
-                                            } elseif ($diff < 0 && $borrow->status == 'dipinjam') {
-                                                $rowClass = 'bg-red-500/20';
-                                            }
+                                            if ($diff == 0 && $anyDipinjam) { $rowClass = 'bg-yellow-500/20'; }
+                                            elseif ($diff < 0 && $anyDipinjam) { $rowClass = 'bg-red-500/20'; }
+                                            $groupId = 'grp-'.$bookId.'-'.$loop->parent->index.'-'.$loop->index;
                                         @endphp
 
-                                        <tr
-                                            class="border-b border-white/10 hover:bg-[#434A8B]/40 transition-all duration-300 {{ $rowClass }}">
-                                            <td class="px-6 py-4 font-medium text-white">{{ $borrow->book->judul_buku }}
-                                            </td>
+                                        <tr class="border-b border-white/10 hover:bg-[#434A8B]/40 transition-all duration-300 {{ $rowClass }}">
+                                            <td class="px-6 py-4 font-medium text-white">{{ $first->book->judul_buku }}</td>
+                                            <td class="px-6 py-4">{{ $minPinjam }}</td>
+                                            <td class="px-6 py-4">{{ $maxKembali }}</td>
                                             <td class="px-6 py-4">
-                                                {{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }}
+                                                <span class="px-2 py-1 text-xs font-medium rounded-lg {{ $anyDipinjam ? 'bg-yellow-400/30 text-yellow-100' : 'bg-green-500/30 text-green-100' }}">{{ ucfirst($statusText) }}</span>
                                             </td>
-                                            <td class="px-6 py-4">
-                                                {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <span
-                                                    class="px-2 py-1 text-xs font-medium rounded-lg {{ $borrow->status === 'dipinjam' ? 'bg-yellow-400/30 text-yellow-100' : 'bg-green-500/30 text-green-100' }}">
-                                                    {{ ucfirst($borrow->status) }}
-                                                </span>
-                                            </td>
+                                            <td class="px-6 py-4 text-center">{{ $qty }}</td>
                                             <td class="px-6 py-4 text-center">
-                                                @if ($borrow->book->kondisi_awal)
-                                                    <img src="{{ asset('storage/' . $borrow->book->kondisi_awal) }}"
-                                                        alt="Kondisi Awal" width="50" class="rounded-md shadow-md">
+                                                @if ($first->book->kondisi_awal)
+                                                    <img src="{{ asset('storage/' . $first->book->kondisi_awal) }}" alt="Kondisi Awal" width="50" class="rounded-md shadow-md">
                                                 @else
                                                     <span class="italic text-gray-300">Tidak ada gambar</span>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-center">
-                                                @if ($borrow->kondisi_akhir)
-                                                    <img src="{{ asset('storage/' . $borrow->kondisi_akhir) }}"
-                                                        alt="Kondisi Akhir" width="50" class="rounded-md shadow-md">
+                                                @if ($first->kondisi_akhir)
+                                                    <img src="{{ asset('storage/' . $first->kondisi_akhir) }}" alt="Kondisi Akhir" width="50" class="rounded-md shadow-md">
                                                 @else
-                                                    <span class="italic text-gray-300">Tidak ada gambar</span>
+                                                    <span class="italic text-gray-300">—</span>
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 text-center">
-                                                @if ($borrow->status === 'dipinjam')
-                                                    <div class="flex justify-center gap-3">
-                                                        <form action="{{ route('admin.extendLoan', $borrow->id) }}"
-                                                            method="POST" class="inline-flex items-center gap-2">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <input type="date" name="tanggal_kembali" required
-                                                                class="block w-32 text-sm text-gray-900 border-gray-300 rounded-lg bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500">
-                                                            <button type="submit"
-                                                                class="group relative px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-indigo-600
-                        shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(79,70,229,0.7)]">
-                                                                <span class="relative z-10">Perpanjang</span>
-                                                                <span
-                                                                    class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition duration-500"></span>
-                                                            </button>
-                                                        </form>
-
-                                                        <button data-modal-target="returnModal-{{ $borrow->id }}"
-                                                            data-modal-toggle="returnModal-{{ $borrow->id }}"
-                                                            class="group relative px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-rose-600 to-red-700
-                        shadow-[0_0_15px_rgba(225,29,72,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(225,29,72,0.7)]">
-                                                            <span class="relative z-10">Kembalikan</span>
-                                                            <span
-                                                                class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition duration-500"></span>
-                                                        </button>
-                                                    </div>
-                                                @else
-                                                    <span class="text-gray-400 italic">Sudah dikembalikan</span>
-                                                @endif
+                                                <button type="button" onclick="document.getElementById('{{ $groupId }}').classList.toggle('hidden')"
+                                                    class="group relative px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(79,70,229,0.7)]">
+                                                    Kelola
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr id="{{ $groupId }}" class="hidden">
+                                            <td colspan="8" class="px-6 py-4 bg-[#2C3262]/40">
+                                                <div class="space-y-3">
+                                                    @foreach ($items as $borrow)
+                                                        <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                                                            <div class="text-sm text-white/90">
+                                                                {{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }} →
+                                                                {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
+                                                                <span class="ml-2 px-2 py-0.5 rounded bg-white/10 text-xs">Qty: {{ $borrow->quantity ?? 1 }}</span>
+                                                            </div>
+                                                            <div class="flex items-center gap-2">
+                                                                @if ($borrow->status === 'dipinjam')
+                                                                    <form action="{{ route('admin.extendLoan', $borrow->id) }}" method="POST" class="inline-flex items-center gap-2">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <input type="date" name="tanggal_kembali" required class="block w-32 text-sm text-gray-900 border-gray-300 rounded-lg bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500">
+                                                                        <button type="submit" class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 to-indigo-600">Perpanjang</button>
+                                                                    </form>
+                                                                    <button data-modal-target="returnModal-{{ $borrow->id }}" data-modal-toggle="returnModal-{{ $borrow->id }}" class="px-4 py-2 rounded-lg text-white bg-gradient-to-r from-rose-600 to-red-700">Kembalikan</button>
+                                                                @else
+                                                                    <span class="text-gray-300 italic">Selesai</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -134,7 +134,7 @@ $allRequests = PinjamBuku::where('status', 'menunggu konfirmasi')
                 ->with('book')
                 ->get()
                 ->groupBy(function($item) {
-                    return $item->user_id ?? 'guest_'.$item->guest_name;
+                    return $item->user_id ?? 'guest_'.$item->nama_peminjam;
                 });
 
 // Ambil "user identifier" unik
@@ -165,7 +165,7 @@ public function approveAllGuestRequests($guestSlug)
     $guestName = str_replace('-', ' ', $guestSlug);
 
     $requests = PinjamBuku::whereNull('user_id')
-        ->where('guest_name', $guestName)
+        ->where('nama_peminjam', $guestName)
         ->where('status', 'menunggu konfirmasi')
         ->with('book')
         ->get();
@@ -193,7 +193,7 @@ public function rejectAllGuestRequestsByName($guestSlug)
     $guestName = str_replace('-', ' ', $guestSlug);
 
     $requests = PinjamBuku::whereNull('user_id')
-        ->where('guest_name', $guestName)
+        ->where('nama_peminjam', $guestName)
         ->where('status', 'menunggu konfirmasi')
         ->get();
 
@@ -223,7 +223,7 @@ public function borrowedBooksAdmin(Request $request, $status = null)
         })
         ->orderBy('tanggal_pinjam', 'desc')
         ->get()
-        ->groupBy('guest_name');
+        ->groupBy('nama_peminjam');
 
     // Manual pagination
     $page = request()->get('page', 1);
@@ -440,7 +440,7 @@ public function checkoutCart(Request $request)
         for ($i = 0; $i < $quantity; $i++) {
             PinjamBuku::create([
                 'user_id' => null,
-                'guest_name' => $item['guest_name'] ?? 'Guest',
+                'nama_peminjam' => $item['nama_peminjam'] ?? 'Guest',
                 'book_id' => $book_id,
                 'tanggal_pinjam' => $item['tanggal_pinjam'],
                 'tanggal_kembali' => $item['tanggal_kembali'],

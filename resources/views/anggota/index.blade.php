@@ -384,6 +384,32 @@
                                          <form action="{{ route('keranjang.checkout') }}" method="POST"
                                              id="cartForm">
                                              @csrf
+                                             <!-- Global borrower name (applies to all items) -->
+                                             <div class="mb-3 p-3 rounded-lg bg-yellow-50 border border-yellow-200 dark:bg-white/10 dark:border-white/20">
+                                                 <label for="global-borrower-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama Peminjam (sekali isi)</label>
+                                                 <input type="text" id="global-borrower-name" placeholder="Nama Peminjam" required
+                                                     value="{{ Auth::user()->name ?? '' }}"
+                                                     class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:bg-transparent dark:text-white">
+                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Nama ini akan diterapkan ke semua barang di keranjang.</p>
+                                             </div>
+                                             <!-- Global borrow dates (apply to all items) -->
+                                             <div class="mb-3 p-3 rounded-lg bg-blue-50 border border-blue-200 dark:bg-white/10 dark:border-white/20">
+                                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                     <div>
+                                                         <label for="global-borrow-date" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal Pinjam</label>
+                                                         <input type="date" id="global-borrow-date"
+                                                                value="{{ now()->format('Y-m-d') }}"
+                                                                class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
+                                                     </div>
+                                                     <div>
+                                                         <label for="global-return-date" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal Kembali</label>
+                                                         <input type="date" id="global-return-date"
+                                                                value="{{ now()->addDays(7)->format('Y-m-d') }}"
+                                                                class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
+                                                     </div>
+                                                 </div>
+                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Tanggal akan diterapkan ke semua barang di keranjang.</p>
+                                             </div>
                                              @foreach ($cart as $id => $item)
                                                  <div
                                                      class="flex gap-3 items-start bg-gray-50 dark:bg-white/10 rounded-xl p-3 shadow-sm hover:shadow-md transition">
@@ -409,16 +435,17 @@
 
                                                          <!-- Input Guest dan Tanggal -->
                                                          <div class="mt-2 space-y-1">
-                                                             <input type="text"
-                                                                 name="cart[{{ $id }}][guest_name]"
-                                                                 placeholder="Nama Peminjam"
-                                                                 class="w-full p-2 border rounded-md" required>
-                                                             <input type="date"
+                                                             <!-- Per-item borrower name is hidden and auto-filled from the global input above -->
+                                                             <input type="hidden"
+                                                                 name="cart[{{ $id }}][nama_peminjam]"
+                                                                 class="cart-item-borrower-name">
+                                                             <!-- Per-item dates are hidden and synced from the global date inputs -->
+                                                             <input type="hidden"
                                                                  name="cart[{{ $id }}][tanggal_pinjam]"
-                                                                 class="w-full p-2 border rounded-md" required>
-                                                             <input type="date"
+                                                                 class="cart-item-tanggal-pinjam">
+                                                             <input type="hidden"
                                                                  name="cart[{{ $id }}][tanggal_kembali]"
-                                                                 class="w-full p-2 border rounded-md" required>
+                                                                 class="cart-item-tanggal-kembali">
                                                          </div>
 
                                                          <!-- Jumlah -->
@@ -475,9 +502,50 @@
 
      </x-app-layout>
      <script>
-         function toggleCart() {
-             document.getElementById('cartModal').classList.toggle('hidden');
-         }
+        function toggleCart() {
+            document.getElementById('cartModal').classList.toggle('hidden');
+        }
+
+        // Sync global borrower name to all cart items
+        function syncBorrowerName() {
+            const globalInput = document.getElementById('global-borrower-name');
+            if (!globalInput) return;
+            const val = globalInput.value || '';
+            document.querySelectorAll('#cartForm input[name$="[nama_peminjam]"]').forEach(el => {
+                el.value = val;
+            });
+        }
+        // Sync global dates to all cart items
+        function syncBorrowDates() {
+            const borrow = document.getElementById('global-borrow-date');
+            const back = document.getElementById('global-return-date');
+            if (borrow) {
+                const v = borrow.value || '';
+                document.querySelectorAll('#cartForm input[name$="[tanggal_pinjam]"]').forEach(el => el.value = v);
+            }
+            if (back) {
+                const v2 = back.value || '';
+                document.querySelectorAll('#cartForm input[name$="[tanggal_kembali]"]').forEach(el => el.value = v2);
+            }
+            if (borrow && back) back.min = borrow.value || '';
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const globalInput = document.getElementById('global-borrower-name');
+            if (globalInput) {
+                syncBorrowerName();
+                globalInput.addEventListener('input', syncBorrowerName);
+            }
+            // initial sync for dates and listeners
+            syncBorrowDates();
+            const gBorrow = document.getElementById('global-borrow-date');
+            const gReturn = document.getElementById('global-return-date');
+            if (gBorrow) gBorrow.addEventListener('change', syncBorrowDates);
+            if (gReturn) gReturn.addEventListener('change', syncBorrowDates);
+            const cartForm = document.getElementById('cartForm');
+            if (cartForm) {
+                cartForm.addEventListener('submit', () => { syncBorrowerName(); syncBorrowDates(); });
+            }
+        });
 
          function updateQty(btn, diff, id) {
              const input = btn.parentElement.querySelector('input[type=number]');
