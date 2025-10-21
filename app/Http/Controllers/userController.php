@@ -52,7 +52,7 @@ class userController extends Controller
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect()->route('users.index')->with('success', 'Anggota berhasil ditambahkan.');
+        return redirect()->route('users.index')->with('created', 'Anggota berhasil ditambahkan.');
     }
 
     /**
@@ -87,7 +87,7 @@ class userController extends Controller
         ]);
     
         // Redirect dengan pesan sukses
-        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil diperbarui.');
+        return redirect()->route('users.index')->with('updated', 'Data pengguna berhasil diperbarui.');
     }
 
     /**
@@ -96,6 +96,6 @@ class userController extends Controller
     public function destroy(User $user)
     {
         $user->delete(); // Delete the user
-        return redirect()->route('users.index')->with('success', 'User Berhasil Dihapus.');
+        return redirect()->route('users.index')->with('deleted', 'User Berhasil Dihapus.');
     }
 }

@@ -14,12 +14,22 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+      public function handle(Request $request, Closure $next, $role = null): Response
     {
-        $roles = explode('|', $role);
-        if (Auth::check() && in_array(Auth::user()->role, $roles)) {
-           return $next($request);
+        // Kalau route khusus admin
+        if ($role === 'admin') {
+            if (Auth::check() && Auth::user()->role === 'admin') {
+                return $next($request);
+            }
+            abort(403, 'Hanya admin yang bisa mengakses.');
         }
+
+        // Semua user login lain (guest) bisa akses route umum
+        if (Auth::check()) {
+            return $next($request);
+        }
+
+        // Kalau belum login
         abort(403, 'Hayo Mau Ngapain?');
     }
 }

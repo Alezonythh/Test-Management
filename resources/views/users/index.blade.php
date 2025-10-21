@@ -1,128 +1,270 @@
 <x-app-layout>
-    <div x-data="{
-        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
-    }" x-init="window.addEventListener('sidebar-toggled', () => {
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
         open = JSON.parse(localStorage.getItem('sidebarOpen'));
     });" :class="open ? 'ml-64' : 'ml-16'"
-        class="transition-all duration-300">
-    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5"> 
-        <div class="mx-auto max-w-screen-xl px-4">
-                            <!-- Flash Message -->
-                            @if (session('success'))
-                    <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
-                        {{ session('success') }}
+        class="transition-all duration-300 relative">
+
+        <section class="bg-gray-50 dark:bg-gray-900 p-5 sm:p-7 sm:rounded-lg">
+            <div class="mx-auto max-w-screen-xl px-4">
+
+                <!-- Alert sukses -->
+                @if (session('success'))
+                    <div
+                        class="mb-5 rounded-xl border border-[#F1A004]/30 bg-[#FFF8E5] 
+                                dark:bg-green-900/30 dark:border-green-500/30
+                                text-[#5C4B00] dark:text-green-200 p-4 text-sm 
+                                shadow-md flex items-center justify-between">
+                        <span class="font-semibold">{{ session('success') }}</span>
+                        <button onclick="this.parentElement.remove()"
+                            class="text-[#F1A004] dark:text-green-300 hover:scale-110 transition">✕</button>
                     </div>
                 @endif
-            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                
-                 <!-- Form Pencarian -->
-                 <div class="flex justify-between items-center p-4">
-                    <form action="{{ route('users.index') }}" method="GET" class="flex">
-                        <input type="text" name="search" id="search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Cari berdasarkan nama atau email" value="{{ request('search') }}">
-                        <button type="submit"
-                            class="ml-2 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Cari
-                        </button>
-                    </form>
-                
-                <!-- Tombol Tambah Anggota -->
-                <div class="flex justify-between">
-                    <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
-                        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#F1A004] dark:hover:bg-[#CC8600] dark:focus:ring-[#CC8600]">
-                        Tambah Anggota
-                    </button>
-                </div>
-                 
-                </div>
 
-
-                <!-- Tabel Daftar Pengguna -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-4 py-3">No</th>
-                                <th scope="col" class="px-4 py-3">Nama Anggota</th>
-                                <th scope="col" class="px-4 py-3">Email</th>
-                                <th scope="col" class="px-4 py-3">Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($users as $user)
-                                <tr class="border-b dark:border-gray-700">
-                                    <td class="px-4 py-3">{{ $loop->iteration}}</td>
-                                    <td class="px-4 py-3">{{ $user->name }}</td>
-                                    <td class="px-4 py-3">{{ $user->email }}</td>
-                                    <td class="px-4 py-3 flex text-right space-x-2 items-center">
-                                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-600 dark:text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600">Edit</a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus User ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 dark:text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
-                                        No users found.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                        <div class="p-4">
-                        {{ $users->links() }}
+                <!-- Kontainer utama -->
+                <div class="relative overflow-hidden rounded-2xl shadow-2xl text-white sm:rounded-lg">
+                    <!-- Background -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-[#fff8e1] via-[#fffef8] to-[#fff8e1]
+               dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262]">
                     </div>
-                    </table>
-                </div>
-            </div>
-        </div>
 
-        <!-- Modal -->
-        <div id="defaultModal" tabindex="-1" aria-hidden="true"
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-            <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                    <!-- Modal Header -->
-                    <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                            Tambah Anggota
-                        </h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="defaultModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
+                    <!-- Efek glow lembut -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-[#F1A004]/20 via-white/10 to-transparent 
+               dark:from-[#2C3262]/30 dark:via-[#434A8B]/30 dark:to-[#2C3262]/30 blur-xl animate-pulse">
                     </div>
-                    <!-- Modal Body -->
-                    <form action="{{ route('users.store') }}" method="POST">
-                        @csrf
-                        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+
+                    <!-- Konten -->
+                    <div class="relative z-10">
+
+                        <!-- Header -->
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 border-b border-white/20 dark:border-white/20">
                             <div>
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Lengkap</label>
-                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nama Lengkap" required>
+                                <h2 class="text-2xl font-extrabold text-[#F1A004] dark:text-white">👥 Daftar Anggota
+                                </h2>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">Kelola data anggota dengan mudah.
+                                </p>
                             </div>
-                            <div>
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukan email siswa" required>
-                            </div>
-                            <div>
-                                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Masukan Password" required>
+
+                            <!-- Search & Button -->
+                            <div class="flex mt-4 sm:mt-0 gap-2">
+                                <form action="{{ route('users.index') }}" method="GET" class="flex">
+                                    <input type="text" name="search" id="search"
+                                        class="bg-white/90 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-[#F1A004] focus:border-[#F1A004] block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="Cari nama/email..." value="{{ request('search') }}">
+                                    <button type="submit"
+                                        class="text-white bg-[#F1A004] hover:bg-[#d89403] px-4 rounded-r-lg transition-all">
+                                        Cari
+                                    </button>
+                                </form>
+
+                                <!-- Tombol Tambah Anggota -->
+                                <button id="defaultModalButton" data-modal-target="defaultModal"
+                                    data-modal-toggle="defaultModal"
+                                    class="relative group block px-6 py-2.5 text-white font-semibold rounded-xl
+                           bg-gradient-to-r from-[#F1A004] to-[#d89403]
+                           shadow-[0_4px_15px_rgba(241,160,4,0.5)]
+                           transition-all duration-500 ease-in-out
+                           hover:scale-105 hover:shadow-[0_8px_25px_rgba(204,134,0,0.7)]
+                           active:scale-95 overflow-hidden">
+                                    <span
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                               opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                               transition-all duration-700 ease-in-out"></span>
+                                    Tambah Anggota
+                                </button>
                             </div>
                         </div>
-                        <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Tambah Anggota
-                        </button>
-                    </form>
 
+                        <!-- Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-900 dark:text-gray-200">
+                                <thead class="text-xs uppercase bg-[#F1A004]/10 dark:bg-white/10">
+                                    <tr>
+                                        <th class="px-4 py-3">No</th>
+                                        <th class="px-4 py-3">Nama Anggota</th>
+                                        <th class="px-4 py-3">Email</th>
+                                        <th class="px-4 py-3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($users as $user)
+                                        <tr
+                                            class="border-b border-gray-200 dark:border-white/20 hover:bg-[#F1A004]/5 dark:hover:bg-white/10 transition">
+                                            <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                                            <td class="px-4 py-3">{{ $user->name }}</td>
+                                            <td class="px-4 py-3">{{ $user->email }}</td>
+                                            <td class="px-4 py-3 flex space-x-2">
+                                                <a href="{{ route('users.edit', $user->id) }}"
+                                                    class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition-all">
+                                                    Edit
+                                                </a>
+
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                    class="delete-form inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-red-600 to-red-800 hover:scale-105 transition-all">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4"
+                                                class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">
+                                                Tidak ada anggota ditemukan.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            <div class="p-4">
+                                {{ $users->links() }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
+                <!-- Modal Tambah Anggota -->
+                <div id="defaultModal" tabindex="-1" aria-hidden="true"
+                    class="fixed inset-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto bg-black/60 backdrop-blur-sm">
+                    <div class="relative w-full max-w-lg mx-auto animate-[fadeInScale_0.4s_ease-out]">
+                        <div
+                            class="relative rounded-2xl shadow-2xl overflow-hidden 
+                   bg-gradient-to-br from-white to-[#FFF8E1] dark:from-[#2C3262]/95 dark:to-[#434A8B]/95
+                   border border-gray-200/40 dark:border-white/10 
+                   backdrop-blur-md transition-all duration-500">
+
+                            <!-- Header -->
+                            <div
+                                class="flex items-start justify-between p-4 
+                       border-b border-gray-200/40 dark:border-white/10">
+                                <h3
+                                    class="text-lg font-extrabold tracking-wide 
+                           text-gray-900 dark:text-white flex items-center gap-2">
+                                    👤 Tambah Anggota
+                                </h3>
+                                <button type="button"
+                                    class="text-gray-600 hover:text-gray-900 dark:text-white/70 dark:hover:text-white 
+                           hover:bg-gray-200/40 dark:hover:bg-white/20 rounded-lg text-xs p-2 transition"
+                                    data-modal-toggle="defaultModal">✖</button>
+                            </div>
+
+                            <!-- Body -->
+                            <form action="{{ route('users.store') }}" method="POST" class="p-5 space-y-4 text-sm">
+                                @csrf
+
+                                <div>
+                                    <label for="name"
+                                        class="block mb-1 text-xs font-semibold text-gray-700 dark:text-gray-200">Nama
+                                        Lengkap</label>
+                                    <input type="text" name="name" id="name"
+                                        class="w-full p-2.5 rounded-lg border text-gray-800 dark:text-white
+                               placeholder-gray-400 dark:placeholder-gray-300
+                               bg-white/80 dark:bg-white/10 border-gray-300 dark:border-white/20
+                               focus:ring-2 focus:ring-[#F1A004] dark:focus:ring-indigo-400 focus:outline-none"
+                                        placeholder="Nama Lengkap" required>
+                                </div>
+
+                                <div>
+                                    <label for="email"
+                                        class="block mb-1 text-xs font-semibold text-gray-700 dark:text-gray-200">Email</label>
+                                    <input type="email" name="email" id="email"
+                                        class="w-full p-2.5 rounded-lg border text-gray-800 dark:text-white
+                               placeholder-gray-400 dark:placeholder-gray-300
+                               bg-white/80 dark:bg-white/10 border-gray-300 dark:border-white/20
+                               focus:ring-2 focus:ring-[#F1A004] dark:focus:ring-indigo-400 focus:outline-none"
+                                        placeholder="Masukan email siswa" required>
+                                </div>
+
+                                <div>
+                                    <label for="password"
+                                        class="block mb-1 text-xs font-semibold text-gray-700 dark:text-gray-200">Password</label>
+                                    <input type="password" name="password" id="password"
+                                        class="w-full p-2.5 rounded-lg border text-gray-800 dark:text-white
+                               placeholder-gray-400 dark:placeholder-gray-300
+                               bg-white/80 dark:bg-white/10 border-gray-300 dark:border-white/20
+                               focus:ring-2 focus:ring-[#F1A004] dark:focus:ring-indigo-400 focus:outline-none"
+                                        placeholder="Masukan Password" required>
+                                </div>
+
+                                <!-- Tombol Submit -->
+                                <button type="submit"
+                                    class="relative w-full px-4 py-2.5 rounded-lg font-bold text-sm text-white 
+                           bg-gradient-to-r from-[#F1A004] via-[#FFD54F] to-[#F1A004]
+                           dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262]
+                           shadow-lg hover:shadow-xl hover:scale-[1.02] 
+                           transition-all duration-500 overflow-hidden group">
+                                    <span class="relative z-10">✨ Tambah Anggota</span>
+                                    <span
+                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent 
+                               -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-    </section></div>
+        </section>
+    </div>
 </x-app-layout>
+
+<!-- SWEETALERT2 SCRIPT -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('.delete-form');
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Yakin?',
+                    text: "User ini akan dihapus permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+
+    @if (session('deleted'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('deleted') }}",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    @endif
+    @if (session('created'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('created') }}",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    @endif
+    @if (session('updated'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('updated') }}",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    @endif
+</script>

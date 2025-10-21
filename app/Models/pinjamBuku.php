@@ -14,6 +14,7 @@ class pinjamBuku extends Model
     protected $fillable = [
         'user_id',
         'book_id',
+        'guest_name',
         'tanggal_pinjam',
         'tanggal_kembali',
         'status',

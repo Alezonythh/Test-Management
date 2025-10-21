@@ -1,121 +1,129 @@
 <x-app-layout>
-    <div x-data="{
-        open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true'),
-    }" x-init="window.addEventListener('sidebar-toggled', () => {
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
         open = JSON.parse(localStorage.getItem('sidebarOpen'));
     });" :class="open ? 'ml-64' : 'ml-16'"
-        class="transition-all duration-300">
-<<<<<<< HEAD
-<section class="bg-white dark:bg-gray-900">
-  <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-      <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Barang</h2>
-      <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-              <div class="sm:col-span-2">
-                  <label for="judul_buku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>
-                  <input type="text" name="judul_buku" id="judul_buku" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nama Barang" required="">
-              </div>
-              <div class="sm:col-span-1">
-                  <label for="kategori" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
-                  <select id="kategori" name="kategori" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                      <option selected="">Pilih Kategori</option>
-                      <option value="Fiksi">Camera</option>
-                      <option value="Non-Fiksi">Headset</option>
-                      <option value="Sains">Proyektor</option>
-                  </select>
-              </div>
-              <div class="sm:col-span-1">
-                  <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                  <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                  <option selected="">Pilih Status</option>
-                      <option value="1">Tersedia</option>
-                      <option value="0">Tidak Tersedia</option>
-                  </select>
-              </div>
-              <div class="sm:col-span-2">
-                  <label for="jumlah_stok" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Stok</label>
-                  <input type="number" name="jumlah_stok" id="jumlah_stok" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Jumlah Stok" required="">
-              </div> 
-              <div class="sm:col-span-2">
-                  <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                  <textarea id="deskripsi" name="deskripsi" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Tuliskan Deskripsi"></textarea>
-              </div>
-              <div class="sm:col-span-2">
-                  <label for="kondisi_awal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kondisi Awal (Foto)</label>
-                  <input type="file" name="kondisi_awal" id="kondisi_awal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-              </div>
-          </div>
-          <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-[#F1A004] rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-[#CC8600]">
-              Tambah Barang
-          </button>
-      </form>
-  </div>
-</section></div>
-=======
-        <section class="bg-white dark:bg-gray-900">
-            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tambah Barang</h2>
-                <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                        <div class="sm:col-span-2">
+        class="transition-all duration-300 relative">
+        <!-- Main Section -->
+        <section
+            class="bg-gradient-to-br from-[#FFF5E1] to-white dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-700">
+            <div class="py-12 px-4 mx-auto max-w-3xl lg:py-16">
+
+                <!-- Judul -->
+                <div class="mb-10 text-center">
+                    <h2
+                        class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F1A004] to-[#facc15] dark:from-[#F1A004] dark:to-[#CC8600]">
+                        Tambah Barang
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm">
+                        Lengkapi data berikut untuk menambahkan barang baru.
+                    </p>
+                </div>
+
+                <!-- Card Form -->
+                <div
+                    class="rounded-2xl shadow-2xl border border-[#F1A004]/30 dark:border-white/10 overflow-hidden backdrop-blur-sm 
+                           bg-white/90 dark:bg-gradient-to-br dark:from-[#2C3262]/90 dark:to-[#434A8B]/90 p-8 
+                           transition-all duration-700">
+
+                    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data"
+                        class="space-y-6">
+                        @csrf
+
+                        <!-- Nama Barang -->
+                        <div>
                             <label for="judul_buku"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>
-                            <input type="text" name="judul_buku" id="judul_buku"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Nama Barang" required="">
+                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Nama
+                                Barang</label>
+                            <input type="text" name="judul_buku" id="judul_buku" placeholder="Nama Barang"
+                                class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
+                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                                       focus:outline-none transition-all duration-300"
+                                required>
                         </div>
-                        <div class="sm:col-span-1">
-                            <label for="kategori"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
-                            <select id="kategori" name="kategori"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected="">Pilih Kategori</option>
-                                <option value="Camera">Camera</option>
-                                <option value="Headset">Headset</option>
-                                <option value="Proyektor">Proyektor</option>
-                            </select>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Kategori -->
+                            <div>
+                                <label for="kategori"
+                                    class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Kategori</label>
+                                <select id="kategori" name="kategori"
+                                    class="w-full p-3 rounded-xl text-sm border border-[#F1A004]/40 bg-white text-gray-900
+                                           dark:bg-white/20 dark:text-white focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                                    <option selected>Pilih Kategori</option>
+                                    <option value="Camera">Camera</option>
+                                    <option value="Headset">Headset</option>
+                                    <option value="Proyektor">Proyektor</option>
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div>
+                                <label for="status"
+                                    class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Status</label>
+                                <select id="status" name="status"
+                                    class="w-full p-3 rounded-xl text-sm border border-[#F1A004]/40 bg-white text-gray-900
+                                           dark:bg-white/20 dark:text-white focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
+                                    <option selected>Pilih Status</option>
+                                    <option value="1">Tersedia</option>
+                                    <option value="0">Tidak Tersedia</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="sm:col-span-1">
-                            <label for="status"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                            <select id="status" name="status"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected="">Pilih Status</option>
-                                <option value="1">Tersedia</option>
-                                <option value="0">Tidak Tersedia</option>
-                            </select>
-                        </div>
-                        <div class="sm:col-span-2">
+
+                        <!-- Jumlah Stok -->
+                        <div>
                             <label for="jumlah_stok"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Stok</label>
-                            <input type="number" name="jumlah_stok" id="jumlah_stok"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Jumlah Stok" required="">
+                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Jumlah
+                                Stok</label>
+                            <input type="number" name="jumlah_stok" id="jumlah_stok" placeholder="Jumlah Stok"
+                                class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
+                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                                       focus:outline-none transition-all duration-300"
+                                required>
                         </div>
-                        <div class="sm:col-span-2">
+
+                        <!-- Deskripsi -->
+                        <div>
                             <label for="deskripsi"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                            <textarea id="deskripsi" name="deskripsi" rows="8"
-                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Tuliskan Deskripsi"></textarea>
+                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Deskripsi</label>
+                            <textarea id="deskripsi" name="deskripsi" rows="5" placeholder="Tuliskan deskripsi barang"
+                                class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
+                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                                       focus:outline-none transition-all duration-300"></textarea>
                         </div>
-                        <div class="sm:col-span-2">
+
+                        <!-- Kondisi Awal -->
+                        <div>
                             <label for="kondisi_awal"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kondisi Awal
+                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Kondisi Awal
                                 (Foto)</label>
                             <input type="file" name="kondisi_awal" id="kondisi_awal"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                class="block w-full text-sm border border-[#F1A004]/40 rounded-xl cursor-pointer 
+                                       bg-white text-gray-900 dark:bg-white/20 dark:text-white focus:ring-2 
+                                       focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none transition-all duration-300">
                         </div>
-                    </div>
-                    <button type="submit"
-                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                        Tambah Barang
-                    </button>
-                </form>
+
+                        <!-- Tombol -->
+                        <div class="text-center pt-4">
+                            <button type="submit"
+                                class="relative inline-flex items-center px-8 py-3 text-sm font-semibold text-white rounded-xl
+                                       bg-gradient-to-r from-[#F1A004] to-[#facc15] shadow-[0_4px_15px_rgba(241,160,4,0.6)]
+                                       hover:from-[#e39b00] hover:to-[#d4a500] hover:shadow-[0_8px_25px_rgba(204,134,0,0.8)]
+                                       active:scale-95 active:shadow-inner overflow-hidden group transition-all duration-500">
+                                <span
+                                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                                           opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] 
+                                           transition-all duration-700 ease-in-out"></span>
+                                ✨ Tambah Barang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </section>
     </div>
->>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522
 </x-app-layout>

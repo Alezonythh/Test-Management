@@ -1,109 +1,140 @@
 <x-app-layout>
-    <section class="bg-white dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-<<<<<<< HEAD
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Barang</h2>
-=======
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edit Buku</h2>
->>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522
-            <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                    <div class="sm:col-span-2">
-<<<<<<< HEAD
-                        <label for="judul_buku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Barang</label>
-                        <input type="text" name="judul_buku" id="judul_buku" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ $book->judul_buku }}" required>
-                    </div>
-                    <div class="sm:col-span-1">
-                        <label for="kategori" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
-                        <select id="kategori" name="kategori" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option value="Fiksi" {{ $book->kategori == 'Fiksi' ? 'selected' : '' }}>Camera</option>
-                            <option value="Non-Fiksi" {{ $book->kategori == 'Non-Fiksi' ? 'selected' : '' }}>Headset</option>
-                            <option value="Sains" {{ $book->kategori == 'Sains' ? 'selected' : '' }}>Sains</option>
-                            <option value="Teknologi" {{ $book->kategori == 'Teknologi' ? 'selected' : '' }}>Proyektor</option>
-                        </select>
-                    </div>
-                    <div class="sm:col-span-1">
-                        <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                        <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-=======
-                        <label for="judul_buku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judul
-                            buku</label>
-                        <input type="text" name="judul_buku" id="judul_buku"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $book->judul_buku }}" required>
-                    </div>
+    <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
+        open = JSON.parse(localStorage.getItem('sidebarOpen'));
+    });" :class="open ? 'ml-64' : 'ml-16'"
+        class="transition-all duration-300">
 
-                    <div class="sm:col-span-1">
-                        <label for="kategori"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategori</label>
-                        <select id="kategori" name="kategori"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            <option value="Fiksi" {{ $book->kategori == 'Camera' ? 'selected' : '' }}>Camera</option>
-                            <option value="Non-Fiksi" {{ $book->kategori == 'Headset' ? 'selected' : '' }}>Headset
-                            </option>
-                            <option value="Sains" {{ $book->kategori == 'Proyektor' ? 'selected' : '' }}>Proyektor
-                            </option>
-                        </select>
-                    </div>
-                    <div class="sm:col-span-1">
-                        <label for="status"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                        <select id="status" name="status"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
->>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522
-                            <option value="1" {{ $book->status ? 'selected' : '' }}>Tersedia</option>
-                            <option value="0" {{ !$book->status ? 'selected' : '' }}>Tidak Tersedia</option>
-                        </select>
-                    </div>
-                    <div class="sm:col-span-2">
-<<<<<<< HEAD
-                        <label for="jumlah_stok" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Stok</label>
-                        <input type="number" name="jumlah_stok" id="jumlah_stok" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ $book->jumlah_stok }}" required>
-                    </div> 
-                    <div class="sm:col-span-2">
-                        <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                        <textarea id="deskripsi" name="deskripsi" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ $book->deskripsi }}</textarea>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label for="kondisi_awal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kondisi Awal (Foto)</label>
-                        <input type="file" name="kondisi_awal" id="kondisi_awal" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                    </div>
+        <section
+            class="min-h-screen bg-gradient-to-br from-[#FAF7F0] via-[#FFFDF7] to-[#FFF7E0]
+                       dark:from-[#1E1B4B] dark:via-[#2C3262] dark:to-[#6a5acd]
+                       transition-all duration-500">
+            <div class="py-12 px-4 mx-auto max-w-2xl lg:py-16">
+                <!-- Header -->
+                <div class="mb-10 text-center">
+                    <h2 class="text-3xl font-extrabold text-[#E19E02] dark:text-[#F1A004]">
+                        Edit Barang
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm">
+                        Lengkapi data berikut untuk mengedit data barang.
+                    </p>
                 </div>
-                <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                    Update Barang
-=======
-                        <label for="jumlah_stok"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jumlah Stok</label>
-                        <input type="number" name="jumlah_stok" id="jumlah_stok"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            value="{{ $book->jumlah_stok }}" required>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label for="deskripsi"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
-                        <textarea id="deskripsi" name="deskripsi" rows="8"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">{{ $book->deskripsi }}</textarea>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label for="kondisi_awal"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kondisi Awal
-                            (Foto)</label>
-                        <input type="file" name="kondisi_awal" id="kondisi_awal"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                    </div>
+
+                <!-- Card -->
+                <div
+                    class="bg-white/90 dark:bg-[#2C3262]/95 
+                           backdrop-blur-md rounded-2xl shadow-2xl p-8 
+                           border border-[#E19E02]/20 dark:border-white/20 transition-all duration-500">
+
+                    <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                            <!-- Nama Barang -->
+                            <div class="sm:col-span-2">
+                                <label for="judul_buku"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Nama Barang
+                                </label>
+                                <input type="text" name="judul_buku" id="judul_buku"
+                                    class="w-full p-3 text-sm rounded-xl 
+                                           bg-[#FFF9E8] border border-[#E19E02]/40 text-gray-900 
+                                           placeholder-gray-500 focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] 
+                                           focus:outline-none dark:bg-white/20 dark:text-white dark:placeholder-gray-300"
+                                    value="{{ $book->judul_buku }}" required>
+                            </div>
+
+                            <!-- Kategori -->
+                            <div>
+                                <label for="kategori"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Kategori
+                                </label>
+                                <select id="kategori" name="kategori"
+                                    class="w-full p-3 rounded-xl text-sm 
+                                           bg-[#FFF9E8] border border-[#E19E02]/40 text-gray-900 
+                                           focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] focus:outline-none
+                                           dark:bg-[#2C3262] dark:text-white dark:border-white/30">
+                                    <option value="Camera" {{ $book->kategori == 'Camera' ? 'selected' : '' }}>Camera
+                                    </option>
+                                    <option value="Headset" {{ $book->kategori == 'Headset' ? 'selected' : '' }}>Headset
+                                    </option>
+                                    <option value="Proyektor" {{ $book->kategori == 'Proyektor' ? 'selected' : '' }}>
+                                        Proyektor</option>
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div>
+                                <label for="status"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Status
+                                </label>
+                                <select id="status" name="status"
+                                    class="w-full p-3 rounded-xl text-sm 
+                                           bg-[#FFF9E8] border border-[#E19E02]/40 text-gray-900 
+                                           focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] focus:outline-none
+                                           dark:bg-[#2C3262] dark:text-white dark:border-white/30">
+                                    <option value="1" {{ $book->status ? 'selected' : '' }}>Tersedia</option>
+                                    <option value="0" {{ !$book->status ? 'selected' : '' }}>Tidak Tersedia
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Jumlah Stok -->
+                            <div class="sm:col-span-2">
+                                <label for="jumlah_stok"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Jumlah Stok
+                                </label>
+                                <input type="number" name="jumlah_stok" id="jumlah_stok"
+                                    class="w-full p-3 text-sm rounded-xl 
+                                           bg-[#FFF9E8] border border-[#E19E02]/40 text-gray-900 
+                                           focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] 
+                                           focus:outline-none dark:bg-white/20 dark:text-white dark:border-white/30"
+                                    value="{{ $book->jumlah_stok }}" required>
+                            </div>
+
+                            <!-- Deskripsi -->
+                            <div class="sm:col-span-2">
+                                <label for="deskripsi"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Deskripsi
+                                </label>
+                                <textarea id="deskripsi" name="deskripsi" rows="6"
+                                    class="block w-full p-3 text-sm rounded-xl 
+                                           bg-[#FFF9E8] border border-[#E19E02]/40 text-gray-900 
+                                           placeholder-gray-600 focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] 
+                                           focus:outline-none dark:bg-white/20 dark:text-white dark:placeholder-gray-300">{{ $book->deskripsi }}</textarea>
+                            </div>
+
+                            <!-- Kondisi Awal -->
+                            <div class="sm:col-span-2">
+                                <label for="kondisi_awal"
+                                    class="block mb-2 text-sm font-semibold text-[#E19E02] dark:text-white">
+                                    Kondisi Awal (Foto)
+                                </label>
+                                <input type="file" name="kondisi_awal" id="kondisi_awal"
+                                    class="block w-full text-sm border border-[#E19E02]/40 rounded-xl cursor-pointer 
+                                           bg-[#FFF9E8] text-gray-800 placeholder-gray-600 
+                                           focus:outline-none focus:ring-2 focus:ring-[#E19E02] focus:border-[#E19E02] 
+                                           dark:bg-white/10 dark:text-white dark:border-white/30">
+                            </div>
+                        </div>
+
+                        <!-- Tombol Update -->
+                        <div class="text-center pt-6">
+                            <button type="submit"
+                                class="px-8 py-3 text-sm font-semibold text-white rounded-xl
+                                           bg-[#E19E02] hover:bg-[#c98b00] 
+                                           dark:bg-[#2C3262] dark:hover:bg-[#1f234a]
+                                           shadow-md hover:shadow-lg transition-all duration-300">
+                                Update Barang
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit"
-                    class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                    Update Buku
->>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522
-                </button>
-            </form>
-        </div>
-    </section>
-<<<<<<< HEAD
+            </div>
+        </section>
+    </div>
 </x-app-layout>
-=======
-</x-app-layout>
->>>>>>> cb2e637b35a75d0a64241f4b2276f61c9a975522

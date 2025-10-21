@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Book;
 use App\Models\PinjamBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
 use App\Exports\BorrowedBooksExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class anggotaController extends Controller
 {
@@ -19,12 +20,19 @@ class anggotaController extends Controller
     {
         $query = Book::query();
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('judul_buku', 'like', '%' . $search . '%')
-                ->orWhere('penulis', 'like', '%' . $search . '%')
-                ->orWhere('kategori', 'like', '%' . $search . '%');
-        }
+     // Search judul / penulis
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('judul_buku', 'like', '%' . $search . '%')
+              ->orWhere('kategori', 'like', '%' . $search . '%');
+        });
+    }
+
+    // Filter kategori
+    if ($request->has('kategori') && $request->kategori != '') {
+        $query->where('kategori', $request->kategori);
+    }
 
         $books = $query->orderBy('created_at', 'desc')->paginate(6);
 
@@ -84,20 +92,29 @@ class anggotaController extends Controller
         return redirect()->back()->with('success', 'Permintaan peminjaman berhasil diajukan. Tunggu konfirmasi dari admin.');
     }
 
-    public function borrowedBooks(Request $request)
-    {
-        $status = $request->input('status', 'dipinjam');
+public function borrowedBooks(Request $request)
+{
+    $status = $request->input('status', 'dipinjam');
+    $judul = $request->input('judul_buku'); // ambil input search
 
-        $borrowedBooks = PinjamBuku::where('user_id', auth()->id())
-            ->where('status', $status)
-            ->with('book')
-            ->orderBy($status == 'dipinjam' ? 'tanggal_pinjam' : 'tanggal_kembali', 'desc')
-            ->paginate(6);
+    $query = PinjamBuku::where('user_id', auth()->id())
+        ->where('status', $status)
+        ->with('book')
+        ->orderBy($status == 'dipinjam' ? 'tanggal_pinjam' : 'tanggal_kembali', 'desc');
 
-        $borrowedBooks->appends(['status' => $status]);
-
-        return view('anggota.borrowed', compact('borrowedBooks', 'status'));
+    // Filter judul buku jika ada
+    if ($judul) {
+        $query->whereHas('book', function($q) use ($judul) {
+            $q->where('judul_buku', 'like', '%' . $judul . '%');
+        });
     }
+
+    $borrowedBooks = $query->paginate(6);
+    $borrowedBooks->appends(['status' => $status, 'judul_buku' => $judul]);
+
+    return view('anggota.borrowed', compact('borrowedBooks', 'status'));
+}
+
 
     public function loanRequests()
     {
@@ -109,71 +126,121 @@ class anggotaController extends Controller
         return view('anggota.loan_requests', compact('requests'));
     }
 
-    public function confirmRequests()
-    {
-        $requests = PinjamBuku::where('status', 'menunggu konfirmasi')
-            ->with('book', 'user')
-            ->paginate(10);
 
-        return view('admin.confirm_requests', compact('requests'));
+public function confirmRequests(Request $request)
+{
+// Ambil semua request menunggu konfirmasi
+$allRequests = PinjamBuku::where('status', 'menunggu konfirmasi')
+                ->with('book')
+                ->get()
+                ->groupBy(function($item) {
+                    return $item->user_id ?? 'guest_'.$item->guest_name;
+                });
+
+// Ambil "user identifier" unik
+$userIdsOrGuests = $allRequests->keys();
+
+// Pagination
+$perPage = 5;
+$page = request()->get('page', 1);
+$items = $userIdsOrGuests->slice(($page - 1) * $perPage, $perPage);
+
+$paginatedUsers = new LengthAwarePaginator(
+    $items,
+    $userIdsOrGuests->count(),
+    $perPage,
+    $page,
+    ['path' => request()->url(), 'query' => request()->query()]
+);
+
+return view('admin.confirm_requests', [
+    'requestsGrouped' => $allRequests,
+    'paginatedUsers' => $paginatedUsers,
+]);
+}
+
+
+public function approveAllGuestRequests($guestSlug)
+{
+    $guestName = str_replace('-', ' ', $guestSlug);
+
+    $requests = PinjamBuku::whereNull('user_id')
+        ->where('guest_name', $guestName)
+        ->where('status', 'menunggu konfirmasi')
+        ->with('book')
+        ->get();
+
+    DB::transaction(function () use ($requests) {
+        foreach ($requests as $peminjaman) {
+            $book = $peminjaman->book;
+            if (!$book || $book->jumlah_stok < 1) continue;
+
+            // Ubah status peminjaman
+            $peminjaman->update(['status' => 'dipinjam']);
+
+            // Kurangi stok 1 per peminjaman
+            $book->decrement('jumlah_stok', 1);
+        }
+    });
+
+    return back()->with('success', 'Semua permintaan guest berhasil disetujui.');
+}
+
+
+
+public function rejectAllGuestRequestsByName($guestSlug)
+{
+    $guestName = str_replace('-', ' ', $guestSlug);
+
+    $requests = PinjamBuku::whereNull('user_id')
+        ->where('guest_name', $guestName)
+        ->where('status', 'menunggu konfirmasi')
+        ->get();
+
+    foreach ($requests as $peminjaman) {
+        $peminjaman->delete(); // hapus langsung tanpa menambah stok
     }
 
-    public function approveRequest($id)
-    {
-        $peminjaman = PinjamBuku::findOrFail($id);
+    return back()->with('success', 'Semua permintaan guest berhasil ditolak.');
+}
 
-        if ($peminjaman->status !== 'menunggu konfirmasi') {
-            return back()->with('error', 'Permintaan ini sudah diproses.');
-        }
 
-        $book = $peminjaman->book;
-        if ($book->jumlah_stok <= 0) {
-            return back()->with('error', 'Stok buku habis.');
-        }
 
-        $peminjaman->update(['status' => 'dipinjam']);
-        $book->decrement('jumlah_stok');
 
-        if ($book->jumlah_stok <= 0) {
-            $book->update(['status' => false]);
-        } elseif ($book->jumlah_stok > 0) {
-            $book->update(['status' => true]);
-        }
 
-        return back()->with('success', 'Permintaan peminjaman disetujui.');
-    }
 
-    public function rejectRequest($id)
-    {
-        $peminjaman = PinjamBuku::findOrFail($id);
+public function borrowedBooksAdmin(Request $request, $status = null)
+{
+    $status = $status ?: $request->input('status', 'dipinjam');
 
-        if ($peminjaman->status !== 'menunggu konfirmasi') {
-            return back()->with('error', 'Permintaan ini sudah diproses.');
-        }
+    // Ambil semua dulu
+    $all = PinjamBuku::with('book')
+        ->when($status === 'overdue', function ($query) {
+            return $query->where('tanggal_kembali', '<', Carbon::now())
+                         ->where('status', 'dipinjam');
+        }, function ($query) use ($status) {
+            return $query->where('status', '=', $status);
+        })
+        ->orderBy('tanggal_pinjam', 'desc')
+        ->get()
+        ->groupBy('guest_name');
 
-        $peminjaman->delete();
+    // Manual pagination
+    $page = request()->get('page', 1);
+    $perPage = 5;
+    $paginated = new LengthAwarePaginator(
+        $all->slice(($page - 1) * $perPage, $perPage),
+        $all->count(),
+        $perPage,
+        $page,
+        ['path' => request()->url(), 'query' => request()->query()]
+    );
 
-        return back()->with('success', 'Permintaan peminjaman ditolak.');
-    }
-
-    public function borrowedBooksAdmin(Request $request, $status = null)
-    {
-        $status = $status ?: $request->input('status', 'dipinjam');
-
-        $borrowedBooks = PinjamBuku::with('book', 'user')
-            ->when($status === 'overdue', function ($query) {
-                return $query->where('tanggal_kembali', '<', Carbon::now())
-                    ->where('status', 'dipinjam');
-            }, function ($query) use ($status) {
-                return $query->where('status', '=', $status);
-            })
-            ->orderBy('tanggal_pinjam', 'desc')
-            ->paginate(6);
-
-        $borrowedBooks->appends(['status' => $status]);
-
-        return view('admin.borrowed_books', compact('borrowedBooks', 'status'));
-    }
+    return view('admin.borrowed_books', [
+        'borrowedBooks' => $paginated,
+        'status' => $status
+    ]);
+}
 
     public function getBorrowerName($borrow)
     {
@@ -244,36 +311,34 @@ class anggotaController extends Controller
         $totalPinjam = PinjamBuku::where('status', 'dipinjam')->count();
 
         $search = request('search'); // ambil dari input search
-        
-$dataPeminjam = DB::table('pinjam_bukus')
-    ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
-    ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
-    ->select(
-        'books.judul_buku as nama_barang',
-        'books.kondisi_awal',
-        'pinjam_bukus.id as pinjam_id',
-        'users.name as peminjam'
-    )
-    ->where('pinjam_bukus.status', 'dipinjam')
-    ->when($search, function ($query, $search) {
-        return $query->where('books.judul_buku', 'like', "%{$search}%");
-    })
-    ->get();
 
-
-
-
-        $dataBuku = DB::table('books')
+        $dataPeminjam = DB::table('pinjam_bukus')
+            ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
+            ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
             ->select(
-                'books.id',
-                'books.judul_buku',
-                'books.jumlah_stok',
-                DB::raw("(SELECT COUNT(*) FROM pinjam_bukus 
-                  WHERE pinjam_bukus.book_id = books.id 
-                    AND pinjam_bukus.status = 'dipinjam') as dipinjam")
+                'books.judul_buku as nama_barang',
+                'books.kondisi_awal',
+                'pinjam_bukus.id as pinjam_id',
+                'users.name as peminjam'
             )
+            ->where('pinjam_bukus.status', 'dipinjam')
+            ->when($search, function ($query, $search) {
+                return $query->where('books.judul_buku', 'like', "%{$search}%");
+            })
             ->get();
 
+        $dataKategori = DB::table('books')
+            ->leftJoin('pinjam_bukus', function ($join) {
+                $join->on('books.id', '=', 'pinjam_bukus.book_id')
+                    ->where('pinjam_bukus.status', 'dipinjam');
+            })
+            ->select(
+                'books.kategori',
+                DB::raw('SUM(books.jumlah_stok) as jumlah_stok_total'),
+                DB::raw('COUNT(pinjam_bukus.id) as dipinjam_total')
+            )
+            ->groupBy('books.kategori')
+            ->get();
 
         //buku yg dikembalikan
         $dataBukuDikembalikan = DB::table('pinjam_bukus')
@@ -281,9 +346,7 @@ $dataPeminjam = DB::table('pinjam_bukus')
             ->count();
 
 
-
-
-
+            
         // Get count of overdue books
         $overdueBooksCount = PinjamBuku::where('tanggal_kembali', '<', Carbon::now())
             ->where('status', 'dipinjam')
@@ -303,7 +366,7 @@ $dataPeminjam = DB::table('pinjam_bukus')
             ->where('status', 'menunggu konfirmasi')
             ->get();
 
-        return view('dashboard', compact('totalBuku', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataBuku', 'overdueBooksCount', 'pendingRequestsCount', 'overdueBooks', 'pendingRequests'));
+        return view('dashboard', compact('totalBuku', 'overdueBooksCount', 'pendingRequestsCount', 'overdueBooks', 'pendingRequests', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataKategori'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)
@@ -314,4 +377,106 @@ $dataPeminjam = DB::table('pinjam_bukus')
         $filename = 'borrowed_books_' . $status . '_' . date('YmdHis') . '.xlsx';
         return Excel::download(new BorrowedBooksExport($borrowedBooks), $filename);
     }
+
+
+    // Tambah ke keranjang
+public function addToCart($id)
+{
+    $book = Book::findOrFail($id);
+    $cart = session()->get('cart', []);
+
+    if(isset($cart[$id])){
+        $cart[$id]['quantity']++;
+    } else {
+        $cart[$id] = [
+            'judul_buku' => $book->judul_buku,
+            'kategori' => $book->kategori,
+            'jumlah_stok' => $book->jumlah_stok,
+            'status' => $book->status,
+            'deskripsi' => $book->deskripsi,
+            'quantity' => 1,
+        ];
+    }
+
+    session()->put('cart', $cart);
+    return back()->with('success', 'Buku ditambahkan ke keranjang!');
+}
+
+
+// Hapus item dari keranjang
+public function removeFromCart($id)
+{
+    $cart = session()->get('cart', []);
+    if(isset($cart[$id])){
+        unset($cart[$id]);
+        session()->put('cart', $cart);
+    }
+    return response()->json(['success' => true]);
+}
+
+
+// Checkout (Pinjam Semua)
+public function checkoutCart(Request $request)
+{
+    $sessionCart = session()->get('cart', []); // ambil data dari session
+    $inputCart = $request->cart; // ambil data dari form
+
+    if (!$inputCart || count($inputCart) == 0) {
+        return back()->with('error', 'Keranjang masih kosong.');
+    }
+
+    foreach ($inputCart as $book_id => $item) {
+        if (!isset($sessionCart[$book_id])) continue;
+
+        $quantity = (int) $item['quantity'];
+        $book = Book::find($book_id);
+
+        // Validasi stok
+        if ($book && $book->jumlah_stok < $quantity) {
+            return back()->with('error', "Stok buku '{$book->judul_buku}' tidak mencukupi.");
+        }
+
+        // 🔥 Buat beberapa record tergantung quantity
+        for ($i = 0; $i < $quantity; $i++) {
+            PinjamBuku::create([
+                'user_id' => null,
+                'guest_name' => $item['guest_name'] ?? 'Guest',
+                'book_id' => $book_id,
+                'tanggal_pinjam' => $item['tanggal_pinjam'],
+                'tanggal_kembali' => $item['tanggal_kembali'],
+                'status' => 'menunggu konfirmasi',
+                'kondisi_awal' => 'Bagus',
+                'kondisi_akhir' => null,
+                'quantity' => 1, // tiap baris 1 buku aja
+            ]);
+        }
+    }
+
+    session()->forget('cart');
+    return redirect()->route('anggota.index')->with('success', 'Permintaan peminjaman berhasil diajukan.');
+}
+
+
+
+public function updateCart(Request $request, $id)
+{
+    $cart = session()->get('cart', []);
+
+    if (isset($cart[$id])) {
+        $newQty = max(1, (int)$request->input('quantity'));
+        $maxQty = $cart[$id]['jumlah_stok'];
+
+        if ($newQty > $maxQty) {
+            return back()->with('error', 'Jumlah melebihi stok!');
+        }
+
+        $cart[$id]['quantity'] = $newQty;
+        session()->put('cart', $cart);
+        return back()->with('success', 'Jumlah buku diperbarui!');
+    }
+
+    return back()->with('error', 'Buku tidak ditemukan di keranjang.');
+}
+
+    
 }

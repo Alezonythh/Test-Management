@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
+            $table->string('guest_name')->nullable(); // kalau guest meminjam
             $table->date('tanggal_pinjam')->nullable();
             $table->date('tanggal_kembali');
             $table->string('status')->default('borrowed');
