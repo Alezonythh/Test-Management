@@ -69,72 +69,122 @@
                 </div>
             @else
                 <!-- Daftar Permintaan -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($paginatedUsers as $identifier)
                         @php
                             $requests = $requestsGrouped[$identifier];
                             $guestName = $requests->first()->nama_peminjam ?? null;
                             $guestSlug = $guestName ? \Illuminate\Support\Str::slug($guestName) : null;
+                            $totalQty = $requests->sum(fn($r) => $r->quantity ?? 1);
+                            $groupedByBook = $requests->groupBy('book_id');
                         @endphp
 
                         <div
-                            class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden relative hover:shadow-2xl transition-all duration-300">
+                            class="bg-white dark:bg-gradient-to-br dark:from-[#3C4272]/90 dark:to-[#575FA0]/90 
+                   rounded-2xl shadow-[0_8px_25px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_25px_rgba(0,0,0,0.25)]
+                   overflow-hidden border border-gray-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 
                             <!-- Header -->
-                            <div
-                                class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-yellow-400 to-yellow-300 dark:from-yellow-600 dark:to-yellow-500">
-                                <h5 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                                    👤 {{ $guestName ?? 'Guest' }}
+                            <div class="px-6 pt-6 pb-4 text-center border-b border-gray-100 dark:border-gray-700">
+
+                                <h5 class="text-lg font-semibold text-gray-900 dark:text-gray-50">
+                                    {{ $guestName ?? 'Guest' }}
                                 </h5>
-                                @php
-                                    $totalQty = $requests->sum(function($r){ return $r->quantity ?? 1; });
-                                    $groupedByBook = $requests->groupBy('book_id');
-                                @endphp
-                                <p class="text-sm text-gray-800 dark:text-gray-200 mt-1">
-                                    Permintaan Peminjaman: {{ $totalQty }} Barang
+                                <p class="text-sm text-gray-600 dark:text-gray-200 mt-1">
+                                    {{ $totalQty }} permintaan peminjaman
                                 </p>
                             </div>
 
-                            <!-- List Buku -->
-                            @foreach ($groupedByBook as $bookId => $items)
-                                @php
-                                    $first = $items->first();
-                                    $qty = $items->sum(function($r){ return $r->quantity ?? 1; });
-                                @endphp
-                                <div class="px-6 py-3 text-sm text-gray-700 border-t border-gray-200 dark:border-gray-700">
-                                    <span class="font-semibold">{{ $first->book->judul_buku }}</span>
-                                    <span class="text-gray-400">- Qty: {{ $qty }}</span>
-                                </div>
-                            @endforeach
+                            <!-- Daftar Buku -->
+                            <div class="px-6 py-5 space-y-3 bg-[#FAFAFA] dark:bg-[#2E3261]/40">
+                                @foreach ($groupedByBook as $bookId => $items)
+                                    @php
+                                        $first = $items->first();
+                                        $qty = $items->sum(fn($r) => $r->quantity ?? 1);
+                                    @endphp
+                                    <div class="flex justify-between items-center py-3 relative">
+                                        <div>
+                                            <p class="font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $first->book->judul_buku }}
+                                            </p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-300 mt-0.5">
+                                                Qty: {{ $qty }}
+                                            </p>
+                                        </div>
 
-                            <!-- Actions -->
+                                        <span
+                                            class="text-xs font-medium px-3 py-1 rounded-full 
+        bg-[#FFF8E1]/80 dark:bg-[#585E99]/50 
+        text-[#C5A423] dark:text-[#F5E6A8]">
+                                            Item
+                                        </span>
+
+                                        <!-- Garis bawah elegan dan jelas -->
+                                        <div
+                                            class="absolute bottom-0 left-0 right-0 h-[1.2px]
+        bg-gradient-to-r 
+        from-transparent 
+        via-[#E6C766] dark:via-[#6B75C1] 
+        to-transparent opacity-80">
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Tombol Aksi -->
                             @if ($guestSlug)
-                                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex gap-3">
-                                    <!-- Approve Guest -->
-                                    <form
-                                        action="{{ route('admin.approveAllGuestRequests', ['guestSlug' => $guestSlug]) }}"
-                                        method="POST" class="flex-1">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="w-full py-2 ...">Setujui Semua</button>
-                                    </form>
+                                <div
+                                    class="px-6 py-5 border-t border-gray-100 dark:border-gray-700 bg-[#F9FAFB]/80 dark:bg-[#1E1E1E]/80">
+                                    <div class="flex flex-col sm:flex-row gap-3">
 
-                                    <!-- Reject Guest -->
-                                    <form
-                                        action="{{ route('admin.rejectAllGuestRequestsByName', ['guestSlug' => $guestSlug]) }}"
-                                        method="POST" class="flex-1">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="w-full py-2 ...">Tolak Semua</button>
-                                    </form>
+                                        <!-- Setujui Semua -->
+                                        <form
+                                            action="{{ route('admin.approveAllGuestRequests', ['guestSlug' => $guestSlug]) }}"
+                                            method="POST" class="flex-1">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="w-full py-3 rounded-xl text-sm font-semibold text-gray-900 dark:text-white
+                    bg-[#02ff39] dark:bg-[#44c04b]
+                    hover:bg-[#92DCA0] dark:hover:bg-[#57A65E]
+                    shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+                    hover:shadow-[0_6px_20px_rgba(128,237,153,0.5)]
+                    dark:hover:shadow-[0_6px_20px_rgba(102,187,106,0.4)]
+                    transform transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5">
+                                                Setujui Semua
+                                            </button>
+                                        </form>
+
+                                        <!-- Tolak Semua -->
+                                        <form
+                                            action="{{ route('admin.rejectAllGuestRequestsByName', ['guestSlug' => $guestSlug]) }}"
+                                            method="POST" class="flex-1">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="w-full py-3 rounded-xl text-sm font-semibold text-gray-900 dark:text-white
+                    bg-[#FFB3B3] dark:bg-[#ed413e]
+                    hover:bg-[#FF9B9B] dark:hover:bg-[#E53935]
+                    shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+                    hover:shadow-[0_6px_20px_rgba(255,155,155,0.5)]
+                    dark:hover:shadow-[0_6px_20px_rgba(239,83,80,0.4)]
+                    transform transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5">
+                                                Tolak Semua
+                                            </button>
+                                        </form>
+
+                                    </div>
                                 </div>
                             @endif
 
+
+
+
                         </div>
                     @endforeach
-
-
                 </div>
+
+
 
 
             @endif

@@ -3,31 +3,45 @@
         class="transition-all duration-300">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-7xl">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Daftar Barang</h2>
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold" style="color: #F1A004;">Daftar Barang</h2>
                     @if (Auth::check() && Auth::user()->role == 'admin')
                         <a href="{{ route('books.create') }}"
-                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white 
+                   bg-[#F1A004] hover:bg-[#d89200] 
+                   rounded-xl shadow-md hover:shadow-lg 
+                   transition-all duration-300 ease-out">
                             Tambah Barang
                         </a>
                     @endif
                 </div>
-                <div class="flex items-center justify-between mb-4">
+
+                <div class="flex items-center justify-between mb-6">
                     <form action="{{ route('books.index') }}" method="GET" class="w-full max-w-md">
-                        <div class="relative">
+                        <div class="relative group">
+                            <!-- Icon -->
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <svg class="w-5 h-5 text-white opacity-80 group-focus-within:opacity-100 transition"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                         stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 5a7 7 0 0 1 14 0Z" />
                                 </svg>
                             </div>
-                            <input type="search" name="search" id="table-search"
-                                class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Search">
+
+                            <!-- Input -->
+                            <input type="search" name="search" id="table-search" placeholder="Cari barang..."
+                                class="block w-full p-2.5 pl-10 text-sm text-white 
+                       rounded-xl border border-transparent 
+                       bg-[#F1A004] focus:bg-[#d89200]
+                       placeholder-white/70
+                       shadow-md focus:shadow-lg 
+                       transition-all duration-300 ease-out
+                       dark:bg-[#2C3262] dark:focus:bg-[#434A8B]">
                         </div>
                     </form>
                 </div>
+
 
                 @if (session('success'))
                     <div

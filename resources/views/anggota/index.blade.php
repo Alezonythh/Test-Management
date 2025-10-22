@@ -283,66 +283,78 @@
                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
                      @forelse ($books as $book)
                          <div
-                             class="relative max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col
-    bg-white text-gray-900
-    dark:bg-gradient-to-br dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262] dark:text-white
-    transform transition-all duration-500 hover:scale-[1.05]">
+                             class="relative max-w-sm w-full rounded-3xl shadow-xl border border-gray-200 dark:border-white/10 overflow-hidden 
+    bg-white dark:bg-gradient-to-br dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262]
+    text-gray-900 dark:text-white transform transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl">
 
-                             <!-- Efek Glow / Denyut Tengah -->
+                             <!-- Header / Logo Placeholder -->
                              <div
-                                 class="absolute inset-0
-    bg-white/10 dark:bg-indigo-900/20
-    blur-2xl animate-pulse pointer-events-none">
-                             </div>
-
-
-
-                             <!-- Efek Overlay Glow -->
-                             <div
-                                 class="absolute inset-0 bg-[#F1A004]/10 dark:bg-gradient-to-r dark:from-[#2C3262]/40 dark:via-[#434A8B]/40 dark:to-[#2C3262]/40 blur-2xl pointer-events-none">
+                                 class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-white/10">
+                                 <div class="flex items-center space-x-3">
+                                     <div
+                                         class="w-10 h-10 rounded-full bg-gradient-to-r from-[#F1A004] to-[#d89200] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                                         {{ strtoupper(substr($book->judul_buku, 0, 1)) }}
+                                     </div>
+                                     <div>
+                                         <h5 class="font-extrabold text-xl tracking-wide">{{ $book->judul_buku }}</h5>
+                                         <p class="text-sm opacity-70">Kategori: {{ $book->kategori }}</p>
+                                     </div>
+                                 </div>
+                                 <button class="text-gray-400 hover:text-[#F1A004] transition">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor">
+                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                             d="M5 13l4 4L19 7" />
+                                     </svg>
+                                 </button>
                              </div>
 
                              <!-- Isi Card -->
-                             <div class="relative p-6 flex-grow z-10">
-                                 <h5 class="mb-4 text-3xl font-extrabold tracking-wide drop-shadow-md">
-                                     {{ $book->judul_buku }}
-                                 </h5>
-                                 <p class="mb-2"><strong>Kategori:</strong> {{ $book->kategori }}</p>
-                                 <p class="mb-2"><strong>Jumlah Stok:</strong>
+                             <div class="relative p-6 space-y-3">
+                                 <div class="flex items-center justify-between">
+                                     <p class="text-sm font-semibold">Jumlah Stok:</p>
                                      <span
-                                         class="px-3 py-1 rounded-full text-sm font-bold shadow-inner 
-                {{ $book->jumlah_stok > 0 ? 'bg-green-400 text-green-900' : 'bg-red-400 text-red-900' }}">
+                                         class="px-3 py-1 rounded-full text-xs font-bold shadow-inner 
+                {{ $book->jumlah_stok > 0 ? 'bg-green-400/30 text-green-900 dark:text-green-200' : 'bg-red-400/30 text-red-900 dark:text-red-200' }}">
                                          {{ $book->jumlah_stok }}
                                      </span>
-                                 </p>
-                                 <p class="mb-2"><strong>Status:</strong>
+                                 </div>
+
+                                 <div class="flex items-center justify-between">
+                                     <p class="text-sm font-semibold">Status:</p>
                                      <span
-                                         class="px-3 py-1 rounded-full text-sm font-bold shadow-inner
-                {{ $book->status ? 'bg-green-400 text-green-900' : 'bg-red-400 text-red-900' }}">
+                                         class="px-3 py-1 rounded-full text-xs font-bold shadow-inner
+                {{ $book->status ? 'bg-green-400/30 text-green-900 dark:text-green-200' : 'bg-red-400/30 text-red-900 dark:text-red-200' }}">
                                          {{ $book->status ? 'Tersedia' : 'Tidak Tersedia' }}
                                      </span>
-                                 </p>
-                                 <p class="mt-4"><strong>Deskripsi:</strong></p>
-                                 <p class="text-gray-700 dark:text-gray-200 text-sm italic">
-                                     {{ Str::limit($book->deskripsi, 100, '...') }}
-                                 </p>
+                                 </div>
+
+                                 <div class="pt-3 border-t border-gray-200 dark:border-white/10">
+                                     <p class="text-sm font-semibold mb-1">Deskripsi:</p>
+                                     <p class="text-gray-700 dark:text-gray-200 text-sm italic leading-snug">
+                                         {{ Str::limit($book->deskripsi, 100, '...') }}
+                                     </p>
+                                 </div>
                              </div>
 
-                             <!-- Tombol Pinjam -->
-                             <div class="relative p-4 text-center border-t border-gray-200 dark:border-white/20 z-10">
+                             <!-- Tombol -->
+                             <div
+                                 class="p-5 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-transparent">
                                  <form id="addToCartForm-{{ $book->id }}"
-                                     action="{{ route('keranjang.add', $book->id) }}" method="POST" class="mt-3">
+                                     action="{{ route('keranjang.add', $book->id) }}" method="POST">
                                      @csrf
                                      <button type="button" onclick="confirmAddToCart({{ $book->id }})"
                                          {{ $book->jumlah_stok <= 0 ? 'disabled' : '' }}
-                                         class="w-full text-white font-semibold py-2 rounded-lg transition
-        {{ $book->jumlah_stok > 0 ? 'bg-[#F1A004] hover:bg-[#d68c00]' : 'bg-gray-400 cursor-not-allowed' }}">
+                                         class="w-full py-2.5 font-semibold rounded-lg transition 
+                {{ $book->jumlah_stok > 0
+                    ? 'bg-gradient-to-r from-[#F1A004] to-[#d89200] hover:opacity-90 text-white'
+                    : 'bg-gray-400 cursor-not-allowed text-gray-200' }}">
                                          {{ $book->jumlah_stok > 0 ? 'Tambah ke Keranjang' : 'Stok Habis' }}
                                      </button>
                                  </form>
-
                              </div>
                          </div>
+
 
                          <!-- Tombol Keranjang -->
                          <button onclick="toggleCart()"
@@ -385,94 +397,128 @@
                                              id="cartForm">
                                              @csrf
                                              <!-- Global borrower name (applies to all items) -->
-                                             <div class="mb-3 p-3 rounded-lg bg-yellow-50 border border-yellow-200 dark:bg-white/10 dark:border-white/20">
-                                                 <label for="global-borrower-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama Peminjam (sekali isi)</label>
-                                                 <input type="text" id="global-borrower-name" placeholder="Nama Peminjam" required
+                                             <div
+                                                 class="mb-3 p-3 rounded-lg bg-yellow-50 border border-yellow-200 dark:bg-white/10 dark:border-white/20">
+                                                 <label for="global-borrower-name"
+                                                     class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Nama
+                                                     Peminjam (sekali isi)</label>
+                                                 <input type="text" id="global-borrower-name"
+                                                     placeholder="Nama Peminjam" required
                                                      value="{{ Auth::user()->name ?? '' }}"
                                                      class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:bg-transparent dark:text-white">
-                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Nama ini akan diterapkan ke semua barang di keranjang.</p>
+                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Nama ini akan
+                                                     diterapkan ke semua barang di keranjang.</p>
                                              </div>
                                              <!-- Global borrow dates (apply to all items) -->
-                                             <div class="mb-3 p-3 rounded-lg bg-blue-50 border border-blue-200 dark:bg-white/10 dark:border-white/20">
+                                             <div
+                                                 class="mb-3 p-3 rounded-lg bg-blue-50 border border-blue-200 dark:bg-white/10 dark:border-white/20">
                                                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                      <div>
-                                                         <label for="global-borrow-date" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal Pinjam</label>
+                                                         <label for="global-borrow-date"
+                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal
+                                                             Pinjam</label>
                                                          <input type="date" id="global-borrow-date"
-                                                                value="{{ now()->format('Y-m-d') }}"
-                                                                class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
+                                                             value="{{ now()->format('Y-m-d') }}"
+                                                             class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
                                                      </div>
                                                      <div>
-                                                         <label for="global-return-date" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal Kembali</label>
+                                                         <label for="global-return-date"
+                                                             class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal
+                                                             Kembali</label>
                                                          <input type="date" id="global-return-date"
-                                                                value="{{ now()->addDays(7)->format('Y-m-d') }}"
-                                                                class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
+                                                             value="{{ now()->addDays(7)->format('Y-m-d') }}"
+                                                             class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white">
                                                      </div>
                                                  </div>
-                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Tanggal akan diterapkan ke semua barang di keranjang.</p>
+                                                 <p class="mt-1 text-xs text-gray-600 dark:text-gray-300">Tanggal akan
+                                                     diterapkan ke semua barang di keranjang.</p>
                                              </div>
                                              @foreach ($cart as $id => $item)
                                                  <div
-                                                     class="flex gap-3 items-start bg-gray-50 dark:bg-white/10 rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                                                     class="flex items-center gap-4 bg-white dark:bg-gradient-to-br dark:from-[#2C3262] dark:via-[#434A8B] dark:to-[#2C3262]
+    rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-white/10">
+
+
+
                                                      <!-- Info Buku -->
-                                                     <div class="flex-1">
+                                                     <div class="flex-1 space-y-1">
                                                          <p
-                                                             class="font-semibold text-gray-800 dark:text-white text-sm leading-tight">
+                                                             class="font-bold text-gray-900 dark:text-white text-base leading-tight">
                                                              {{ $item['judul_buku'] }}
                                                          </p>
-                                                         <p class="text-xs text-gray-600 dark:text-gray-300">Kategori:
-                                                             {{ $item['kategori'] }}</p>
-                                                         <p class="text-xs text-black dark:text-gray-300">
+                                                         <p class="text-xs text-gray-600 dark:text-gray-300">
+                                                             Kategori: <span
+                                                                 class="font-medium">{{ $item['kategori'] }}</span>
+                                                         </p>
+
+                                                         <p class="text-xs text-gray-600 dark:text-gray-300">
                                                              Status:
                                                              @if ($item['status'] === 1)
                                                                  <span
-                                                                     class="font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400 px-2 py-0.5 rounded-full">Tersedia</span>
+                                                                     class="font-semibold text-green-700 bg-green-100 dark:bg-green-900/30 dark:text-green-300 px-2 py-0.5 rounded-full text-[11px] shadow-inner">
+                                                                     Tersedia
+                                                                 </span>
                                                              @else
                                                                  <span
-                                                                     class="font-semibold text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 px-2 py-0.5 rounded-full">Tidak
-                                                                     Tersedia</span>
+                                                                     class="font-semibold text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-300 px-2 py-0.5 rounded-full text-[11px] shadow-inner">
+                                                                     Tidak Tersedia
+                                                                 </span>
                                                              @endif
                                                          </p>
 
-                                                         <!-- Input Guest dan Tanggal -->
-                                                         <div class="mt-2 space-y-1">
-                                                             <!-- Per-item borrower name is hidden and auto-filled from the global input above -->
-                                                             <input type="hidden"
-                                                                 name="cart[{{ $id }}][nama_peminjam]"
-                                                                 class="cart-item-borrower-name">
-                                                             <!-- Per-item dates are hidden and synced from the global date inputs -->
-                                                             <input type="hidden"
-                                                                 name="cart[{{ $id }}][tanggal_pinjam]"
-                                                                 class="cart-item-tanggal-pinjam">
-                                                             <input type="hidden"
-                                                                 name="cart[{{ $id }}][tanggal_kembali]"
-                                                                 class="cart-item-tanggal-kembali">
-                                                         </div>
+                                                         <!-- Hidden Inputs -->
+                                                         <input type="hidden"
+                                                             name="cart[{{ $id }}][nama_peminjam]"
+                                                             class="cart-item-borrower-name">
+                                                         <input type="hidden"
+                                                             name="cart[{{ $id }}][tanggal_pinjam]"
+                                                             class="cart-item-tanggal-pinjam">
+                                                         <input type="hidden"
+                                                             name="cart[{{ $id }}][tanggal_kembali]"
+                                                             class="cart-item-tanggal-kembali">
 
                                                          <!-- Jumlah -->
-                                                         <div class="mt-2 flex items-center gap-2">
+                                                         <div class="mt-3 flex items-center gap-3">
                                                              <button type="button"
                                                                  onclick="updateQty(this, -1, {{ $id }})"
-                                                                 class="w-7 h-7 ...">−</button>
+                                                                 class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-white/20
+                bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 transition">
+                                                                 −
+                                                             </button>
 
                                                              <input type="number"
                                                                  name="cart[{{ $id }}][quantity]"
                                                                  value="{{ $item['quantity'] }}" min="1"
                                                                  max="{{ $item['jumlah_stok'] }}"
                                                                  data-max="{{ $item['jumlah_stok'] }}"
-                                                                 class="w-12 text-center ...">
+                                                                 class="w-14 text-center text-sm font-semibold rounded-lg border border-gray-300 dark:border-white/20 
+                bg-white dark:bg-white/10 text-gray-800 dark:text-white focus:ring-2 focus:ring-[#F1A004] outline-none">
 
                                                              <button type="button"
                                                                  onclick="updateQty(this, 1, {{ $id }})"
-                                                                 class="w-7 h-7 ...">＋</button>
+                                                                 class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-white/20
+                bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 transition">
+                                                                 ＋
+                                                             </button>
                                                          </div>
 
-
-                                                         <!-- Tombol Hapus (pakai JS, bukan form) -->
-                                                         <button type="button"
-                                                             onclick="removeFromCart({{ $id }})"
-                                                             class="mt-2 flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-all duration-200 text-xs font-medium px-2 py-1 rounded-lg shadow-sm border border-red-200">
-                                                             Hapus
-                                                         </button>
+                                                         <!-- Tombol Hapus -->
+                                                         <div class="mt-3 flex justify-end">
+                                                             <button type="button"
+                                                                 onclick="removeFromCart({{ $id }})"
+                                                                 class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold
+                bg-gradient-to-r from-red-500 to-red-600 text-white hover:opacity-90 shadow-md transition-all duration-300">
+                                                                 <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     class="w-3.5 h-3.5" fill="none"
+                                                                     viewBox="0 0 24 24" stroke="currentColor"
+                                                                     stroke-width="2">
+                                                                     <path stroke-linecap="round"
+                                                                         stroke-linejoin="round"
+                                                                         d="M6 18L18 6M6 6l12 12" />
+                                                                 </svg>
+                                                                 Hapus
+                                                             </button>
+                                                         </div>
                                                      </div>
                                                  </div>
                                              @endforeach
@@ -502,50 +548,53 @@
 
      </x-app-layout>
      <script>
-        function toggleCart() {
-            document.getElementById('cartModal').classList.toggle('hidden');
-        }
+         function toggleCart() {
+             document.getElementById('cartModal').classList.toggle('hidden');
+         }
 
-        // Sync global borrower name to all cart items
-        function syncBorrowerName() {
-            const globalInput = document.getElementById('global-borrower-name');
-            if (!globalInput) return;
-            const val = globalInput.value || '';
-            document.querySelectorAll('#cartForm input[name$="[nama_peminjam]"]').forEach(el => {
-                el.value = val;
-            });
-        }
-        // Sync global dates to all cart items
-        function syncBorrowDates() {
-            const borrow = document.getElementById('global-borrow-date');
-            const back = document.getElementById('global-return-date');
-            if (borrow) {
-                const v = borrow.value || '';
-                document.querySelectorAll('#cartForm input[name$="[tanggal_pinjam]"]').forEach(el => el.value = v);
-            }
-            if (back) {
-                const v2 = back.value || '';
-                document.querySelectorAll('#cartForm input[name$="[tanggal_kembali]"]').forEach(el => el.value = v2);
-            }
-            if (borrow && back) back.min = borrow.value || '';
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            const globalInput = document.getElementById('global-borrower-name');
-            if (globalInput) {
-                syncBorrowerName();
-                globalInput.addEventListener('input', syncBorrowerName);
-            }
-            // initial sync for dates and listeners
-            syncBorrowDates();
-            const gBorrow = document.getElementById('global-borrow-date');
-            const gReturn = document.getElementById('global-return-date');
-            if (gBorrow) gBorrow.addEventListener('change', syncBorrowDates);
-            if (gReturn) gReturn.addEventListener('change', syncBorrowDates);
-            const cartForm = document.getElementById('cartForm');
-            if (cartForm) {
-                cartForm.addEventListener('submit', () => { syncBorrowerName(); syncBorrowDates(); });
-            }
-        });
+         // Sync global borrower name to all cart items
+         function syncBorrowerName() {
+             const globalInput = document.getElementById('global-borrower-name');
+             if (!globalInput) return;
+             const val = globalInput.value || '';
+             document.querySelectorAll('#cartForm input[name$="[nama_peminjam]"]').forEach(el => {
+                 el.value = val;
+             });
+         }
+         // Sync global dates to all cart items
+         function syncBorrowDates() {
+             const borrow = document.getElementById('global-borrow-date');
+             const back = document.getElementById('global-return-date');
+             if (borrow) {
+                 const v = borrow.value || '';
+                 document.querySelectorAll('#cartForm input[name$="[tanggal_pinjam]"]').forEach(el => el.value = v);
+             }
+             if (back) {
+                 const v2 = back.value || '';
+                 document.querySelectorAll('#cartForm input[name$="[tanggal_kembali]"]').forEach(el => el.value = v2);
+             }
+             if (borrow && back) back.min = borrow.value || '';
+         }
+         document.addEventListener('DOMContentLoaded', () => {
+             const globalInput = document.getElementById('global-borrower-name');
+             if (globalInput) {
+                 syncBorrowerName();
+                 globalInput.addEventListener('input', syncBorrowerName);
+             }
+             // initial sync for dates and listeners
+             syncBorrowDates();
+             const gBorrow = document.getElementById('global-borrow-date');
+             const gReturn = document.getElementById('global-return-date');
+             if (gBorrow) gBorrow.addEventListener('change', syncBorrowDates);
+             if (gReturn) gReturn.addEventListener('change', syncBorrowDates);
+             const cartForm = document.getElementById('cartForm');
+             if (cartForm) {
+                 cartForm.addEventListener('submit', () => {
+                     syncBorrowerName();
+                     syncBorrowDates();
+                 });
+             }
+         });
 
          function updateQty(btn, diff, id) {
              const input = btn.parentElement.querySelector('input[type=number]');

@@ -21,39 +21,64 @@
 
                 <!-- Card Form -->
                 <div
-                    class="rounded-2xl shadow-2xl border border-[#F1A004]/30 dark:border-white/10 overflow-hidden backdrop-blur-sm 
-                           bg-white/90 dark:bg-gradient-to-br dark:from-[#2C3262]/90 dark:to-[#434A8B]/90 p-8 
-                           transition-all duration-700">
+                    class="rounded-2xl shadow-2xl border border-[#F1A004]/30 dark:border-white/10 overflow-hidden backdrop-blur-md 
+           bg-white/90 dark:bg-gradient-to-br dark:from-[#2C3262]/90 dark:to-[#434A8B]/90 p-10 
+           transition-all duration-700 max-w-5xl mx-auto">
+
+
 
                     <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data"
-                        class="space-y-6">
+                        class="space-y-8">
                         @csrf
 
-                        <!-- Nama Barang -->
-                        <div>
-                            <label for="judul_buku"
-                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Nama
-                                Barang</label>
-                            <input type="text" name="judul_buku" id="judul_buku" placeholder="Nama Barang"
-                                class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
-                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
-                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
-                                       focus:outline-none transition-all duration-300"
-                                required>
+                        <!-- Baris 1: Nama Barang & Jumlah Stok -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Nama Barang -->
+                            <div>
+                                <label for="judul_buku"
+                                    class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Nama
+                                    Barang</label>
+                                <input type="text" name="judul_buku" id="judul_buku" placeholder="Nama Barang"
+                                    class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
+                           placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                           dark:bg-white/10 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                           focus:outline-none transition-all duration-300"
+                                    required>
+                            </div>
+
+                            <!-- Jumlah Stok -->
+                            <div>
+                                <label for="jumlah_stok"
+                                    class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Jumlah
+                                    Stok</label>
+                                <input type="number" name="jumlah_stok" id="jumlah_stok" placeholder="Jumlah Stok"
+                                    class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
+                           placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                           dark:bg-white/10 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                           focus:outline-none transition-all duration-300"
+                                    required>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Baris 2: Kategori & Status -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Kategori -->
                             <div>
                                 <label for="kategori"
                                     class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Kategori</label>
                                 <select id="kategori" name="kategori"
                                     class="w-full p-3 rounded-xl text-sm border border-[#F1A004]/40 bg-white text-gray-900
-                                           dark:bg-white/20 dark:text-white focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
-                                    <option selected>Pilih Kategori</option>
-                                    <option value="Camera">Camera</option>
-                                    <option value="Headset">Headset</option>
-                                    <option value="Proyektor">Proyektor</option>
+                   placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                   dark:bg-[#3b4175] dark:text-white dark:border-white/30
+                   dark:focus:ring-[#F1A004] dark:focus:border-[#F1A004]
+                   appearance-none transition-all duration-300">
+                                    <option class="bg-white dark:bg-[#2C3262] dark:text-white">Pilih Kategori</option>
+                                    <option value="Camera" class="bg-white dark:bg-[#2C3262] dark:text-white">Camera
+                                    </option>
+                                    <option value="Headset" class="bg-white dark:bg-[#2C3262] dark:text-white">Headset
+                                    </option>
+                                    <option value="Proyektor" class="bg-white dark:bg-[#2C3262] dark:text-white">
+                                        Proyektor</option>
                                 </select>
                             </div>
 
@@ -63,26 +88,19 @@
                                     class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Status</label>
                                 <select id="status" name="status"
                                     class="w-full p-3 rounded-xl text-sm border border-[#F1A004]/40 bg-white text-gray-900
-                                           dark:bg-white/20 dark:text-white focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none">
-                                    <option selected>Pilih Status</option>
-                                    <option value="1">Tersedia</option>
-                                    <option value="0">Tidak Tersedia</option>
+                   placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                   dark:bg-[#3b4175] dark:text-white dark:border-white/30
+                   dark:focus:ring-[#F1A004] dark:focus:border-[#F1A004]
+                   appearance-none transition-all duration-300">
+                                    <option class="bg-white dark:bg-[#2C3262] dark:text-white">Pilih Status</option>
+                                    <option value="1" class="bg-white dark:bg-[#2C3262] dark:text-white">Tersedia
+                                    </option>
+                                    <option value="0" class="bg-white dark:bg-[#2C3262] dark:text-white">Tidak
+                                        Tersedia</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Jumlah Stok -->
-                        <div>
-                            <label for="jumlah_stok"
-                                class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Jumlah
-                                Stok</label>
-                            <input type="number" name="jumlah_stok" id="jumlah_stok" placeholder="Jumlah Stok"
-                                class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
-                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
-                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
-                                       focus:outline-none transition-all duration-300"
-                                required>
-                        </div>
 
                         <!-- Deskripsi -->
                         <div>
@@ -90,9 +108,9 @@
                                 class="block mb-2 text-sm font-semibold text-[#F1A004] dark:text-white">Deskripsi</label>
                             <textarea id="deskripsi" name="deskripsi" rows="5" placeholder="Tuliskan deskripsi barang"
                                 class="w-full p-3 text-sm rounded-xl border border-[#F1A004]/40 bg-white text-gray-900
-                                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
-                                       dark:bg-white/20 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
-                                       focus:outline-none transition-all duration-300"></textarea>
+                       placeholder-gray-400 focus:ring-2 focus:ring-[#F1A004] focus:border-[#F1A004]
+                       dark:bg-white/10 dark:text-white dark:placeholder-gray-300 dark:border-white/30 
+                       focus:outline-none transition-all duration-300"></textarea>
                         </div>
 
                         <!-- Kondisi Awal -->
@@ -102,26 +120,27 @@
                                 (Foto)</label>
                             <input type="file" name="kondisi_awal" id="kondisi_awal"
                                 class="block w-full text-sm border border-[#F1A004]/40 rounded-xl cursor-pointer 
-                                       bg-white text-gray-900 dark:bg-white/20 dark:text-white focus:ring-2 
-                                       focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none transition-all duration-300">
+                       bg-white text-gray-900 dark:bg-white/10 dark:text-white focus:ring-2 
+                       focus:ring-[#F1A004] focus:border-[#F1A004] focus:outline-none transition-all duration-300">
                         </div>
 
                         <!-- Tombol -->
-                        <div class="text-center pt-4">
+                        <div class="text-center pt-6">
                             <button type="submit"
-                                class="relative inline-flex items-center px-8 py-3 text-sm font-semibold text-white rounded-xl
-                                       bg-gradient-to-r from-[#F1A004] to-[#facc15] shadow-[0_4px_15px_rgba(241,160,4,0.6)]
-                                       hover:from-[#e39b00] hover:to-[#d4a500] hover:shadow-[0_8px_25px_rgba(204,134,0,0.8)]
-                                       active:scale-95 active:shadow-inner overflow-hidden group transition-all duration-500">
+                                class="relative inline-flex items-center justify-center px-8 py-3 text-sm font-semibold text-white rounded-xl
+                       bg-gradient-to-r from-[#F1A004] to-[#facc15] shadow-[0_4px_15px_rgba(241,160,4,0.6)]
+                       hover:from-[#e39b00] hover:to-[#d4a500] hover:shadow-[0_8px_25px_rgba(204,134,0,0.8)]
+                       active:scale-95 active:shadow-inner overflow-hidden group transition-all duration-500">
                                 <span
                                     class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                                           opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] 
-                                           transition-all duration-700 ease-in-out"></span>
+                           opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] 
+                           transition-all duration-700 ease-in-out"></span>
                                 ✨ Tambah Barang
                             </button>
                         </div>
                     </form>
                 </div>
+
 
             </div>
         </section>

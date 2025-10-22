@@ -341,20 +341,20 @@ public function borrowedBooksAdmin(Request $request, $status = null)
 
         $search = request('search'); // ambil dari input search
 
-        $dataPeminjam = DB::table('pinjam_bukus')
-            ->join('users', 'pinjam_bukus.user_id', '=', 'users.id')
-            ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
-            ->select(
-                'books.judul_buku as nama_barang',
-                'books.kondisi_awal',
-                'pinjam_bukus.id as pinjam_id',
-                'users.name as peminjam'
-            )
-            ->where('pinjam_bukus.status', 'dipinjam')
-            ->when($search, function ($query, $search) {
-                return $query->where('books.judul_buku', 'like', "%{$search}%");
-            })
-            ->get();
+$dataPeminjam = DB::table('pinjam_bukus')
+    ->join('books', 'pinjam_bukus.book_id', '=', 'books.id')
+    ->select(
+        'pinjam_bukus.nama_peminjam as peminjam',
+        DB::raw('COUNT(pinjam_bukus.id) as total_pinjam'),
+        DB::raw('MIN(books.kondisi_awal) as kondisi_awal') 
+    )
+    ->where('pinjam_bukus.status', 'dipinjam')
+    ->when($search, function ($query, $search) {
+        return $query->where('pinjam_bukus.nama_peminjam', 'like', "%{$search}%");
+    })
+    ->groupBy('pinjam_bukus.nama_peminjam')
+    ->get();
+
 
         $dataKategori = DB::table('books')
             ->leftJoin('pinjam_bukus', function ($join) {
@@ -428,7 +428,7 @@ public function addToCart($id)
     }
 
     session()->put('cart', $cart);
-    return back()->with('success', 'Buku ditambahkan ke keranjang!');
+    return back()->with('success', 'Barang ditambahkan ke keranjang!');
 }
 
 

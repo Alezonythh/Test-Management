@@ -2,7 +2,7 @@
     <style>
         @keyframes shimmer {
             0% {
-                 transform: translateX(-100%);
+                transform: translateX(-100%);
             }
 
             50% {
@@ -105,44 +105,45 @@
                             <p class="text-gray-600 dark:text-gray-300 mb-6">List nama peminjaman barang</p>
                             <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
                                 <!-- Bagian Kiri: Card -->
-                                <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-6 h-10">
                                     @foreach ($dataPeminjam as $item)
                                         <div
                                             class="relative flex flex-col items-center text-center rounded-3xl p-6
-            bg-white/80 dark:bg-gray-900/80 
-            backdrop-blur-xl border border-gray-200/40 dark:border-gray-700/40
-            shadow-lg hover:shadow-2xl hover:-translate-y-2
-            transition-all duration-500 ease-out group">
+            bg-white dark:bg-[#1E2130]
+            border border-gray-200/60 dark:border-gray-700/60
+            shadow-lg hover:shadow-xl hover:-translate-y-1.5
+            transition-all duration-500 ease-out">
 
-                                            <!-- Decorative Glow -->
+                                            <!-- Foto Profil / Icon Box -->
                                             <div
-                                                class="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-pink-500/20 opacity-0 group-hover:opacity-100 blur-xl transition duration-700">
-                                            </div>
-
-                                            <!-- Icon Box -->
-                                            <div
-                                                class="relative w-20 h-20 flex items-center justify-center rounded-2xl 
-                bg-gradient-to-br from-blue-500 to-indigo-600 
-                dark:from-indigo-500 dark:to-purple-600
-                shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
-
+                                                class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-gray-100 dark:ring-gray-800 shadow-md mb-4">
                                                 <img src="{{ asset('storage/' . $item->kondisi_awal) }}" alt="Kondisi Awal"
-                                                    class="w-full h-full object-cover rounded-2xl">
+                                                    class="w-full h-full object-cover">
                                             </div>
 
-                                            <!-- Nama Barang -->
-                                            <p
-                                                class="relative text-sm font-medium text-gray-700 dark:text-gray-300 
-                group-hover:text-blue-600 dark:group-hover:text-purple-400 transition-colors">
-                                                {{ $item->nama_barang }}
-                                            </p>
+                                            <!-- Nama Peminjam -->
+                                            <h3 class="text-base font-semibold text-gray-800 dark:text-gray-100">
+                                                {{ $item->peminjam }}
+                                            </h3>
 
-                                            <!-- Info Peminjam -->
-                                            <p
-                                                class="relative text-xs mt-3 text-gray-500 dark:text-gray-400 
-                group-hover:text-purple-500 dark:group-hover:text-pink-400 transition-colors">
-                                                👤 Peminjam: <span class="font-semibold">{{ $item->peminjam }}</span>
-                                            </p>
+                                            <!-- Detail Statistik -->
+                                            <div class="mt-3 w-full space-y-2 text-sm">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span>Meminjam {{ $item->total_pinjam }} barang</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Garis halus pemisah -->
+                                            <div class="my-4 w-16 h-[1px] bg-gray-200 dark:bg-gray-700"></div>
+
+
                                         </div>
                                     @endforeach
                                 </div>
@@ -443,47 +444,58 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                             <p class="text-gray-600 dark:text-gray-300 mb-6">List nama peminjaman barang</p>
                             <div class="grid grid-cols-1 md:grid-cols-6 gap-6">
                                 <!-- Bagian Kiri: Card -->
-                                <div class="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div class="md:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-10">
                                     @foreach ($dataPeminjam as $item)
                                         <div
                                             class="relative flex flex-col items-center text-center rounded-3xl p-6
-            bg-white/80 dark:bg-gray-900/80 
-            backdrop-blur-xl border border-gray-200/40 dark:border-gray-700/40
-            shadow-lg hover:shadow-2xl hover:-translate-y-2
-            transition-all duration-500 ease-out group">
+            bg-white dark:bg-[#1E2130]
+            border border-gray-200/60 dark:border-gray-700/60
+            shadow-lg hover:shadow-xl hover:-translate-y-1.5
+            transition-all duration-500 ease-out">
 
-                                            <!-- Decorative Glow -->
+                                            <!-- Foto Profil / Icon Box -->
                                             <div
-                                                class="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-pink-500/20 opacity-0 group-hover:opacity-100 blur-xl transition duration-700">
-                                            </div>
-
-                                            <!-- Icon Box -->
-                                            <div
-                                                class="relative w-20 h-20 flex items-center justify-center rounded-2xl 
-                bg-gradient-to-br from-blue-500 to-indigo-600 
-                dark:from-indigo-500 dark:to-purple-600
-                shadow-md mb-5 overflow-hidden group-hover:scale-110 transition-transform duration-500">
-
+                                                class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-gray-100 dark:ring-gray-800 shadow-md mb-4">
                                                 <img src="{{ asset('storage/' . $item->kondisi_awal) }}"
-                                                    alt="Kondisi Awal" class="w-full h-full object-cover rounded-2xl">
+                                                    alt="Kondisi Awal" class="w-full h-full object-cover">
                                             </div>
 
-                                            <!-- Nama Barang -->
-                                            <p
-                                                class="relative text-sm font-medium text-gray-700 dark:text-gray-300 
-                group-hover:text-blue-600 dark:group-hover:text-purple-400 transition-colors">
-                                                {{ $item->nama_barang }}
-                                            </p>
+                                            <!-- Nama Peminjam -->
+                                            <h3 class="text-base font-semibold text-gray-800 dark:text-gray-100">
+                                                {{ $item->peminjam }}
+                                            </h3>
 
-                                            <!-- Info Peminjam -->
-                                            <p
-                                                class="relative text-xs mt-3 text-gray-500 dark:text-gray-400 
-                group-hover:text-purple-500 dark:group-hover:text-pink-400 transition-colors">
-                                                👤 Peminjam: <span class="font-semibold">{{ $item->peminjam }}</span>
-                                            </p>
+                                            <!-- Detail Statistik -->
+                                            <div class="mt-3 w-full space-y-2 text-sm">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-4 h-4 text-indigo-500 dark:text-indigo-400"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span>Meminjam {{ $item->total_pinjam }} barang</span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Garis halus pemisah -->
+                                            <div class="my-4 w-16 h-[1px] bg-gray-200 dark:bg-gray-700"></div>
+
+                                            <!-- Tombol Aksi -->
+                                            <div class="flex justify-center gap-2 mt-1">
+                                                <a href="{{ route('admin.borrowedBooks') }}"
+                                                    class="px-4 py-2 rounded-xl text-sm font-medium text-white 
+                    bg-gradient-to-r from-indigo-500 to-indigo-600 
+                    hover:from-indigo-400 hover:to-indigo-500 
+                    shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                                                    Lihat Detail
+                                                </a>
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>
+
 
                                 <!-- Bagian Kanan: Progress -->
                                 <div
@@ -610,7 +622,8 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
                             <span class="font-semibold">{{ $request->book->judul_buku }}</span>
                             <span class="text-gray-400">
-                                - By: {{ $request->user ? $request->user->name : ($request->nama_peminjam ?? 'Guest') }}
+                                - By:
+                                {{ $request->user ? $request->user->name : $request->nama_peminjam ?? 'Guest' }}
                             </span>
                         </div>
                     @endforeach
