@@ -163,6 +163,9 @@
                                     <span class="font-semibold">📅 Tanggal Kembali:</span>
                                     {{ $request->tanggal_kembali }}
                                 </p>
+                                <p class="mb-2 text-gray-700 dark:text-gray-300 text-sm">
+                                    <span class="font-semibold">Jumlah:</span> x{{ $request->group_count ?? 1 }}
+                                </p>
 
                                 <!-- Status badge profesional -->
                                 <p class="flex gap-2 items-center">

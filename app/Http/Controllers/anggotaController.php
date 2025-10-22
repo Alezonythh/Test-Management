@@ -41,11 +41,40 @@ class anggotaController extends Controller
 
     public function pendingRequests()
     {
-        $requests = PinjamBuku::where('user_id', auth()->id())
+        // Ambil semua request pending milik user lalu kelompokkan
+        $all = PinjamBuku::where('user_id', auth()->id())
             ->where('status', 'menunggu konfirmasi')
             ->with('book')
             ->orderBy('created_at', 'desc')
-            ->paginate(6);
+            ->get();
+
+        // Kelompokkan berdasarkan kombinasi item yang sama
+        $grouped = $all->groupBy(function ($item) {
+            return implode('|', [
+                $item->book_id,
+                $item->tanggal_pinjam,
+                $item->tanggal_kembali,
+                $item->status,
+            ]);
+        })->map(function ($group) {
+            // Ambil satu contoh data untuk ditampilkan dan tambahkan jumlahnya
+            $first = $group->first();
+            $first->setAttribute('group_count', $group->count());
+            return $first;
+        })->values();
+
+        // Manual pagination untuk hasil yang sudah digroup
+        $perPage = 6;
+        $page = request()->get('page', 1);
+        $items = $grouped->slice(($page - 1) * $perPage, $perPage);
+
+        $requests = new LengthAwarePaginator(
+            $items,
+            $grouped->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('anggota.pending_requests', compact('requests'));
     }
