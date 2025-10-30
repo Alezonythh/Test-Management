@@ -517,14 +517,17 @@ public function checkoutCart(Request $request)
                 'book_id' => $book_id,
                 'tanggal_pinjam' => $item['tanggal_pinjam'],
                 'tanggal_kembali' => $item['tanggal_kembali'],
-                'status' => 'dipinjam',
+                'status' => $isAdmin ? 'dipinjam' : 'menunggu konfirmasi',
                 'kondisi_awal' => 'Bagus',
                 'kondisi_akhir' => null,
                 'quantity' => 1,
             ]);
         }
-        $book->decrement('jumlah_stok', $quantity);
-        if ($book->jumlah_stok <= 0) { $book->status = false; $book->save(); }
+        // Kurangi stok hanya untuk admin (langsung dipinjam). User biasa menunggu konfirmasi.
+        if ($isAdmin) {
+            $book->decrement('jumlah_stok', $quantity);
+            if ($book->jumlah_stok <= 0) { $book->status = false; $book->save(); }
+        }
     }
 
     session()->forget('cart');
@@ -532,8 +535,8 @@ public function checkoutCart(Request $request)
         return redirect()->route('admin.borrowedBooks', ['status' => 'dipinjam'])
             ->with('success', 'Peminjaman berhasil dan langsung dikonfirmasi.');
     }
-    return redirect()->route('anggota.borrowedBooks', ['status' => 'dipinjam'])
-        ->with('success', 'Peminjaman berhasil dan langsung diproses.');
+    return redirect()->route('anggota.pending_requests')
+        ->with('success', 'Permintaan peminjaman berhasil diajukan. Menunggu konfirmasi admin.');
 }
 
 

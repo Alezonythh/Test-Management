@@ -69,7 +69,7 @@
                 </div>
             @else
                 <!-- Daftar Permintaan -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
                     @foreach ($paginatedUsers as $identifier)
                         @php
                             $requests = $requestsGrouped[$identifier];
@@ -80,9 +80,9 @@
                         @endphp
 
                         <div
-                            class="bg-white dark:bg-gradient-to-br dark:from-[#3C4272]/90 dark:to-[#575FA0]/90 
+                            class="bg-white dark:bg-gradient-to-br dark:from-[#3C4272]/90 dark:to-[#575FA0]/90 text-gray-800 dark:text-gray-100
                    rounded-2xl shadow-[0_8px_25px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_25px_rgba(0,0,0,0.25)]
-                   overflow-hidden border border-gray-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                   overflow-hidden border border-gray-100 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl h-full flex flex-col">
 
                             <!-- Header -->
                             <div class="px-6 pt-6 pb-4 text-center border-b border-gray-100 dark:border-gray-700">
@@ -96,7 +96,7 @@
                             </div>
 
                             <!-- Daftar Buku -->
-                            <div class="px-6 py-5 space-y-3 bg-[#FAFAFA] dark:bg-[#2E3261]/40">
+                            <div class="px-6 py-5 space-y-3 bg-[#FAFAFA] dark:bg-[#2E3261]/40 flex-1">
                                 @foreach ($groupedByBook as $bookId => $items)
                                     @php
                                         $first = $items->first();
@@ -114,8 +114,8 @@
 
                                         <span
                                             class="text-xs font-medium px-3 py-1 rounded-full 
-        bg-[#FFF8E1]/80 dark:bg-[#585E99]/50 
-        text-[#C5A423] dark:text-[#F5E6A8]">
+        bg-[#FFF8E1]/80 dark:bg-white/10 border border-yellow-200/50 dark:border-white/10 
+        text-[#C5A423] dark:text-gray-100">
                                             Item
                                         </span>
 
@@ -134,7 +134,7 @@
                             <!-- Tombol Aksi -->
                             @if ($guestSlug)
                                 <div
-                                    class="px-6 py-5 border-t border-gray-100 dark:border-gray-700 bg-[#F9FAFB]/80 dark:bg-[#1E1E1E]/80">
+                                    class="px-6 py-5 border-t border-gray-100 dark:border-white/10 bg-[#F9FAFB]/80 dark:bg-[#2E3261]/40 mt-auto">
                                     <div class="flex flex-col sm:flex-row gap-3">
 
                                         <!-- Setujui Semua -->
@@ -144,13 +144,9 @@
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit"
-                                                class="w-full py-3 rounded-xl text-sm font-semibold text-gray-900 dark:text-white
-                    bg-[#02ff39] dark:bg-[#44c04b]
-                    hover:bg-[#92DCA0] dark:hover:bg-[#57A65E]
-                    shadow-[0_4px_12px_rgba(0,0,0,0.15)]
-                    hover:shadow-[0_6px_20px_rgba(128,237,153,0.5)]
-                    dark:hover:shadow-[0_6px_20px_rgba(102,187,106,0.4)]
-                    transform transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5">
+                                                class="w-full py-3 rounded-xl text-sm font-semibold text-white
+                    bg-emerald-600 hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60
+                    shadow-[0_4px_12px_rgba(0,0,0,0.15)] transform transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
                                                 Setujui Semua
                                             </button>
                                         </form>
@@ -162,13 +158,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="w-full py-3 rounded-xl text-sm font-semibold text-gray-900 dark:text-white
-                    bg-[#FFB3B3] dark:bg-[#ed413e]
-                    hover:bg-[#FF9B9B] dark:hover:bg-[#E53935]
-                    shadow-[0_4px_12px_rgba(0,0,0,0.15)]
-                    hover:shadow-[0_6px_20px_rgba(255,155,155,0.5)]
-                    dark:hover:shadow-[0_6px_20px_rgba(239,83,80,0.4)]
-                    transform transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5">
+                                                class="w-full py-3 rounded-xl text-sm font-semibold text-white
+                    bg-rose-600 hover:bg-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60
+                    shadow-[0_4px_12px_rgba(0,0,0,0.15)] transform transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
                                                 Tolak Semua
                                             </button>
                                         </form>
