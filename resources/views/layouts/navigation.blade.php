@@ -12,7 +12,6 @@
         </path>
     </svg>
 </button>
-
 <aside id="default-sidebar" x-data="{
     open: JSON.parse(localStorage.getItem('sidebarOpen') || 'false'),
     setOpen(value) {
@@ -20,15 +19,16 @@
         localStorage.setItem('sidebarOpen', value);
         window.dispatchEvent(new Event('sidebar-toggled'));
     }
-}"
-    @mouseenter="setOpen(true)" @mouseleave="setOpen(false)"
-    :class="open ? 'sm:w-64' : 'sm:w-16'"
-    class="fixed top-0 left-0 h-screen transition-all duration-300
-       text-white border-r border-white/10
-       bg-[#F1A004] dark:bg-[#2C3262]
-       z-40 w-64 -translate-x-full sm:translate-x-0">
+}" @mouseenter="setOpen(true)" @mouseleave="setOpen(false)"
+    :style="open ? 'width: 16rem; transition: width 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);' :
+        'width: 4rem; transition: width 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);'"
+    class="fixed top-0 left-0 h-screen 
+           overflow-hidden text-white border-r border-white/10
+           bg-[#F1A004] dark:bg-[#2C3262]
+           z-40 w-16 sm:translate-x-0">
 
-    <div class="flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl transition-all duration-500">
+    <div class="flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl"
+        style="transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
 
         <!-- shimmer tipis -->
         <div
@@ -50,7 +50,12 @@
                         class="bg-white/90 backdrop-blur-md rounded-full p-1 flex items-center justify-center shadow-sm">
                         <img src="/images/login.png" alt="Logo" class="w-15 h-8">
                     </div>
-                    <span x-show="open"
+                    <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                        x-transition:enter-start="opacity-0 -translate-x-4"
+                        x-transition:enter-end="opacity-100 translate-x-0"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 translate-x-0"
+                        x-transition:leave-end="opacity-0 -translate-x-4"
                         class="text-lg font-extrabold tracking-wide
              bg-clip-text text-transparent
              bg-gradient-to-r 
@@ -95,7 +100,11 @@
        group-hover:text-white transition-colors duration-500"></ion-icon>
 
                     <!-- Label -->
-                    <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                    <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        class="ml-3 group-hover:text-white transition-colors duration-500">
                         Dashboard
                     </span>
                 </a>
@@ -127,7 +136,10 @@
                      group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open"
+                        <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
                             class="flex-1 ml-3 text-left whitespace-nowrap 
                  group-hover:text-white transition-colors duration-500">
                             Inventaris
@@ -149,6 +161,12 @@
                         @if (Auth::check() && Auth::user()->role == 'admin')
                             <li>
                                 <a href="{{ route('books.create') }}" x-show="open"
+                                    x-transition:enter="transition ease-out duration-500"
+                                    x-transition:enter-start="opacity-0 -translate-x-2"
+                                    x-transition:enter-end="opacity-100 translate-x-0"
+                                    x-transition:leave="transition ease-in duration-300"
+                                    x-transition:leave-start="opacity-100 translate-x-0"
+                                    x-transition:leave-end="opacity-0 -translate-x-2"
                                     class="relative flex items-center p-2 pl-12 rounded-md 
                   text-gray-700 dark:text-gray-200 
                   transition-all duration-500 ease-in-out
@@ -164,6 +182,12 @@
                         @endif
                         <li>
                             <a href="{{ route('books.index') }}" x-show="open"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 -translate-x-2"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 translate-x-0"
+                                x-transition:leave-end="opacity-0 -translate-x-2"
                                 class="relative flex items-center p-2 pl-12 rounded-md 
                   text-gray-700 dark:text-gray-200 
                   transition-all duration-500 ease-in-out
@@ -178,6 +202,12 @@
                         </li>
                         <li>
                             <a href="{{ route('admin.borrowedBooks') }}" x-show="open"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 -translate-x-2"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 translate-x-0"
+                                x-transition:leave-end="opacity-0 -translate-x-2"
                                 class="relative flex items-center p-2 pl-12 rounded-md 
                   text-gray-700 dark:text-gray-200 
                   transition-all duration-500 ease-in-out
@@ -221,7 +251,11 @@
                          group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                        <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                            class="ml-3 group-hover:text-white transition-colors duration-500">
                             Daftar User
                         </span>
                     </a>
@@ -249,7 +283,11 @@
                          group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                        <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                            class="ml-3 group-hover:text-white transition-colors duration-500">
                             Konfirmasi
                         </span>
                     </a>
@@ -259,8 +297,6 @@
                 </li>
 
             @endif
-
-
 
 
 
@@ -289,7 +325,10 @@
          group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open"
+                        <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
                             class="flex-1 ml-3 text-left whitespace-nowrap group-hover:text-white transition-colors duration-500">
                             Inventaris
                         </span>
@@ -308,6 +347,12 @@
                     <ul id="dropdown-lemari" class="hidden py-2 space-y-2">
                         <li>
                             <a href="{{ route('anggota.index') }}" x-show="open"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 -translate-x-2"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 translate-x-0"
+                                x-transition:leave-end="opacity-0 -translate-x-2"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
                   text-gray-800 dark:text-gray-200 font-normal
                   transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
@@ -321,6 +366,12 @@
                         </li>
                         <li>
                             <a href="{{ route('anggota.borrowed') }}" x-show="open"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 -translate-x-2"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 translate-x-0"
+                                x-transition:leave-end="opacity-0 -translate-x-2"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
                   text-gray-800 dark:text-gray-200 font-normal
                   transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
@@ -334,6 +385,12 @@
                         </li>
                         <li>
                             <a href="{{ route('anggota.pending_requests') }}" x-show="open"
+                                x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0 -translate-x-2"
+                                x-transition:enter-end="opacity-100 translate-x-0"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100 translate-x-0"
+                                x-transition:leave-end="opacity-0 -translate-x-2"
                                 class="relative flex items-center p-2 pl-12 w-full rounded-lg
                   text-gray-800 dark:text-gray-200 font-normal
                   transition-all duration-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800
@@ -379,7 +436,11 @@
                          group-hover:text-white transition-colors duration-500"></ion-icon>
 
                         <!-- Label -->
-                        <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                        <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
+                            class="ml-3 group-hover:text-white transition-colors duration-500">
                             Login
                         </span>
                     </a>
@@ -419,7 +480,11 @@
                                  group-hover:text-white transition-colors duration-500"></ion-icon>
 
                             <!-- Label -->
-                            <span x-show="open" class="ml-3 group-hover:text-white transition-colors duration-500">
+                            <span x-show="open" x-transition:enter="transition ease-out duration-500"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-300"
+                                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                class="ml-3 group-hover:text-white transition-colors duration-500">
                                 Log Out
                             </span>
                         </button>

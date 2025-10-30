@@ -126,12 +126,14 @@
                         <div class="text-center pt-6">
                             <button type="submit"
                                 class="px-8 py-3 text-sm font-semibold text-white rounded-xl
-                                           bg-[#E19E02] hover:bg-[#c98b00] 
-                                           dark:bg-[#2C3262] dark:hover:bg-[#1f234a]
-                                           shadow-md hover:shadow-lg transition-all duration-300">
+               bg-gradient-to-r from-amber-400 to-yellow-500
+               hover:from-amber-500 hover:to-yellow-600
+               dark:from-yellow-400 dark:to-amber-500
+               shadow-md hover:shadow-lg transition-all duration-300">
                                 Update Barang
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>

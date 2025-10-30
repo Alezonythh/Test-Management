@@ -44,7 +44,7 @@
                                 class="group relative inline-flex items-center justify-center px-6 py-3 font-semibold rounded-xl text-white transition-all duration-300
                            @if ($status == $btn['value']) bg-gradient-to-r {{ $btn['color'] }} shadow-[0_0_20px_rgba(255,255,255,0.3)]
                            @else
-                               bg-gray-800 hover:bg-gradient-to-r {{ $btn['color'] }} hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] @endif
+                               bg-gray-800 hover:bg-gradient-to-r {{ $btn['color'] }} hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] mb-5 @endif
                            overflow-hidden backdrop-blur-md hover:scale-[1.05] active:scale-95">
                                 <span class="relative z-10">{{ $btn['label'] }}</span>
                                 <span
