@@ -13,17 +13,20 @@
     </svg>
 </button>
 
-<aside x-data="{
+<aside id="default-sidebar" x-data="{
     open: JSON.parse(localStorage.getItem('sidebarOpen') || 'false'),
     setOpen(value) {
         this.open = value;
         localStorage.setItem('sidebarOpen', value);
         window.dispatchEvent(new Event('sidebar-toggled'));
     }
-}" @mouseenter="setOpen(true)" @mouseleave="setOpen(false)" :class="open ? 'w-64' : 'w-16'"
+}"
+    @mouseenter="setOpen(true)" @mouseleave="setOpen(false)"
+    :class="open ? 'sm:w-64' : 'sm:w-16'"
     class="fixed top-0 left-0 h-screen transition-all duration-300
        text-white border-r border-white/10
-       bg-[#F1A004] dark:bg-[#2C3262]">
+       bg-[#F1A004] dark:bg-[#2C3262]
+       z-40 w-64 -translate-x-full sm:translate-x-0">
 
     <div class="flex flex-col h-full overflow-y-auto py-5 px-3 shadow-xl transition-all duration-500">
 

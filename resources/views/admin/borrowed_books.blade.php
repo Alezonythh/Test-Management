@@ -1,7 +1,7 @@
 <x-app-layout>
     <div x-data="{ open: JSON.parse(localStorage.getItem('sidebarOpen') || 'true') }" x-init="window.addEventListener('sidebar-toggled', () => {
         open = JSON.parse(localStorage.getItem('sidebarOpen'));
-    });" :class="open ? 'ml-64' : 'ml-16'"
+    });" :class="open ? 'ml-0 sm:ml-64' : 'ml-0 sm:ml-16'"
         class="transition-all duration-300 relative p-4">
 
 
@@ -142,6 +142,7 @@
                                 Peminjam: {{ $guestName ?? '-' }}
                             </h2>
 
+                            <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-white mb-8">
                                 <thead
                                     class="text-xs uppercase bg-[#2C3262]/90 border-b border-white/10 text-[#F1A004]">
@@ -166,6 +167,7 @@
                                             $maxKembali = \Carbon\Carbon::parse($items->max('tanggal_kembali'))->format('d-m-Y');
                                             $anyDipinjam = $items->contains(function($r){ return $r->status === 'dipinjam'; });
                                             $statusText = $anyDipinjam ? 'dipinjam' : 'dikembalikan';
+                                            $dipinjamCount = $items->where('status', 'dipinjam')->count();
                                             $returnDate = \Carbon\Carbon::parse($items->max('tanggal_kembali'));
                                             $now = \Carbon\Carbon::now();
                                             $diff = $now->diffInDays($returnDate, false);
@@ -199,9 +201,18 @@
                                             </td>
                                             <td class="px-6 py-4 text-center">
                                                 <button type="button" onclick="document.getElementById('{{ $groupId }}').classList.toggle('hidden')"
-                                                    class="group relative px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(79,70,229,0.7)]">
+                                                    class="group relative px-5 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] mr-2">
                                                     Kelola
                                                 </button>
+                                                @if ($dipinjamCount > 0)
+                                                    <form action="{{ route('admin.bulkReturn') }}" method="POST" class="inline-flex items-center gap-2 align-middle">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="book_id" value="{{ $first->book->id }}">
+                                                        <input type="hidden" name="nama_peminjam" value="{{ $guestName }}">
+                                                        <button type="submit" class="px-3 py-2 rounded-lg text-white bg-green-600 hover:bg-green-700 text-xs">Kembalikan Semua</button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                         <tr id="{{ $groupId }}" class="hidden">
@@ -235,6 +246,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            </div>
                         @endforeach
 
                         <!-- Pagination -->

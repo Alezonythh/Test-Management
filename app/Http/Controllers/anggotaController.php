@@ -252,13 +252,17 @@ public function borrowedBooksAdmin(Request $request, $status = null)
         })
         ->orderBy('tanggal_pinjam', 'desc')
         ->get()
-        ->groupBy('nama_peminjam');
+        ->groupBy('nama_peminjam')
+        // Sort groups so the borrower with the most recent created record appears first
+        ->sortByDesc(function ($items) {
+            return $items->max('created_at');
+        });
 
     // Manual pagination
     $page = request()->get('page', 1);
     $perPage = 5;
     $paginated = new LengthAwarePaginator(
-        $all->slice(($page - 1) * $perPage, $perPage),
+        $all->slice(($page - 1) * $perPage, $perPage, true),
         $all->count(),
         $perPage,
         $page,
@@ -297,6 +301,45 @@ public function borrowedBooksAdmin(Request $request, $status = null)
         }
 
         return redirect()->back()->with('success', 'Buku telah berhasil dikembalikan.');
+    }
+
+    // Bulk return multiple items of the same book for a borrower
+    public function bulkReturn(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_peminjam' => 'required|string',
+            'book_id' => 'required|exists:books,id',
+        ]);
+
+        $nama = $validated['nama_peminjam'];
+        $bookId = (int) $validated['book_id'];
+        DB::transaction(function () use ($nama, $bookId) {
+            $book = Book::lockForUpdate()->findOrFail($bookId);
+
+            // Ambil semua record yang statusnya masih dipinjam untuk peminjam dan buku ini
+            $records = PinjamBuku::where('nama_peminjam', $nama)
+                ->where('book_id', $bookId)
+                ->where('status', 'dipinjam')
+                ->orderBy('tanggal_pinjam', 'asc')
+                ->get();
+
+            if ($records->count() < 1) {
+                throw new \Exception('Tidak ada item yang sedang dipinjam untuk dikembalikan.');
+            }
+
+            foreach ($records as $r) {
+                $r->update(['status' => 'dikembalikan']);
+            }
+
+            // Tambah stok sesuai jumlah yang dikembalikan
+            $book->increment('jumlah_stok', $records->count());
+            if ($book->jumlah_stok > 0) {
+                $book->status = true;
+                $book->save();
+            }
+        });
+
+        return back()->with('success', 'Pengembalian massal berhasil diproses.');
     }
 
     public function completeLoan($id)
@@ -453,6 +496,7 @@ public function checkoutCart(Request $request)
     if (!$inputCart || count($inputCart) == 0) {
         return back()->with('error', 'Keranjang masih kosong.');
     }
+    $isAdmin = auth()->check() && in_array(auth()->user()->role, ['admin','supervisor']);
 
     foreach ($inputCart as $book_id => $item) {
         if (!isset($sessionCart[$book_id])) continue;
@@ -468,21 +512,28 @@ public function checkoutCart(Request $request)
         // 🔥 Buat beberapa record tergantung quantity
         for ($i = 0; $i < $quantity; $i++) {
             PinjamBuku::create([
-                'user_id' => null,
-                'nama_peminjam' => $item['nama_peminjam'] ?? 'Guest',
+                'user_id' => auth()->check() ? auth()->id() : null,
+                'nama_peminjam' => $item['nama_peminjam'] ?? (auth()->check() ? (auth()->user()->name ?? 'User') : 'Guest'),
                 'book_id' => $book_id,
                 'tanggal_pinjam' => $item['tanggal_pinjam'],
                 'tanggal_kembali' => $item['tanggal_kembali'],
-                'status' => 'menunggu konfirmasi',
+                'status' => 'dipinjam',
                 'kondisi_awal' => 'Bagus',
                 'kondisi_akhir' => null,
-                'quantity' => 1, // tiap baris 1 buku aja
+                'quantity' => 1,
             ]);
         }
+        $book->decrement('jumlah_stok', $quantity);
+        if ($book->jumlah_stok <= 0) { $book->status = false; $book->save(); }
     }
 
     session()->forget('cart');
-    return redirect()->route('anggota.index')->with('success', 'Permintaan peminjaman berhasil diajukan.');
+    if ($isAdmin) {
+        return redirect()->route('admin.borrowedBooks', ['status' => 'dipinjam'])
+            ->with('success', 'Peminjaman berhasil dan langsung dikonfirmasi.');
+    }
+    return redirect()->route('anggota.borrowedBooks', ['status' => 'dipinjam'])
+        ->with('success', 'Peminjaman berhasil dan langsung diproses.');
 }
 
 

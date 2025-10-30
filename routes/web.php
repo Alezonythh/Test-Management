@@ -27,6 +27,7 @@ Route::delete('/admin/reject-guest/{guestSlug}', [AnggotaController::class, 'rej
 
     Route::get('/admin/borrowed-books/{status?}', [AnggotaController::class, 'borrowedBooksAdmin'])->name('admin.borrowedBooks');
     Route::patch('/admin/return-book/{id}', [AnggotaController::class, 'returnBookForAdmin'])->name('admin.returnBookForAdmin');
+    Route::patch('/admin/bulk-return', [AnggotaController::class, 'bulkReturn'])->name('admin.bulkReturn');
     Route::patch('/admin/complete-loan/{id}', [AnggotaController::class, 'completeLoan'])->name('admin.completeLoan');
     Route::patch('/admin/extend-loan/{id}', [AnggotaController::class, 'extendLoan'])->name('admin.extendLoan');
     route::resource('users',userController::class);
