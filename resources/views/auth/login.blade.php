@@ -147,14 +147,7 @@
                         Masuk Sekarang
                     </button>
 
-                    <!-- Link ke Register -->
-                    <p class="text-center text-sm text-gray-600">
-                        Belum punya akun?
-                        <a href="{{ route('register') }}"
-                            class="font-semibold text-[#F1A004] hover:text-[#b37700] transition">
-                            Daftar Sekarang
-                        </a>
-                    </p>
+
                 </form>
             </div>
         </div>
