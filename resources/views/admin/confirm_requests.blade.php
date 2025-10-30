@@ -37,7 +37,7 @@
                     class="text-3xl md:text-4xl font-extrabold 
                     bg-gradient-to-r from-[#F1A004] via-amber-500 to-yellow-400 
                     bg-clip-text text-transparent relative inline-block">
-                    Permintaan Peminjaman Buku
+                    Permintaan Peminjaman Barang
                 </h1>
 
                 <!-- Deskripsi -->
