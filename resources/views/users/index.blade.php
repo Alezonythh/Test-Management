@@ -59,21 +59,23 @@
                                     </button>
                                 </form>
 
-                                <!-- Tombol Tambah Anggota -->
-                                <button id="defaultModalButton" data-modal-target="defaultModal"
-                                    data-modal-toggle="defaultModal"
-                                    class="relative group block px-6 py-2.5 text-white font-semibold rounded-xl
-                           bg-gradient-to-r from-[#F1A004] to-[#d89403]
-                           shadow-[0_4px_15px_rgba(241,160,4,0.5)]
-                           transition-all duration-500 ease-in-out
-                           hover:scale-105 hover:shadow-[0_8px_25px_rgba(204,134,0,0.7)]
-                           active:scale-95 overflow-hidden">
-                                    <span
-                                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                               opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
-                               transition-all duration-700 ease-in-out"></span>
-                                    Tambah Anggota
-                                </button>
+                                @if (Auth::check() && Auth::user()->role == 'admin')
+                                    <!-- Tombol Tambah Anggota -->
+                                    <button id="defaultModalButton" data-modal-target="defaultModal"
+                                        data-modal-toggle="defaultModal"
+                                        class="relative group block px-6 py-2.5 text-white font-semibold rounded-xl
+                            bg-gradient-to-r from-[#F1A004] to-[#d89403]
+                            shadow-[0_4px_15px_rgba(241,160,4,0.5)]
+                            transition-all duration-500 ease-in-out
+                            hover:scale-105 hover:shadow-[0_8px_25px_rgba(204,134,0,0.7)]
+                            active:scale-95 overflow-hidden">
+                                        <span
+                                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                                opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full 
+                                transition-all duration-700 ease-in-out"></span>
+                                        Tambah Anggota
+                                    </button>
+                                @endif
                             </div>
                         </div>
 
@@ -96,20 +98,22 @@
                                             <td class="px-4 py-3">{{ $user->name }}</td>
                                             <td class="px-4 py-3">{{ $user->email }}</td>
                                             <td class="px-4 py-3 flex space-x-2">
-                                                <a href="{{ route('users.edit', $user->id) }}"
-                                                    class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition-all">
-                                                    Edit
-                                                </a>
+                                                @if (Auth::check() && Auth::user()->role == 'admin')
+                                                    <a href="{{ route('users.edit', $user->id) }}"
+                                                        class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition-all">
+                                                        Edit
+                                                    </a>
 
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                    class="delete-form inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-red-600 to-red-800 hover:scale-105 transition-all">
-                                                        Delete
-                                                    </button>
-                                                </form>
+                                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                        class="delete-form inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="px-5 py-2 rounded-xl text-white bg-gradient-to-r from-red-600 to-red-800 hover:scale-105 transition-all">
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -130,6 +134,7 @@
                 </div>
 
 
+                @if (Auth::check() && Auth::user()->role == 'admin')
                 <!-- Modal Tambah Anggota -->
                 <div id="defaultModal" tabindex="-1" aria-hidden="true"
                     class="fixed inset-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto bg-black/60 backdrop-blur-sm">
@@ -209,6 +214,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
             </div>
         </section>

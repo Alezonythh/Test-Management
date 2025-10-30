@@ -94,23 +94,25 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-6 text-center">
-                                        <div class="inline-flex items-center gap-2 whitespace-nowrap">
-                                            <a href="{{ route('books.edit', $book->id) }}"
-                                                class="inline-flex px-5 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition">
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('books.destroy', $book->id) }}" method="POST"
-                                                class="inline delete-form">
-                                                @csrf @method('DELETE')
-                                                <button type="submit"
-                                                    class="inline-flex px-5 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 hover:scale-105 transition">
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        </div>
+                                        @if (Auth::check() && Auth::user()->role == 'admin')
+                                            <div class="inline-flex items-center gap-2 whitespace-nowrap">
+                                                <a href="{{ route('books.edit', $book->id) }}"
+                                                    class="inline-flex px-5 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 transition">
+                                                    Edit
+                                                </a>
+                                                <form action="{{ route('books.destroy', $book->id) }}" method="POST"
+                                                    class="inline delete-form">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit"
+                                                        class="inline-flex px-5 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 hover:scale-105 transition">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        @if (Auth::check() && Auth::user()->role == 'admin')
+                                        @if (Auth::check() && in_array(Auth::user()->role, ['admin','supervisor']))
                                             <form id="addToCartForm-{{ $book->id }}"
                                                 action="{{ route('keranjang.add', $book->id) }}" method="POST"
                                                 class="inline-block mr-2">
@@ -179,8 +181,8 @@
                 @endforeach
             </div>
         </section>
-        <!-- Floating Cart Button for Admin -->
-        @if (Auth::check() && Auth::user()->role == 'admin')
+        <!-- Floating Cart Button for Admin/Supervisor -->
+        @if (Auth::check() && in_array(Auth::user()->role, ['admin','supervisor']))
             <button onclick="toggleCart()"
                 class="fixed bottom-5 right-5 flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 z-50 bg-[#F1A004] hover:bg-[#d68c00] dark:bg-[#2C3262] dark:hover:bg-[#3b4180]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -343,8 +345,8 @@
     @endif
 </script>
 
-@if (Auth::check() && Auth::user()->role == 'admin')
-    <script>
+@if (Auth::check() && in_array(Auth::user()->role, ['admin','supervisor']))
+<script>
         function toggleCart() {
             const el = document.getElementById('cartModal');
             if (el) el.classList.toggle('hidden');
@@ -412,5 +414,5 @@
                 if (data.success) location.reload();
             });
         }
-    </script>
+</script>
 @endif

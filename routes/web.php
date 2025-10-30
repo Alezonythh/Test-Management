@@ -46,13 +46,13 @@ route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
 route::group(['middleware' => ['auth', 'role:admin']], function(){
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
+    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 });
 route::group(['middleware' => ['auth', 'role:admin|supervisor']], function(){
     Route::get('/books', [BookController::class, 'index'])->name('books.index');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
-   Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
-    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
     Route::get('/admin/borrow-book', [BookController::class, 'showBorrowForm'])->name('admin.borrowBook');
     Route::get('/admin/borrow-form/{book_id}', [BookController::class, 'showAdminBorrowForm'])->name('admin.borrowForm');
     Route::post('/books/pinjam', [BookController::class, 'pinjam'])->name('books.pinjam');
