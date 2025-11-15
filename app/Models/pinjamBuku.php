@@ -18,7 +18,8 @@ class pinjamBuku extends Model
         'tanggal_pinjam',
         'tanggal_kembali',
         'status',
-        'kondisi_akhir', // ✅ sudah ditambahkan
+        'kondisi_akhir',
+        'deskripsi_pengembalian',
     ];
 
     public function user()

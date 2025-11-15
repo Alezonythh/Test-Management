@@ -44,15 +44,10 @@ class BorrowedBooksExport implements FromCollection, WithMapping, WithHeadings
             // status peminjaman
             ucfirst($borrow->status) ?? '-',
 
-            // kondisi awal dari tabel books
-            $borrow->book->kondisi_awal
-                ? url('images/' . $borrow->book->kondisi_awal)
-                : '-',
-
-            // kondisi akhir dari tabel pinjam_buku
-            $borrow->kondisi_akhir
-                ? url('images/' . $borrow->kondisi_akhir)
-                : '-',
+            // catatan pengembalian
+            $borrow->deskripsi_pengembalian
+                ? $borrow->deskripsi_pengembalian
+                : 'Selesai',
         ];
     }
 
@@ -64,8 +59,7 @@ class BorrowedBooksExport implements FromCollection, WithMapping, WithHeadings
             'Tanggal Pinjam',
             'Tanggal Kembali',
             'Status',
-            'Kondisi Awal',
-            'Kondisi Akhir',
+            'Deskripsi',
         ];
     }
 }

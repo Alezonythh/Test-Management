@@ -182,6 +182,7 @@ class BookController extends Controller
     {
         $request->validate([
             'kondisi_akhir' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'deskripsi_pengembalian' => 'nullable|string|max:1000',
         ]);
 
         $pinjamBuku = \App\Models\PinjamBuku::findOrFail($id);
@@ -193,6 +194,7 @@ class BookController extends Controller
         $imagePath = $imageName;
 
         $pinjamBuku->kondisi_akhir = $imagePath;
+        $pinjamBuku->deskripsi_pengembalian = $request->input('deskripsi_pengembalian');
         $pinjamBuku->status = 'dikembalikan';
         $pinjamBuku->save();
 
@@ -214,6 +216,7 @@ class BookController extends Controller
     {
         $request->validate([
             'kondisi_akhir' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'deskripsi_pengembalian' => 'nullable|string|max:1000',
         ]);
 
         $pinjamBuku = \App\Models\PinjamBuku::findOrFail($id);
@@ -225,6 +228,7 @@ class BookController extends Controller
         $imagePath = $imageName;
 
         $pinjamBuku->kondisi_akhir = $imagePath;
+        $pinjamBuku->deskripsi_pengembalian = $request->input('deskripsi_pengembalian');
         $pinjamBuku->status = 'menunggu persetujuan';
         $pinjamBuku->save();
 

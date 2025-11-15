@@ -412,20 +412,9 @@ $dataPeminjam = DB::table('pinjam_bukus')
             ->groupBy('books.kategori')
             ->get();
 
-        //buku yg dikembalikan
-        $dataBukuDikembalikan = DB::table('pinjam_bukus')
-            ->where('status', 'dikembalikan')
-            ->count();
-
-
-            
         // Get count of overdue books
         $overdueBooksCount = PinjamBuku::where('tanggal_kembali', '<', Carbon::now())
             ->where('status', 'dipinjam')
-            ->count();
-
-        // Get count of pending loan requests
-        $pendingRequestsCount = PinjamBuku::where('status', 'menunggu konfirmasi')
             ->count();
 
         // Get overdue books
@@ -433,12 +422,20 @@ $dataPeminjam = DB::table('pinjam_bukus')
             ->where('tanggal_kembali', '<', Carbon::now())
             ->where('status', 'dipinjam')
             ->get();
-        // Get pending loan requests
-        $pendingRequests = PinjamBuku::with('book', 'user')
+        // Get pending loan requests grouped per borrower
+        $pendingRequestsData = PinjamBuku::with('book', 'user')
             ->where('status', 'menunggu konfirmasi')
             ->get();
 
-        return view('dashboard', compact('totalBuku', 'overdueBooksCount', 'pendingRequestsCount', 'overdueBooks', 'pendingRequests', 'dataBukuDikembalikan', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataKategori'));
+        $pendingRequests = $pendingRequestsData
+            ->groupBy(function ($request) {
+                return $request->user_id ?? 'guest_' . ($request->nama_peminjam ?? $request->id);
+            })
+            ->values();
+
+        $pendingRequestsCount = $pendingRequests->count();
+
+        return view('dashboard', compact('totalBuku', 'overdueBooksCount', 'pendingRequestsCount', 'overdueBooks', 'pendingRequests', 'totalstat', 'totalava', 'totalPinjam', 'dataPeminjam', 'dataKategori'));
     }
 
     public function exportBorrowedBooks(Request $request, $status = null)

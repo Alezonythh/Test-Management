@@ -339,7 +339,7 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                             </div>
                             <div class="flex flex-col lg:flex-row items-center gap-8">
 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full mt-6">
 
 
                                     <!-- Card 1: Barang Tersedia -->
@@ -396,34 +396,6 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
                                     bg-gradient-to-r from-white to-yellow-200">
                                             {{ $totalPinjam }}</p>
                                     </div>
-
-                                    <!-- Card 3: Barang Dikembalikan -->
-                                    <div
-                                        class="relative rounded-2xl p-6 shadow-xl overflow-hidden 
-                                    bg-gradient-to-br from-green-400 via-green-500 to-emerald-500 
-                                    text-white dark:from-green-600 dark:via-emerald-600 dark:to-green-700
-                                    border border-white/10 dark:border-gray-700
-                                    transition-all duration-500 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl hover:shadow-green-400/40">
-
-                                        <div
-                                            class="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/5 to-transparent blur-2xl pointer-events-none">
-                                        </div>
-                                        <div
-                                            class="relative mb-4 flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 group-hover:animate-pulse">
-                                            <ion-icon name="checkmark-done-outline" class="text-2xl"></ion-icon>
-                                            <div
-                                                class="absolute inset-0 rounded-xl bg-white/10 blur-sm animate-pulse pointer-events-none">
-                                            </div>
-                                        </div>
-
-                                        <h4 class="text-sm opacity-90">Barang Dikembalikan</h4>
-                                        <p
-                                            class="text-3xl font-extrabold mt-1 bg-clip-text text-transparent 
-                                    bg-gradient-to-r from-white to-yellow-200">
-                                            {{ $dataBukuDikembalikan }}</p>
-                                    </div>
-
-
 
                                 </div>
                         @endif
@@ -618,12 +590,23 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
 
                 @if (isset($pendingRequests) && count($pendingRequests) > 0)
                     <h6 class="px-6 py-2 font-semibold text-gray-300">Pending Requests</h6>
-                    @foreach ($pendingRequests as $request)
+                    @foreach ($pendingRequests as $requests)
+                        @php
+                            $borrower = optional($requests->first()->user)->name ?? ($requests->first()->nama_peminjam ?? 'Guest');
+                            $bookTitles = $requests
+                                ->map(function ($item) {
+                                    return optional($item->book)->judul_buku;
+                                })
+                                ->filter()
+                                ->unique();
+                        @endphp
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
-                            <span class="font-semibold">{{ $request->book->judul_buku }}</span>
+                            <span class="font-semibold">{{ $borrower }}</span>
                             <span class="text-gray-400">
-                                - By:
-                                {{ $request->user ? $request->user->name : $request->nama_peminjam ?? 'Guest' }}
+                                - {{ $bookTitles->implode(', ') }}
+                                @if ($requests->count() > 1)
+                                    ({{ $requests->count() }} permintaan)
+                                @endif
                             </span>
                         </div>
                     @endforeach
@@ -666,11 +649,23 @@ backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50">
 
                 @if (isset($pendingRequests) && count($pendingRequests) > 0)
                     <h6 class="px-6 py-2 font-semibold text-gray-300">Pending Requests</h6>
-                    @foreach ($pendingRequests as $request)
+                    @foreach ($pendingRequests as $requests)
+                        @php
+                            $borrower = optional($requests->first()->user)->name ?? ($requests->first()->nama_peminjam ?? 'Guest');
+                            $bookTitles = $requests
+                                ->map(function ($item) {
+                                    return optional($item->book)->judul_buku;
+                                })
+                                ->filter()
+                                ->unique();
+                        @endphp
                         <div class="px-6 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors duration-200">
-                            <span class="font-semibold">{{ $request->book->judul_buku }}</span>
+                            <span class="font-semibold">{{ $borrower }}</span>
                             <span class="text-gray-400">
-                                - By: {{ optional($request->user)->name ?? ($request->nama_peminjam ?? 'Guest') }}
+                                - {{ $bookTitles->implode(', ') }}
+                                @if ($requests->count() > 1)
+                                    ({{ $requests->count() }} permintaan)
+                                @endif
                             </span>
                         </div>
                     @endforeach

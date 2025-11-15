@@ -338,6 +338,14 @@
                                                 class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 
                                         focus:ring-2 focus:ring-[#F1A004] focus:outline-none dark:bg-gray-700 dark:text-white">
                                         </div>
+                                        <div class="sm:col-span-2">
+                                            <label
+                                                class="block mb-2 text-sm font-medium text-gray-700 dark:text-white">Deskripsi
+                                                (Opsional)</label>
+                                            <textarea name="deskripsi_pengembalian" rows="3"
+                                                class="w-full p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:ring-2 focus:ring-[#F1A004] focus:outline-none dark:bg-gray-700 dark:text-white"
+                                                placeholder="Catatan tambahan mengenai kondisi akhir barang"></textarea>
+                                        </div>
                                     </div>
                                     <button type="submit"
                                         class="mt-6 relative w-full px-4 py-2.5 rounded-lg font-bold text-white text-sm 
